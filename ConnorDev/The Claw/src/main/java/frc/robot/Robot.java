@@ -6,14 +6,11 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
-/* The big DS (double solenoid) has the claw up against the robot when off (retracted) and pushes the claw
-in front of the robot when on (extended). The small piston has the claw closed when off, and openes it when on.
-*/
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,9 +19,17 @@ in front of the robot when on (extended). The small piston has the claw closed w
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-
- // solP is the piston that pivots the whole claw, solG opens and closes the arms.
 public class Robot extends IterativeRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+   Joystick controller = new Joystick(1);
+    Claw claw = new Claw();
+    boolean buttonValue1;
+    boolean buttonValue2;
+    boolean buttonValue3;
+    boolean buttonValue4;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -32,7 +37,10 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
-    
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    claw.onStart();
   }
 
   /**
@@ -57,9 +65,13 @@ public class Robot extends IterativeRobot {
    * <p>You can add additional auto modes by adding additional comparisons to
    * the switch structure below with additional strings. If using the
    * SendableChooser make sure to add them to the chooser code above as well.
-   */
+   
   @Override
   public void autonomousInit() {
+    m_autoSelected = m_chooser.getSelected();
+    // autoSelected = SmartDashboard.getString("Auto Selector",
+    // defaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /**
@@ -67,20 +79,43 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        // Put custom auto code here
+        break;
+      case kDefaultAuto:
+      default:
+        // Put default auto code here
+        break;
+    }
   }
 
   /**
    * This function is called periodically during operator control.
    */
-  
-  /* The first piston has one button to extend and one to release, same for the second one. These button
-  numbers correspond to different buttons on the Xbox controller, and we'll find out which ones to use
-  later. Our idea is to use l1 and l2 for one piston and r1 and r2 for the other one.
-  */
   @Override
   public void teleopPeriodic() {
     
+    buttonValue1 = controller.getRawButton(1);
+    buttonValue2 = controller.getRawButton(2);
+    buttonValue3 = controller.getRawButton(3);
+    buttonValue4 = controller.getRawButton(4);
+
+    if (buttonValue1 == true){
+      claw.up();
+    }
+    if (buttonValue2 == true){
+      claw.down();
+    }
+    if (buttonValue3 == true){
+      claw.grab();
+    }
+    if (buttonValue4 == true){
+      claw.release();
+    }
   }
+
+   
 
   /**
    * This function is called periodically during test mode.

@@ -7,32 +7,44 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
-/* The big DS (double solenoid) has the claw up against the robot when off (retracted) and pushes the claw
-in front of the robot when on (extended). The small piston has the claw closed when off, and openes it when on.
-*/
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
+ * functions corresponding to each mode, as described in the TimedRobot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-
- // solP is the piston that pivots the whole claw, solG opens and closes the arms.
-public class Robot extends IterativeRobot {
-
+public class Robot extends TimedRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private CANSparkMax left = new CANSparkMax(2, MotorType.kBrushless);
+  private CANSparkMax right = new CANSparkMax(1, MotorType.kBrushless); 
+  private double desiredSpeed = 1.5;
+  
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    right.setInverted(true);
+    left.getEncoder().setVelocityConversionFactor(1.0/60.0/8.75*Units.inchesToMeters(4)*Math.PI);
+    right.getEncoder().setVelocityConversionFactor(1.0/60.0/8.75*Units.inchesToMeters(4)*Math.PI);
+
   }
 
   /**
@@ -60,6 +72,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /**
@@ -67,21 +82,40 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        // Put custom auto code here
+        break;
+      case kDefaultAuto:
+      default:
+        // Put default auto code here
+        break;
+    }
   }
 
   /**
    * This function is called periodically during operator control.
    */
-  
-  /* The first piston has one button to extend and one to release, same for the second one. These button
-  numbers correspond to different buttons on the Xbox controller, and we'll find out which ones to use
-  later. Our idea is to use l1 and l2 for one piston and r1 and r2 for the other one.
-  */
   @Override
   public void teleopPeriodic() {
-    
+    left.setVoltage(findVoltage(desiredSpeed) + getProportionalChange(left.getEncoder().getVelocity(), desiredSpeed));
+    right.setVoltage(findVoltage(desiredSpeed) + getProportionalChange(right.getEncoder().getVelocity(), desiredSpeed));
+    SmartDashboard.putNumber("Left Speed: ", left.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Right Speed: ", right.getEncoder().getVelocity());
+  }
+  public double getProportionalChange(double speed, double targetSpeed) {
+    double error = targetSpeed - speed;
+    double kp = 5.0;
+    return (error * kp);
   }
 
+  public double findVoltage(double speed) {
+    if (speed > 0) {
+      return 3.5622 * speed + 0.2273;
+    } else {
+      return 3.5622 * speed - 0.2273;
+    }
+  }
   /**
    * This function is called periodically during test mode.
    */

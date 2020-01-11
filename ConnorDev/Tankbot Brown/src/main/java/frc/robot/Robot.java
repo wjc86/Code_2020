@@ -5,15 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/*
+The program will define two joysticks and two motors. Each joystick will control a motor and cause it to move in a direction
+depending on how the joystick is moved.
+*/
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
-/* The big DS (double solenoid) has the claw up against the robot when off (retracted) and pushes the claw
-in front of the robot when on (extended). The small piston has the claw closed when off, and openes it when on.
-*/
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,9 +25,24 @@ in front of the robot when on (extended). The small piston has the claw closed w
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-
- // solP is the piston that pivots the whole claw, solG opens and closes the arms.
 public class Robot extends IterativeRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  Joystick lStick = new Joystick(0);
+  Joystick rStick = new Joystick(1);
+  Victor left = new Victor(0);
+  Victor right = new Victor(1);
+
+  /* right joystick = volecity 
+  victor left = right joystick 
+  vitctor right = right joystick
+
+
+
+  left joystick = direction 
 
   /**
    * This function is run when the robot is first started up and should be
@@ -32,7 +50,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
-    
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
   }
 
   /**
@@ -60,6 +80,10 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+    m_autoSelected = m_chooser.getSelected();
+    // autoSelected = SmartDashboard.getString("Auto Selector",
+    // defaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /**
@@ -67,18 +91,38 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        // Put custom auto code here
+        break;
+      case kDefaultAuto:
+      default:
+        // Put default auto code here
+        break;
+    }
   }
 
   /**
    * This function is called periodically during operator control.
    */
-  
-  /* The first piston has one button to extend and one to release, same for the second one. These button
-  numbers correspond to different buttons on the Xbox controller, and we'll find out which ones to use
-  later. Our idea is to use l1 and l2 for one piston and r1 and r2 for the other one.
-  */
   @Override
   public void teleopPeriodic() {
+
+    if(rStick.getX() == 0)
+    {
+      left.set(lStick.getY()*-1);
+      right.set(lStick.getY()*-1);
+    }
+    else if(rStick.getX() < 0)
+    {
+      left.set((lStick.getY()*-1) * (rStick.getX()*-1));
+      right.set((lStick.getY()*-1));
+    }
+    else if(rStick.getX() > 0)
+    {
+      right.set((lStick.getY()*-1) * (rStick.getX()*-1));
+      left.set((lStick.getY()*-1));
+    }
     
   }
 
@@ -89,3 +133,4 @@ public class Robot extends IterativeRobot {
   public void testPeriodic() {
   }
 }
+
