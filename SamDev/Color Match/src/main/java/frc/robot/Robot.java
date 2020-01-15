@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
+
+import java.lang.ProcessBuilder.Redirect;
+
 import com.revrobotics.ColorMatch;
 
 /**
@@ -51,6 +54,11 @@ public class Robot extends TimedRobot {
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
+  private static final int YELLOW_CALIBRATION = 90;
+  private static final int RED_CALIBRATION = 30;
+  private static final int GREEN_CALIBRATION = 130;
+  private static final int CYAN_CALIBRATION = 184;
+
   @Override
   public void robotInit() {
     m_colorMatcher.addColorMatch(kBlueTarget);
@@ -78,8 +86,55 @@ public class Robot extends TimedRobot {
      */
     String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+    int color;
 
-    if (match.color == kBlueTarget) {
+    double[] perRGB = {detectedColor.red, detectedColor.green, detectedColor.blue};
+    double[] RGB = {perRGB[0], perRGB[1], perRGB[2]};
+
+    double min, max, delta, h, s, v;
+    min = Math.min(Math.min(RGB[0], RGB[1]), RGB[2]);
+    max = Math.max(Math.max(RGB[0], RGB[1]), RGB[2]);
+    v = max;
+    delta = max - min;
+    while(true){
+      if(max != 0){
+        s = delta/max;
+      } else {
+        s = 0;
+        h = -1;
+        break;
+      }
+      if(RGB[0] == max){
+        h = (RGB[1] - RGB[2])/delta;
+      } else if(RGB[1] == max){
+        h = 2 + (RGB[2] - RGB[0])/delta;
+      } else {
+        h = 4 + (RGB[0] - RGB[1])/delta;
+      }
+      h *= 60;
+      if(h < 0){
+        h += 360;
+      }
+    }
+
+    if((h >= 0 && h <= ((RED_CALIBRATION + YELLOW_CALIBRATION)/2)) || (h >= 300 && h <= 360)){
+      colorString = "Red";
+      color = 3;
+    } else if(h >= ((RED_CALIBRATION + YELLOW_CALIBRATION)/2) && h <= ((YELLOW_CALIBRATION + GREEN_CALIBRATION)/2)){
+      colorString = "Yellow";
+      color = 4;
+    } else if(h >= ((YELLOW_CALIBRATION + GREEN_CALIBRATION)/2) && h <= ((GREEN_CALIBRATION + CYAN_CALIBRATION)/2)){
+      colorString = "Green";
+      color = 2;
+    } else if(h >= ((GREEN_CALIBRATION + CYAN_CALIBRATION)/2) && h <= 240){
+      colorString = "Cyan";
+      color = 1;
+    } else {
+      colorString = "Unknown";
+      color = 0;
+    }
+
+    /*if (match.color == kBlueTarget) {
       colorString = "Blue";
     } else if (match.color == kRedTarget) {
       colorString = "Red";
@@ -89,16 +144,16 @@ public class Robot extends TimedRobot {
       colorString = "Yellow";
     } else {
       colorString = "Unknown";
-    }
+    }*/
 
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
-    SmartDashboard.putNumber("Red", detectedColor.red);
+    /*SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
+    SmartDashboard.putString("Detected Color", colorString);*/
   }
 }
