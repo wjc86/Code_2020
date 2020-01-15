@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   private TalonFX rightMotor;
   private Joystick m_leftStick;
   private Joystick m_rightStick;
+  private double conversion = 7.1631/100000.0;
 
   @Override
   public void robotInit() {
@@ -38,8 +39,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     leftMotor.set(TalonFXControlMode.PercentOutput, -m_leftStick.getY());
     rightMotor.set(TalonFXControlMode.PercentOutput, m_rightStick.getY());
-    SmartDashboard.putNumber("left velocity", leftMotor.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("right velocity", rightMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("left position", leftMotor.getSelectedSensorPosition()*conversion);
+    SmartDashboard.putNumber("right position", rightMotor.getSelectedSensorPosition()*conversion);
   }
 
   public void autonPeriodic(){
