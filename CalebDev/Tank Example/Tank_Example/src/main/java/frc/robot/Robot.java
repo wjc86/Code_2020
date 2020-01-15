@@ -8,9 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -20,7 +18,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
  * it contains the code necessary to operate a robot with tank drive.
  */
 public class Robot extends TimedRobot {
-  private DifferentialDrive m_myRobot;
   private TalonFX leftMotor;
   private TalonFX rightMotor;
   private Joystick m_leftStick;
@@ -38,8 +35,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     leftMotor.set(TalonFXControlMode.PercentOutput, -m_leftStick.getY());
     rightMotor.set(TalonFXControlMode.PercentOutput, m_rightStick.getY());
-    SmartDashboard.putNumber("left velocity", leftMotor.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("right velocity", rightMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("left position", leftMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("right position", rightMotor.getSelectedSensorPosition());
   }
 
   public void autonPeriodic(){
