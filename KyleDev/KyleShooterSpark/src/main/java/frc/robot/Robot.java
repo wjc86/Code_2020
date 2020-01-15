@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Talon;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,9 +28,14 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public Joystick XboxController = new Joystick(0);
-  private Talon Bottom = new Talon(1);
-  private Talon Top = new Talon(2);
+
+  public Joystick left = new Joystick(0);
+  public Joystick right = new Joystick(1);
+  private CANSparkMax Bottom = new CANSparkMax(4, MotorType.kBrushless);
+  private CANSparkMax Top = new CANSparkMax(6, MotorType.kBrushless);
+  private double lspeed;
+  private double rspeed;
+
 
 
   /**
@@ -40,6 +47,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    
   }
 
   /**
@@ -93,21 +102,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    /*
-    double speedMultiplier = 1;
-    if(X.getRawButtonPressed(1)) {
-      if(speedMultiplier == 1) {
-        speedMultiplier = 2;
-      } else if(speedMultiplier == 2) {
-        speedMultiplier = 1;
-      }
-    }
-    */
+    
     /*if(XboxController.getY() >= 0.1 || XboxController.getY() <= -0.1) {
       
     }*/
-    Top.set(0.1/* * speedMultiplier*/);
-    Bottom.set(0.1/* * speedMultiplier*/);
+    lspeed = left.getRawAxis(3)/-2+0.5;
+    rspeed = right.getRawAxis(3)/-2+0.5;
+    Top.set(lspeed);
+    Bottom.set(rspeed);
+    System.out.println("LSpeed: " + lspeed+" | "+"RSpeed: "+rspeed);
+  
+    // System.out.println(Top.ge;
+    
   }
 
   /**
