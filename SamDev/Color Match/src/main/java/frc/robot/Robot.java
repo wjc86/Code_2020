@@ -134,6 +134,12 @@ public class Robot extends TimedRobot {
       color = 0;
     }
 
+    SmartDashboard.putNumber("Color Graph", color);
+    SmartDashboard.putString("Color", colorString);
+    SmartDashboard.putNumber("H", h);
+    SmartDashboard.putNumber("S", s);
+    SmartDashboard.putNumber("V", v);
+
     /*if (match.color == kBlueTarget) {
       colorString = "Blue";
     } else if (match.color == kRedTarget) {
