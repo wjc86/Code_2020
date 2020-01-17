@@ -31,11 +31,13 @@ public class Robot extends TimedRobot {
 
   public Joystick left = new Joystick(0);
   public Joystick right = new Joystick(1);
-  private CANSparkMax Bottom = new CANSparkMax(4, MotorType.kBrushless);
-  private CANSparkMax Top = new CANSparkMax(6, MotorType.kBrushless);
-  private double lspeed;
-  private double rspeed;
-
+  private CANSparkMax LMotor = new CANSparkMax(4, MotorType.kBrushless);
+  private CANSparkMax RMotor = new CANSparkMax(1, MotorType.kBrushless);
+  private double lpct;
+  private double rpct;
+  private double lvelocity;
+  private double rvelocity;
+   
 
 
   /**
@@ -47,6 +49,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    RMotor.getEncoder().setVelocityConversionFactor(1);
+    LMotor.getEncoder().setVelocityConversionFactor(1);
 
     
   }
@@ -106,19 +110,21 @@ public class Robot extends TimedRobot {
     /*if(XboxController.getY() >= 0.1 || XboxController.getY() <= -0.1) {
       
     }*/
-    lspeed = left.getRawAxis(3)/-2+0.5;
-    rspeed = right.getRawAxis(3)/-2+0.5;
-    Top.set(lspeed);
-    Bottom.set(rspeed);
-    System.out.println("LSpeed: " + lspeed+" | "+"RSpeed: "+rspeed);
-  
-    // System.out.println(Top.ge;
+    lpct = left.getRawAxis(3)/-2.0+0.5;
+    rpct = right.getRawAxis(3)/-2.0+0.5;
+    RMotor.set(rpct);
+    LMotor.set(lpct);
     
-  }
+    
+    lvelocity=LMotor.getEncoder().getVelocity();
+    rvelocity=RMotor.getEncoder().getVelocity();
 
-  /**
-   * This function is called periodically during test mode.
-   */
+    SmartDashboard.putNumber("L%: ", lpct);
+    SmartDashboard.putNumber("R%: ", rpct);
+    SmartDashboard.putNumber("LVel: ", lvelocity);
+    SmartDashboard.putNumber("RVel: ", rvelocity);
+  }
+   
   @Override
   public void testPeriodic() {
   }
