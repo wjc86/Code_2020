@@ -83,22 +83,31 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     Joy.switchMotor();
-    System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation());
+    Joy.EnableThrottle();
+    System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation()+"|"+Joy.enable);
+  
     if (Joy.motor_id==0){
       pert0+=Joy.ButtonAsPerturbation();
       M0pct=Joy.ThrotAsPct();
-      Motor0.set(M0pct+pert0);
+      if(Joy.enable){
+        Motor0.set(M0pct+pert0);
+      }
     }
     else if (Joy.motor_id==1){
       pert1+=Joy.ButtonAsPerturbation();
       M1pct=Joy.ThrotAsPct();
-      Motor1.set(M1pct+pert1);
+      if(Joy.enable){
+        Motor1.set(M1pct+pert1);
+      }
     }
     else{
       pert2+=Joy.ButtonAsPerturbation();
       M2pct=Joy.ThrotAsPct();
-      Motor2.set(ControlMode.PercentOutput,M2pct+pert2);
+      if(Joy.enable){
+        Motor2.set(ControlMode.PercentOutput,M2pct+pert2);
+      }
     }
+    
     SmartDashboard.putNumber("M0:pct",M0pct+pert0);
     SmartDashboard.putNumber("M0:speed", Motor0.getEncoder().getVelocity());
     SmartDashboard.putNumber("M1:pct",M1pct+pert1);
@@ -106,7 +115,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("M2:pct",M2pct+pert2);
     SmartDashboard.putNumber("M2:speed", M2speed);
     SmartDashboard.putNumber("Current Motor: ", Joy.motor_id);
-
+    SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);
     /*
     lpct = (left.getRawAxis(3)/-2.0+0.5);
     rpct = (right.getRawAxis(3)/-2.0+0.5);

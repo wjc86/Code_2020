@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 class motorTestJoystick extends Joystick  {
     public int motor_id = 0;
     public int num_motors = 0;
-
+    public boolean enable = false;
     public motorTestJoystick(int port,int num_motors) {
         super(port);
         this.num_motors=num_motors;
@@ -16,12 +16,22 @@ class motorTestJoystick extends Joystick  {
         // boolean triggerPressed = this.getRawButton(1);
         if(this.getRawButtonPressed(1)){
             // System.out.println("pressed");
-            
+            this.enable = false;
             if(this.motor_id < num_motors-1){
                 this.motor_id += 1;
             }
             else{
                 this.motor_id = 0;
+            }
+        }
+    }
+    public void EnableThrottle(){
+        if (this.getRawButtonPressed(2)){
+            if(this.enable==true){
+                this.enable=false;
+            }
+            else if(this.enable==false){
+                this.enable=true;
             }
         }
     }
