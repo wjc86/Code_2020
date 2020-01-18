@@ -13,15 +13,16 @@ class motorTestJoystick extends Joystick  {
     }
 
     public void switchMotor(){
-        boolean triggerPressed = this.getRawButton(1);
-        if(triggerPressed){
+        // boolean triggerPressed = this.getRawButton(1);
+        if(this.getRawButtonPressed(1)){
+            // System.out.println("pressed");
+            
             if(this.motor_id < num_motors-1){
                 this.motor_id += 1;
             }
             else{
                 this.motor_id = 0;
             }
-    
         }
     }
 
@@ -30,13 +31,13 @@ class motorTestJoystick extends Joystick  {
     }
 
     public double ButtonAsPerturbation(){
-        if (this.getRawButton(5)) {
+        if (this.getRawButtonPressed(5)) {
             return 0.05;
-        } else if(this.getRawButton(3)) {
+        } else if(this.getRawButtonPressed(3)) {
             return -0.05;
-        } else if(this.getRawButton(6)) {
+        } else if(this.getRawButtonPressed(6)) {
             return 0.01;
-        } else if(this.getRawButton(4)) {
+        } else if(this.getRawButtonPressed(4)) {
             return -0.01;
         }
         else{
