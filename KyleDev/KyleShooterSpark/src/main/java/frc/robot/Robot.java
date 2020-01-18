@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
@@ -123,7 +122,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("R%: ", rpct);
     SmartDashboard.putNumber("LVel: ", lvelocity);
     SmartDashboard.putNumber("RVel: ", rvelocity);
-  }
+    SmartDashboard.putNumber("LVel Graph: ", lvelocity);
+    SmartDashboard.putNumber("RVel Graph: ", rvelocity);
+   }
    
   @Override
   public void testPeriodic() {

@@ -14,8 +14,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public Joystick XboxController = new Joystick(0);
-  private TalonSRX Bottom = new TalonSRX(1);
-  private TalonSRX Top = new TalonSRX(2);
+  private TalonSRX Motor = new TalonSRX(44);
+  
 
 
 
@@ -65,10 +65,9 @@ public class Robot extends TimedRobot {
       }
     }
     */
-    if(XboxController.getY() >= 0.1 || XboxController.getY() <= -0.1) {
-      Top.set(ControlMode.PercentOutput, XboxController.getY());
-      Bottom.set(ControlMode.PercentOutput, XboxController.getY());    
-    }
+    Motor.set(ControlMode.PercentOutput, 1);
+          
+    
     
   }
 
