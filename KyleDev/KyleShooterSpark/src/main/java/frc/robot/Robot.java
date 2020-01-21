@@ -108,12 +108,12 @@ public class Robot extends TimedRobot {
       }
     }
     
-    SmartDashboard.putNumber("M0:pct",M0pct+pert0);
-    SmartDashboard.putNumber("M0:speed", Motor0.getEncoder().getVelocity());
-    SmartDashboard.putNumber("M1:pct",M1pct+pert1);
-    SmartDashboard.putNumber("M1:speed", Motor1.getEncoder().getVelocity());
-    SmartDashboard.putNumber("M2:pct",M2pct+pert2);
-    SmartDashboard.putNumber("M2:speed", M2speed);
+    SmartDashboard.putNumber("M0:pct",-(M0pct+pert0));
+    SmartDashboard.putNumber("M0:speed", -(Motor0.getEncoder().getVelocity()));
+    SmartDashboard.putNumber("M1:pct",-(M1pct+pert1));
+    SmartDashboard.putNumber("M1:speed", -(Motor1.getEncoder().getVelocity()));
+    SmartDashboard.putNumber("M2:pct",-(M2pct+pert2));
+    SmartDashboard.putNumber("M2:speed", -(M2speed));
     SmartDashboard.putNumber("Current Motor: ", Joy.motor_id);
     SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);
     /*

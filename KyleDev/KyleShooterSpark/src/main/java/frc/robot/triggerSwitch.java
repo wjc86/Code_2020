@@ -37,7 +37,7 @@ class motorTestJoystick extends Joystick  {
     }
 
     public double ThrotAsPct(){
-        return this.getRawAxis(3)/-2.0+0.5;
+        return -(this.getRawAxis(3)/-2.0+0.5);
     }
 
     public double ButtonAsPerturbation(){
