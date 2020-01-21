@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     leftMotor = new TalonFX(1);
-    rightMotor = new TalonFX(2);    
+    rightMotor = new TalonFX(2);
     m_leftStick = new Joystick(0);
     m_rightStick = new Joystick(1);
     m_gyro = new AHRS(SPI.Port.kMXP);
@@ -80,10 +80,11 @@ public class Robot extends TimedRobot {
      SmartDashboard.putNumber("x", xAxis);
      SmartDashboard.putNumber("y", yAxis);
      SmartDashboard.putNumber("pos", currentPos);
+     SmartDashboard.putNumber("error", error);
      kP = SmartDashboard.getNumber("kP", 0);
      kI = SmartDashboard.getNumber("kI", 0);
      kD = SmartDashboard.getNumber("kD", 0);
-     angle = ((-m_gyro.getAngle())/180.0)*Math.PI;
+     angle = ((-m_gyro.getAngle())/3.0)*Math.PI;
     // codeRunThru += 1.0;
     // if (codeRunThru>100){
     //   leftMotorTotal += leftMotor.getSelectedSensorVelocity()*velocityConversion;
@@ -103,9 +104,12 @@ public class Robot extends TimedRobot {
     if(m_leftStick.getRawButton(1)){
       leftMotor.set(TalonFXControlMode.PercentOutput, feedForward + proportional + integral - derivative);
       rightMotor.set(TalonFXControlMode.PercentOutput, -(feedForward + proportional + integral - derivative));
-    } else {
+    } else if(!m_rightStick.getRawButton(2)) {
       leftMotor.set(TalonFXControlMode.PercentOutput, -m_leftStick.getY()*.5);
       rightMotor.set(TalonFXControlMode.PercentOutput, m_rightStick.getY()*.5);
+    } else{ 
+      leftMotor.set(TalonFXControlMode.PercentOutput, -m_leftStick.getY());
+      rightMotor.set(TalonFXControlMode.PercentOutput, m_rightStick.getY());
     }
     lastError = error;
     lastPos = currentPos;
