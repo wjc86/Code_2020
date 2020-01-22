@@ -84,7 +84,8 @@ public class Robot extends TimedRobot {
      kP = SmartDashboard.getNumber("kP", 0);
      kI = SmartDashboard.getNumber("kI", 0);
      kD = SmartDashboard.getNumber("kD", 0);
-     angle = ((-m_gyro.getAngle())/3.0)*Math.PI;
+    //  angle = ((-m_gyro.getAngle())/3.0)*Math.PI;
+    angle = (-m_gyro.getAngle())*Math.PI/180.0;
     // codeRunThru += 1.0;
     // if (codeRunThru>100){
     //   leftMotorTotal += leftMotor.getSelectedSensorVelocity()*velocityConversion;
