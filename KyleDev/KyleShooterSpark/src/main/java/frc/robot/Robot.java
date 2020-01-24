@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.MotorTest;
 import frc.robot.motorTestJoystick;
+import frc.robot.ourpid;
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -32,30 +33,31 @@ public class Robot extends TimedRobot {
 
   private MotorTest[] motors = new MotorTest[3];
 
-  public Joystick left = new Joystick(0);
-  public Joystick right = new Joystick(1);
-  public Joystick middle = new Joystick(2);
+
+
+  // public Joystick left = new Joystick(0);
+  // public Joystick right = new Joystick(1);
+  // public Joystick middle = new Joystick(2);
   
   public motorTestJoystick Joy = new motorTestJoystick(1,3);
 
-  private final CANSparkMax Motor0 = new CANSparkMax(4, MotorType.kBrushless);
-  private final CANSparkMax Motor1 = new CANSparkMax(1, MotorType.kBrushless);
-  private final TalonSRX Motor2 = new TalonSRX(44);
-  private double pct0;
-  private double pct1;
-  private double pct2;
+  public ourpid controller1 = new ourpid();
+  public ourpid controller0 = new ourpid(); 
+  public ourpid controller2 = new ourpid(); 
+  
+  private ourpid[] controllers = new ourpid[3];
+
   private double pert0;
   private double pert1;
   private double pert2;
-  private double M0speed;
-  private double M1speed;
-  private double M2speed = 0;
   private double M0pct;
   private double M1pct;
   private double M2pct;
   
   
-
+  public double throtpct2speed(double throtpct){
+    return 5775.6*(throtpct) + 5.1504; 
+  }
 
   /**
    * This function is run when the robot is first started up and should be
@@ -66,11 +68,26 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    Motor0.getEncoder().setVelocityConversionFactor(1.0);
-    Motor1.getEncoder().setVelocityConversionFactor(1.0);
+    
     motors[0] = spar1;
     motors[1] = spar2;
     motors[2] = tal1;
+
+    motors[0].getSpark().getEncoder().setVelocityConversionFactor(1.0);
+    motors[1].getSpark().getEncoder().setVelocityConversionFactor(1.0);
+
+    controllers[0] = controller0;
+    controllers[1] = controller1;
+    controllers[2] = controller2;
+    double KP=0;
+    double KI=0;
+    double KD=0;
+    for(int i=0;i<=3;i++){
+      controllers[i].setGains(KP, KI, KD);
+    }
+
+
+
   }
   @Override
   public void autonomousInit() {
@@ -86,36 +103,30 @@ public class Robot extends TimedRobot {
     Joy.EnableThrottle();
     System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation()+"|"+Joy.enable);
   
-    if (Joy.motor_id==0){
-      pert0+=Joy.ButtonAsPerturbation();
-      M0pct=Joy.ThrotAsPct();
-      if(Joy.enable){
-        Motor0.set(M0pct+pert0);
-      }
+  
+    pert+=Joy.ButtonAsPerturbation();
+    Mpct=Joy.ThrotAsPct();
+    if(Joy.enable){
+      controllers[Joy.motor_id].setTargetOutput(throtpct2speed(M0pct+pert0));
     }
-    else if (Joy.motor_id==1){
-      pert1+=Joy.ButtonAsPerturbation();
-      M1pct=Joy.ThrotAsPct();
-      if(Joy.enable){
-        Motor1.set(M1pct+pert1);
-      }
+    controllers[0].setMeasuredOutput(motors[0].getSpark().getEncoder().getVelocity());
+    controllers[1].setMeasuredOutput(motors[1].getSpark().getEncoder().getVelocity());
+
+    for (int i=0;i<2;i++){
+      motors[i].getSpark().set(controllers[i].calcControleEffort())
     }
-    else{
-      pert2+=Joy.ButtonAsPerturbation();
-      M2pct=Joy.ThrotAsPct();
-      if(Joy.enable){
-        Motor2.set(ControlMode.PercentOutput,M2pct+pert2);
-      }
-    }
-    
-    SmartDashboard.putNumber("M0:pct",-(M0pct+pert0));
-    SmartDashboard.putNumber("M0:speed", -(Motor0.getEncoder().getVelocity()));
-    SmartDashboard.putNumber("M1:pct",-(M1pct+pert1));
-    SmartDashboard.putNumber("M1:speed", -(Motor1.getEncoder().getVelocity()));
-    SmartDashboard.putNumber("M2:pct",-(M2pct+pert2));
-    SmartDashboard.putNumber("M2:speed", -(M2speed));
+    // motors[2].getTalon().set(ControlMode.PercentOutput, controllers[2].ta); %set SIMS motor to target speed as pct.
+        
+    SmartDashboard.putNumber("M0:target",-(controllers[0].target_output));
+    SmartDashboard.putNumber("M0:speed", -(controllers[0].measured_output));
+    SmartDashboard.putNumber("M1:target",-(controllers[1].target_output));
+    SmartDashboard.putNumber("M1:speed", -(controllers[1].measured_output));
+    SmartDashboard.putNumber("M2:target",-(controllers[2].target_output));
+
     SmartDashboard.putNumber("Current Motor: ", Joy.motor_id);
     SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);
+    
+
     /*
     lpct = (left.getRawAxis(3)/-2.0+0.5);
     rpct = (right.getRawAxis(3)/-2.0+0.5);

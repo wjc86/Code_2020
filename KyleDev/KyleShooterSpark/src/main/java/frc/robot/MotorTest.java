@@ -8,9 +8,11 @@ public class MotorTest {
     CANSparkMax spark;
     TalonSRX talon;
     boolean myControllerType;
+    
 
     public MotorTest(boolean controllerType, int motorID) {
         this.myControllerType = controllerType;
+        
         if (controllerType) {
             this.spark = new CANSparkMax(motorID, MotorType.kBrushless);
         } else {
@@ -25,4 +27,5 @@ public class MotorTest {
     public CANSparkMax getSpark() {
         return this.spark;
     }
+    
 }
