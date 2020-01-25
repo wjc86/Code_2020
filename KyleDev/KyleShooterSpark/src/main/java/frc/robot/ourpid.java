@@ -22,16 +22,16 @@ public class ourpid {
     public double measured_output = 0;
 
     public double calcControleEffort() {
-        double e =this.target_output-this.measured_output;
-        this.error_sum += e;
+        this.error =this.target_output-this.measured_output;
+        this.error_sum += this.error;
         integrated_error = this.error_sum * this.Timestep;
 
-        error_difference = e - this.previous_error;
+        error_difference = this.error - this.previous_error;
         differentiated_error = error_difference/this.Timestep;
 
-        this.previous_error = e;
+        this.previous_error = this.error;
 
-        p_component = k_p * e;
+        p_component = k_p * this.error;
         i_component = k_i * integrated_error;
         d_component = k_d * differentiated_error;
         

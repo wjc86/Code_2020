@@ -81,9 +81,9 @@ public class Robot extends TimedRobot {
     controllers[0] = controller0;
     controllers[1] = controller1;
     controllers[2] = controller2;
-    double KP=0;
-    double KI=0;
-    double KD=0;
+    double KP=0.01;
+    double KI=0.02;
+    double KD=0.0002;
     for(int i=0;i<3;i++){
       controllers[i].setGains(KP, KI, KD);
     }
@@ -109,27 +109,32 @@ public class Robot extends TimedRobot {
     pert+=Joy.ButtonAsPerturbation();
     Mpct=Joy.ThrotAsPct();
     if(Joy.enable){
-      // controllers[Joy.motor_id].setTargetOutput(throtpct2speed(Mpct+pert));
-      if (Joy.motor_id==2){
-        motors[Joy.motor_id].getTalon().set(ControlMode.PercentOutput,Mpct+pert);
-      }
-      else{
-        motors[Joy.motor_id].getSpark().set(Mpct);
-      }
+      controllers[Joy.motor_id].setTargetOutput(throtpct2speed(Mpct));
+      
+      // if (Joy.motor_id==2){
+      //   motors[Joy.motor_id].getTalon().set(ControlMode.PercentOutput,Mpct);
+      // }
+      // else{
+      //   motors[Joy.motor_id].getSpark().set(Mpct);
+      // }
     }
     controllers[0].setMeasuredOutput(motors[0].getSpark().getEncoder().getVelocity());
     controllers[1].setMeasuredOutput(motors[1].getSpark().getEncoder().getVelocity());
     
-    // for (int i=0;i<2;i++){
-    //   motors[i].getSpark().set(controllers[i].calcControleEffort()+controllers[i].target_output);
-    // }
-    // motors[2].getTalon().set(ControlMode.PercentOutput, controllers[2].target_output); //set SIMS motor to target speed as pct.
+    
+    motors[0].getSpark().set(controllers[0].calcControleEffort()+speed2throt_pct(controllers[0].target_output));
+    // motors[1].getSpark().set(controllers[0].calcControleEffort()+controllers[i].target_output);
+    motors[2].getTalon().set(ControlMode.PercentOutput,speed2throt_pct(controllers[2].target_output)); //set SIMS motor to target speed as pct.
         
-    SmartDashboard.putNumber("M0:target",-(controllers[0].target_output));
-    SmartDashboard.putNumber("M0:speed", -(controllers[0].measured_output));
-    SmartDashboard.putNumber("M1:target",-(controllers[1].target_output));
-    SmartDashboard.putNumber("M1:speed", -(controllers[1].measured_output));
-    SmartDashboard.putNumber("M2:target",-(controllers[2].target_output));
+    SmartDashboard.putNumber("Flywheel Target",controllers[0].target_output);
+    SmartDashboard.putNumber("Flywheel Speed", controllers[0].measured_output);
+    SmartDashboard.putNumber("Flywheel Error", controllers[0].error);
+    SmartDashboard.putNumber("Flywheel Error", controllers[0].error_sum);
+    SmartDashboard.putNumber("Flywheel Error", controllers[0].error_difference);
+    
+    // SmartDashboard.putNumber("M1:target",speed2throt_pct(-(controllers[1].target_output)));
+    // SmartDashboard.putNumber("M1:speed%", -(controllers[1].measured_output));
+    // SmartDashboard.putNumber("M2:target",speed2throt_pct(-(controllers[2].target_output)));
 
     SmartDashboard.putNumber("Current Motor: ", Joy.motor_id);
     SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);
