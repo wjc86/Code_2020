@@ -53,7 +53,6 @@ public class Robot extends TimedRobot {
       TOFSensor.startRanging(VL53L0X_v1.VL53L0X_GOOD_ACCURACY_MODE);
     } catch (Exception e) {
       //TODO: handle exception
-      SmartDashboard.putString("Error 0", e.toString());
     }
   }
 
@@ -67,11 +66,12 @@ public class Robot extends TimedRobot {
     //   m_robotDrive.arcadeDrive(0.5, 0.0); // drive forwards half speed
     // } else {
     //   m_robotDrive.stopMotor(); // stop robot
+
+
     try {
       aValue = TOFSensor.getDistance();
         
       } catch (Exception e) {
-        SmartDashboard.putString("Error 1", e.toString());
         //TODO: handle exception
       }
     
