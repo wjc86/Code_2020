@@ -466,7 +466,7 @@ public class I2CUpdatableAddress {
         cleanerMethod.setAccessible(true);
         Object cleaner = cleanerMethod.invoke(toBeDestroyed);
         Method cleanMethod = cleaner.getClass().getMethod("clean");
-        cleanMethod.setAccessible(true);
+        //cleanMethod.setAccessible(true);
         cleanMethod.invoke(cleaner);
     }
 
