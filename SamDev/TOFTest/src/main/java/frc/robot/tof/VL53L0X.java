@@ -5,14 +5,13 @@ import java.nio.ByteBuffer;
 import edu.wpi.first.hal.HALUtil;
 
 import static frc.robot.tof.VL53L0X.vcselPeriodType.*;
-import static frc.robot.tof.VL53L0X_Constants.*;
 
 public class VL53L0X extends I2CUpdatableAddress {
 	
 	private Port m_port = Port.kOnboard;
 	//Store address given when the class is initialized.
 	
-	private static final int DEFAULT_ADDRESS = 0x29;
+	public static final int DEFAULT_ADDRESS = 0x29;
 	// The value of the address above the default address.
 	private int deviceAddress;
 	private byte stop_variable;
@@ -59,6 +58,11 @@ public class VL53L0X extends I2CUpdatableAddress {
 	public VL53L0X(int deviceAddress) throws NACKException {
 		super(Port.kOnboard, DEFAULT_ADDRESS, DEFAULT_ADDRESS + deviceAddress);
         this.did_timeout = false;
+	}
+
+	public VL53L0X() throws NACKException {
+		super(Port.kOnboard);
+		this.did_timeout = false;
 	}
 	  
 	public final boolean init(boolean io_2v8) throws NACKException {
@@ -747,29 +751,29 @@ public class VL53L0X extends I2CUpdatableAddress {
 			switch (period_pclks)
 			{
 				case 12:
-					write(PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x18);
+					write(VL53L0X_Constants.PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x18);
 					break;
 
 				case 14:
-					write(PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x30);
+					write(VL53L0X_Constants.PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x30);
 					break;
 
 				case 16:
-					write(PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x40);
+					write(VL53L0X_Constants.PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x40);
 					break;
 
 				case 18:
-					write(PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x50);
+					write(VL53L0X_Constants.PRE_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x50);
 					break;
 
 				default:
 					// invalid period
 					return false;
 			}
-			write(PRE_RANGE_CONFIG_VALID_PHASE_LOW.value, 0x08);
+			write(VL53L0X_Constants.PRE_RANGE_CONFIG_VALID_PHASE_LOW.value, 0x08);
 
 			// apply new VCSEL period
-			write(PRE_RANGE_CONFIG_VCSEL_PERIOD.value, vcsel_period_reg);
+			write(VL53L0X_Constants.PRE_RANGE_CONFIG_VCSEL_PERIOD.value, vcsel_period_reg);
 
 			// update timeouts
 
@@ -779,7 +783,7 @@ public class VL53L0X extends I2CUpdatableAddress {
 			int new_pre_range_timeout_mclks =
 					timeoutMicrosecondsToMclks(timeouts.pre_range_us, period_pclks);
 
-			write16(PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI.value,
+			write16(VL53L0X_Constants.PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI.value,
 					encodeTimeout((short)new_pre_range_timeout_mclks));
 
 			// set_sequence_step_timeout() end
@@ -790,7 +794,7 @@ public class VL53L0X extends I2CUpdatableAddress {
 			int new_msrc_timeout_mclks =
 					timeoutMicrosecondsToMclks(timeouts.msrc_dss_tcc_us, period_pclks);
 
-			write(MSRC_CONFIG_TIMEOUT_MACROP.value,
+			write(VL53L0X_Constants.MSRC_CONFIG_TIMEOUT_MACROP.value,
 					(new_msrc_timeout_mclks > 256) ? 255 : (new_msrc_timeout_mclks - 1));
 
 			// set_sequence_step_timeout() end
@@ -800,42 +804,42 @@ public class VL53L0X extends I2CUpdatableAddress {
 			switch (period_pclks)
 			{
 				case 8:
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x10);
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
-					write(GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x02);
-					write(ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x0C);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x10);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
+					write(VL53L0X_Constants.GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x02);
+					write(VL53L0X_Constants.ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x0C);
 					write(0xFF, 0x01);
-					write(ALGO_PHASECAL_LIM.value, 0x30);
+					write(VL53L0X_Constants.ALGO_PHASECAL_LIM.value, 0x30);
 					write(0xFF, 0x00);
 					break;
 
 				case 10:
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x28);
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
-					write(GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
-					write(ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x09);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x28);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
+					write(VL53L0X_Constants.GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
+					write(VL53L0X_Constants.ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x09);
 					write(0xFF, 0x01);
-					write(ALGO_PHASECAL_LIM.value, 0x20);
+					write(VL53L0X_Constants.ALGO_PHASECAL_LIM.value, 0x20);
 					write(0xFF, 0x00);
 					break;
 
 				case 12:
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x38);
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
-					write(GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
-					write(ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x08);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x38);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
+					write(VL53L0X_Constants.GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
+					write(VL53L0X_Constants.ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x08);
 					write(0xFF, 0x01);
-					write(ALGO_PHASECAL_LIM.value, 0x20);
+					write(VL53L0X_Constants.ALGO_PHASECAL_LIM.value, 0x20);
 					write(0xFF, 0x00);
 					break;
 
 				case 14:
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x48);
-					write(FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
-					write(GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
-					write(ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x07);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_HIGH.value, 0x48);
+					write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VALID_PHASE_LOW.value,  0x08);
+					write(VL53L0X_Constants.GLOBAL_CONFIG_VCSEL_WIDTH.value, 0x03);
+					write(VL53L0X_Constants.ALGO_PHASECAL_CONFIG_TIMEOUT.value, 0x07);
 					write(0xFF, 0x01);
-					write(ALGO_PHASECAL_LIM.value, 0x20);
+					write(VL53L0X_Constants.ALGO_PHASECAL_LIM.value, 0x20);
 					write(0xFF, 0x00);
 					break;
 
@@ -845,7 +849,7 @@ public class VL53L0X extends I2CUpdatableAddress {
 			}
 
 			// apply new VCSEL period
-			write(FINAL_RANGE_CONFIG_VCSEL_PERIOD.value, vcsel_period_reg);
+			write(VL53L0X_Constants.FINAL_RANGE_CONFIG_VCSEL_PERIOD.value, vcsel_period_reg);
 
 			// update timeouts
 
@@ -865,7 +869,7 @@ public class VL53L0X extends I2CUpdatableAddress {
 				new_final_range_timeout_mclks += timeouts.pre_range_mclks;
 			}
 
-			write16(FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI.value,
+			write16(VL53L0X_Constants.FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI.value,
 					encodeTimeout((short)new_final_range_timeout_mclks));
 
 			// set_sequence_step_timeout end
@@ -883,10 +887,10 @@ public class VL53L0X extends I2CUpdatableAddress {
 		// "Perform the phase calibration. This is needed after changing on vcsel period."
 		// VL53L0X_perform_phase_calibration() begin
 
-		ByteBuffer sequence_config = read(SYSTEM_SEQUENCE_CONFIG.value);
-		write(SYSTEM_SEQUENCE_CONFIG.value, 0x02);
+		ByteBuffer sequence_config = read(VL53L0X_Constants.SYSTEM_SEQUENCE_CONFIG.value);
+		write(VL53L0X_Constants.SYSTEM_SEQUENCE_CONFIG.value, 0x02);
 		performSingleRefCalibration((byte)0x0);
-		write(SYSTEM_SEQUENCE_CONFIG.value, sequence_config.get());
+		write(VL53L0X_Constants.SYSTEM_SEQUENCE_CONFIG.value, sequence_config.get());
 
 		// VL53L0X_perform_phase_calibration() end
 
