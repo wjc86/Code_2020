@@ -9,7 +9,7 @@ class motorTestJoystick extends Joystick  {
     public motorTestJoystick(int port,int num_motors) {
         super(port);
         this.num_motors=num_motors;
-        // TODO Auto-generated constructor stub
+        
     }
 
     public void switchMotor(){
