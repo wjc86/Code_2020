@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
  */
 public class VL53L0XSensors {
     private boolean initialized = false;
-    private List<VL53L0X> vl53l0xArray = new ArrayList();
+    private List<VL53L0X> vl53l0xArray = new ArrayList<VL53L0X>();
     // Set up synchronized results buffers
     public List<ArrayBlockingQueue<Integer>> arrayBlockingQueueList = null;
     // Respective DIO

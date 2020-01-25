@@ -159,12 +159,6 @@ public class VL53L0X_v1{
 
 	}
 
-
-
-
-
-
-
 	private byte[] readBlockData(int register, int nb) throws IOException {
 		byte[] data = new byte[nb];
 		this.m_i2c.read(register, nb, data);

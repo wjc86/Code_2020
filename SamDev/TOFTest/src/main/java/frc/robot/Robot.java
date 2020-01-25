@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import java.util.concurrent.ArrayBlockingQueue;
-import frc.robot.tof.VL53L0XSensors;
+import frc.robot.tof.VL53L0XSensor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,11 +25,12 @@ import frc.robot.tof.VL53L0XSensors;
  * directory.
  */
 public class Robot extends TimedRobot {
-  private final DifferentialDrive m_robotDrive
-      = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-  private final Joystick m_stick = new Joystick(0);
+  //private final DifferentialDrive m_robotDrive
+  //    = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
+  //private final Joystick m_stick = new Joystick(0);
   private final Timer m_timer = new Timer();
-  public static VL53L0XSensors distance;
+  //public static VL53L0XSensors distance;
+  public static VL53L0XSensor sensor;
   
   /**
    * This function is run when the robot is first started up and should be
@@ -36,15 +38,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    distance = new VL53L0XSensors();
+    sensor = new VL53L0XSensor();
     boolean success = false;
 
-    success = distance.init();
+    success = sensor.init();
     if (success) {
         System.out.println("VL53L0X sensors initialized.");
     } else {
         System.out.println("VL53L0X sensors NOT initialized!!!!!");
     }
+    SmartDashboard.putBoolean("Success", success);
 }
 
   /**
@@ -62,11 +65,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // Drive for 2 seconds
-    if (m_timer.get() < 2.0) {
+    /*if (m_timer.get() < 2.0) {
       m_robotDrive.arcadeDrive(0.5, 0.0); // drive forwards half speed
     } else {
       m_robotDrive.stopMotor(); // stop robot
-    }
+    }*/
   }
 
   /**
@@ -82,21 +85,26 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // m_robotDrive.arcadeDrive(m_stick.getY(), m_stick.getX());
-    Scheduler.getInstance().run();
+    /*Scheduler.getInstance().run();
     StringBuilder sb = new StringBuilder();
     int i = 0;
-for (ArrayBlockingQueue queue : distance.arrayBlockingQueueList) {
-    Object result = queue.poll();
-    if (result != null) {
-            sb.append("Range");
-            sb.append(Integer.toString(i++));
-            sb.append(": ");
-            sb.append(Integer.toString((int) result));
-            sb.append(" ");
-        }
+    for (ArrayBlockingQueue queue : sensor.arrayBlockingQueueList) {
+      Object result = queue.poll();
+      if (result != null) {
+        sb.append("Range");
+        sb.append(Integer.toString(i++));
+        sb.append(": ");
+        sb.append(Integer.toString((int) result));
+        sb.append(" ");
+      }
     }
     sb.append("\n");
-    System.out.println(sb.toString());
+    System.out.println(sb.toString());*/
+    try{
+      SmartDashboard.putNumber("Distance", sensor.readRangeSingleMillimeters());
+    } catch(Exception e){
+      SmartDashboard.putString("Error", e.toString());
+    }
 }
 
   /**

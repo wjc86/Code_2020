@@ -35,7 +35,7 @@ public class Drivetrain {
     private final SpeedControllerGroup m_rightGroup
         = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+    //private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
     private final SimpleMotorFeedforward leftFeedforward
         = new SimpleMotorFeedforward(Constants.leftFF[0], Constants.leftFF[1], Constants.leftFF[2]);
@@ -51,6 +51,21 @@ public class Drivetrain {
     private final DifferentialDriveOdometry m_odometry;
 
     public Drivetrain() {
-        m_gyro.reset();
+       // m_gyro.reset();
+
+        m_odometry = new DifferentialDriveOdometry(getAngle());
     }
+
+    // public Rotation2d getAngle() {
+    //    // return Rotation2d.fromDegrees(-m_gyro.getAngle());
+    // }
+
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        // double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(),
+        //     speeds.leftMetersPerSecond);
+        // // double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
+        // //     speeds.rightMetersPerSecond) + leftFeedforward.;
+        // m_leftGroup.set(leftOutput);
+        //m_rightGroup.set(rightOutput);
+      }
 }

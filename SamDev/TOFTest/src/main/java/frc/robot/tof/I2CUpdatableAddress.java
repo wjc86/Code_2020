@@ -58,6 +58,16 @@ public class I2CUpdatableAddress {
         HAL.report(tResourceType.kResourceType_I2C, deviceAddress);
     }
 
+    public I2CUpdatableAddress(Port port) throws NACKException {
+        m_port = port.value;
+        m_defaultAddress = VL53L0X.DEFAULT_ADDRESS;
+        m_deviceAddress = VL53L0X.DEFAULT_ADDRESS;
+
+        I2CJNI.i2CInitialize((byte) port.value);
+        setAddress(m_deviceAddress);
+        HAL.report(tResourceType.kResourceType_I2C, m_deviceAddress);
+    }
+
     private final int setAddress(int new_address) throws NACKException {
         //NOTICE: CHANGING THE ADDRESS IS NOT STORED IN NON-VOLATILE MEMORY
         // POWER CYCLING THE DEVICE REVERTS ADDRESS BACK TO 0x29
