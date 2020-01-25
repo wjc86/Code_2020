@@ -10,12 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Joystick;
+// import edu.wpi.first.wpilibj.Joystick;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.MotorTest;
 import frc.robot.motorTestJoystick;
@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
   private MotorTest spar1 = new MotorTest(true, 1);
   private MotorTest spar2 = new MotorTest(true, 4);
-  private MotorTest tal1 = new MotorTest(false, 2);
+  private MotorTest tal1 = new MotorTest(false, 11);
 
   private MotorTest[] motors = new MotorTest[3];
 
@@ -47,17 +47,19 @@ public class Robot extends TimedRobot {
   
   private ourpid[] controllers = new ourpid[3];
 
-  private double pert0;
-  private double pert1;
-  private double pert2;
-  private double M0pct;
-  private double M1pct;
-  private double M2pct;
+  private double pert;
+  private double Mpct;
   
   
   public double throtpct2speed(double throtpct){
     return 5775.6*(throtpct) + 5.1504; 
   }
+
+  public double speed2throt_pct(double speed){
+    return 0.0002*(speed); 
+  }
+
+  
 
   /**
    * This function is run when the robot is first started up and should be
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
     double KP=0;
     double KI=0;
     double KD=0;
-    for(int i=0;i<=3;i++){
+    for(int i=0;i<3;i++){
       controllers[i].setGains(KP, KI, KD);
     }
 
@@ -107,15 +109,21 @@ public class Robot extends TimedRobot {
     pert+=Joy.ButtonAsPerturbation();
     Mpct=Joy.ThrotAsPct();
     if(Joy.enable){
-      controllers[Joy.motor_id].setTargetOutput(throtpct2speed(M0pct+pert0));
+      // controllers[Joy.motor_id].setTargetOutput(throtpct2speed(Mpct+pert));
+      if (Joy.motor_id==2){
+        motors[Joy.motor_id].getTalon().set(ControlMode.PercentOutput,Mpct+pert);
+      }
+      else{
+        motors[Joy.motor_id].getSpark().set(Mpct);
+      }
     }
     controllers[0].setMeasuredOutput(motors[0].getSpark().getEncoder().getVelocity());
     controllers[1].setMeasuredOutput(motors[1].getSpark().getEncoder().getVelocity());
-
-    for (int i=0;i<2;i++){
-      motors[i].getSpark().set(controllers[i].calcControleEffort())
-    }
-    // motors[2].getTalon().set(ControlMode.PercentOutput, controllers[2].ta); %set SIMS motor to target speed as pct.
+    
+    // for (int i=0;i<2;i++){
+    //   motors[i].getSpark().set(controllers[i].calcControleEffort()+controllers[i].target_output);
+    // }
+    // motors[2].getTalon().set(ControlMode.PercentOutput, controllers[2].target_output); //set SIMS motor to target speed as pct.
         
     SmartDashboard.putNumber("M0:target",-(controllers[0].target_output));
     SmartDashboard.putNumber("M0:speed", -(controllers[0].measured_output));
