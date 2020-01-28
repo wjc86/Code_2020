@@ -1,6 +1,7 @@
 package frc.robot;
 
 public class ourpid {
+    //All the variables
     public double error = 0;
     public double previous_error = 0;
     public double error_sum = 0;
@@ -18,9 +19,11 @@ public class ourpid {
     public double min_effort;
     public double effort;
 
+    //Lets us see the differance between the target output and the measured output
     public double target_output = 0;
     public double measured_output = 0;
 
+    //Lets us find the error and set our pid components
     public double calcControleEffort() {
         this.error =this.target_output-this.measured_output;
         this.error_sum += this.error;
@@ -44,24 +47,30 @@ public class ourpid {
         return effort;
     }
 
+    //Uses the parameters for the PID and sets them to the k_x 
     public void setGains(double Kp, double Ki, double Kd) {
         this.k_p = Kp;
         this.k_i = Ki;
         this.k_d = Kd;
     }
-
+    
+    //Updates the Timestep
     public void setTimestep(double Timestep) {
         this.Timestep = Timestep;
     }
 
+    //Finds the max and min effort of the motor
     public void setMaxMinEffort(double Max, double Min) {
         this.max_effort = Max;
         this.min_effort = Min;
     }
 
+    //gives the target input
     public void setTargetOutput(double target) {
         this.target_output = target;
     }
+
+    //gives the measured input
     public void setMeasuredOutput(double measure) {
         this.measured_output = measure;
     }
