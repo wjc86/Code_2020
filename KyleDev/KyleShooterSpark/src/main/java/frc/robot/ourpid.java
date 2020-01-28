@@ -65,9 +65,4 @@ public class ourpid {
     public void setMeasuredOutput(double measure) {
         this.measured_output = measure;
     }
-
-
-
-
-
 }

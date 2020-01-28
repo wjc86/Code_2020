@@ -1,21 +1,10 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.Joystick;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-// import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.MotorTest;
 import frc.robot.motorTestJoystick;
@@ -32,12 +21,6 @@ public class Robot extends TimedRobot {
   private MotorTest tal1 = new MotorTest(false, 11);
 
   private MotorTest[] motors = new MotorTest[3];
-
-
-
-  // public Joystick left = new Joystick(0);
-  // public Joystick right = new Joystick(1);
-  // public Joystick middle = new Joystick(2);
   
   public motorTestJoystick Joy = new motorTestJoystick(1,3);
 
@@ -47,7 +30,6 @@ public class Robot extends TimedRobot {
   
   private ourpid[] controllers = new ourpid[3];
 
-  private double pert;
   private double Mpct;
   
   
@@ -59,12 +41,6 @@ public class Robot extends TimedRobot {
     return 0.0002*(speed); 
   }
 
-  
-
-  /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
-   */
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -94,7 +70,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
   
@@ -105,25 +80,16 @@ public class Robot extends TimedRobot {
     Joy.EnableThrottle();
     System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation()+"|"+Joy.enable);
   
-  
-    pert+=Joy.ButtonAsPerturbation();
     Mpct=Joy.ThrotAsPct();
     if(Joy.enable){
       controllers[Joy.motor_id].setTargetOutput(throtpct2speed(Mpct));
       
-      // if (Joy.motor_id==2){
-      //   motors[Joy.motor_id].getTalon().set(ControlMode.PercentOutput,Mpct);
-      // }
-      // else{
-      //   motors[Joy.motor_id].getSpark().set(Mpct);
-      // }
     }
     controllers[0].setMeasuredOutput(motors[0].getSpark().getEncoder().getVelocity());
     controllers[1].setMeasuredOutput(motors[1].getSpark().getEncoder().getVelocity());
     
     
     motors[0].getSpark().set(controllers[0].calcControleEffort()+speed2throt_pct(controllers[0].target_output));
-    // motors[1].getSpark().set(controllers[0].calcControleEffort()+controllers[i].target_output);
     motors[2].getTalon().set(ControlMode.PercentOutput,speed2throt_pct(controllers[2].target_output)); //set SIMS motor to target speed as pct.
         
     SmartDashboard.putNumber("Flywheel Target",controllers[0].target_output);
@@ -132,37 +98,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Flywheel Error", controllers[0].error_sum);
     SmartDashboard.putNumber("Flywheel Error", controllers[0].error_difference);
     
-    // SmartDashboard.putNumber("M1:target",speed2throt_pct(-(controllers[1].target_output)));
-    // SmartDashboard.putNumber("M1:speed%", -(controllers[1].measured_output));
-    // SmartDashboard.putNumber("M2:target",speed2throt_pct(-(controllers[2].target_output)));
-
     SmartDashboard.putNumber("Current Motor: ", Joy.motor_id);
-    SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);
-    
-
-    /*
-    lpct = (left.getRawAxis(3)/-2.0+0.5);
-    rpct = (right.getRawAxis(3)/-2.0+0.5);
-    convpct = (middle.getRawAxis(3)/-2.0+0.5);
-    RMotor.set(rpct);
-    LMotor.set(lpct);
-    conveyor.set(ControlMode.PercentOutput, convpct);
-    */
-    
-    
-    
-    // lvelocity=LMotor.getEncoder().getVelocity();
-    // rvelocity=RMotor.getEncoder().getVelocity();
-
-    // SmartDashboard.putNumber("L%: ", lpct);
-    // SmartDashboard.putNumber("R%: ", rpct);
-    // SmartDashboard.putNumber("Tread %", convpct);
-    // SmartDashboard.putNumber("LVel: ", lvelocity);
-    // SmartDashboard.putNumber("RVel: ", rvelocity);
-    // SmartDashboard.putNumber("LVel Graph: ", lvelocity);
-    // SmartDashboard.putNumber("RVel Graph: ", rvelocity);
-
-    
+    SmartDashboard.putBoolean("CTRL ENABLE", Joy.enable);    
   }
 }
 
