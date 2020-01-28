@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
     //Switches if the slider will change the speed of the motor
     Joy.EnableThrottle();
     
-    System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation()+"|"+Joy.enable);
+    //System.out.println(Joy.motor_id+"|"+Joy.ThrotAsPct()+"|"+Joy.ButtonAsPerturbation()+"|"+Joy.enable);
   
     //Sets Mpct to the slider position
     Mpct=Joy.ThrotAsPct();
