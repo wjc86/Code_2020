@@ -1,6 +1,6 @@
 package frc.robot;
-import edu.wpi.first.wpilibj.Joystick;
 
+import edu.wpi.first.wpilibj.Joystick;
 
 class motorTestJoystick extends Joystick  {
     public int motor_id = 0;
@@ -13,9 +13,7 @@ class motorTestJoystick extends Joystick  {
     }
 
     public void switchMotor(){
-        // boolean triggerPressed = this.getRawButton(1);
         if(this.getRawButtonPressed(1)){
-            // System.out.println("pressed");
             this.enable = false;
             if(this.motor_id < num_motors-1){
                 this.motor_id += 1;
@@ -25,6 +23,7 @@ class motorTestJoystick extends Joystick  {
             }
         }
     }
+
     public void EnableThrottle(){
         if (this.getRawButtonPressed(2)){
             if(this.enable==true){
@@ -54,7 +53,4 @@ class motorTestJoystick extends Joystick  {
             return 0;
         }
     }
-
-  
-    
 }

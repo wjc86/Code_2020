@@ -8,8 +8,8 @@ public class MotorTest {
     CANSparkMax spark;
     TalonSRX talon;
     boolean myControllerType;
-    
 
+    //Sets the Talon and Sparks to the type of motor and gives them their CAN ID
     public MotorTest(boolean controllerType, int motorID) {
         this.myControllerType = controllerType;
         
