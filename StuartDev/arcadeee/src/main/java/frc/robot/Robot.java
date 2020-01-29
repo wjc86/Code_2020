@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     if(m_stickRight.getRawButton(1)){
       m_robotDrive.arcadeDrive(-m_stickLeft.getY(), m_stickRight.getX());
     } else {
-      m_robotDrive.arcadeDrive(-m_stickLeft.getY()*.6, m_stickRight.getX()*.6);
+      m_robotDrive.arcadeDrive(-m_stickLeft.getY(), m_stickRight.getX());
     }
     SmartDashboard.putNumber("left velocity", m_leftMotor.getSelectedSensorVelocity()*velocityConversion);
     SmartDashboard.putNumber("right velocity", -m_rightMotor.getSelectedSensorVelocity()*velocityConversion);

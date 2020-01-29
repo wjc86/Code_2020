@@ -8,7 +8,7 @@ public class Controller {
     private final Joystick rotStick = new Joystick(1);
 
     public double getSpeed() {
-        if(!speedStick.getRawButtonPressed(0)){
+        if(!speedStick.getRawButton(1)){
             if(Math.abs(speedStick.getY()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (speedStick.getY() < 0) {
@@ -28,13 +28,26 @@ public class Controller {
     }
 
     public double getRot() {
-        if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
-            return 0.0;
-        } else if (rotStick.getX() < 0) {
-            return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+        if(!speedStick.getRawButton(1)){
+            if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
+                return 0.0;
+            } else if (rotStick.getX() < 0) {
+                return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+            } else {
+                return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+            }
         } else {
-            return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+            if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
+                return 0.0;
+            } else if (rotStick.getX() < 0) {
+                return (rotStick.getX() + Constants.controllerDeadband) * -1.0;
+            } else {
+                return (rotStick.getX() - Constants.controllerDeadband) * -1.0;
+            }
         }
-        
+    }
+
+    public Boolean resetOdometry(){
+        return speedStick.getRawButton(6);
     }
 }

@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
     m_batteryMonitor.overallMonitoring(m_drive);
+    if(m_controller.resetOdometry()) {m_drive.resetOdometry();}
   }
 
   @Override
