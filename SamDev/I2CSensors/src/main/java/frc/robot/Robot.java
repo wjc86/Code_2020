@@ -8,10 +8,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class Robot extends TimedRobot {
+  private Joystick joy = new Joystick(100);
+  private ColorSensor colorSensor = new ColorSensor();
+
   @Override
   public void robotInit() {
+    colorSensor.setup();
   }
   
   @Override
@@ -28,6 +33,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    
   }
 
   @Override

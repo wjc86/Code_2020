@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode; //Importing what we need from ctre in the Robot class
@@ -10,6 +11,11 @@ import frc.robot.motorTestJoystick;
 import frc.robot.ourpid;
 
 public class Robot extends TimedRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
   //2nd number is the CAN ID and its creating them under the MotorTest Class
   private MotorTest spar1 = new MotorTest(true, 1);
   private MotorTest spar2 = new MotorTest(true, 4);
@@ -41,6 +47,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    
     //Adding the sparks and talon to the motor list
     motors[0] = spar1;
     motors[1] = spar2;
@@ -62,6 +72,14 @@ public class Robot extends TimedRobot {
     for(int i=0;i<3;i++){
       controllers[i].setGains(KP, KI, KD);
     }
+
+
+
+  }
+  @Override
+  public void autonomousInit() {
+    m_autoSelected = m_chooser.getSelected();
+    System.out.println("Auto selected: " + m_autoSelected);
   }
   
   @Override
