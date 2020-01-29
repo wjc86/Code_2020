@@ -20,10 +20,10 @@ public class Constants {
     public static final double[] rightPID = {0,0,0};
     public static final double[] rightFF = {0.156, 0.747, 0.068};
 
-    public static final double velocityConversion = 7.1631/100000.0;
-    public static final double postitionConversion = 7.1631/10000.0;
+    public static final double velocityConversion = 7.1631/10000.0;
+    public static final double postitionConversion = 7.1631/100000.0;
 
-    public static final double controllerDeadband = 0.1;
-    public static final double slowdownSpeed = 1;
-    public static final double slowdownRot = 1;
+    public static final double controllerDeadband = .1;
+    public static final double slowdownSpeed = .5;
+    public static final double slowdownRot = .25;
 }
