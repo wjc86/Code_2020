@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
@@ -58,8 +60,11 @@ public class Drivetrain {
             + */leftFeedforward.calculate(speeds.leftMetersPerSecond);
         double rightOutput = /*m_rightPIDController.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
             + */rightFeedforward.calculate(speeds.rightMetersPerSecond);
-        m_leftGroup.set(leftOutput);
-        m_rightGroup.set(rightOutput);
+        // m_leftGroup.set(leftOutput);
+        // m_rightGroup.set(rightOutput);
+        m_leftMaster.setVoltage(leftOutput);
+        m_rightMaster.setVoltage(rightOutput
+        );
         SmartDashboard.putNumber("right output", rightOutput);
         SmartDashboard.putNumber("left output", leftOutput);
         SmartDashboard.putNumber("right speed", m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion);

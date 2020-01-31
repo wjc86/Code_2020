@@ -12,17 +12,17 @@ public class Controller {
             if(Math.abs(speedStick.getY()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (speedStick.getY() < 0) {
-                return (speedStick.getY() + Constants.controllerDeadband) * Constants.slowdownSpeed * -1.0;
+                return (speedStick.getY() + Constants.controllerDeadband) * Constants.slowdownSpeed * Constants.kSpeedMultiplier * -1.0;
             } else {
-                return (speedStick.getY() - Constants.controllerDeadband) * Constants.slowdownSpeed * -1.0;
+                return (speedStick.getY() - Constants.controllerDeadband) * Constants.slowdownSpeed * Constants.kSpeedMultiplier * -1.0;
             }
         } else {
             if(Math.abs(speedStick.getY()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (speedStick.getY() < 0) {
-                return (speedStick.getY() + Constants.controllerDeadband) * -1.0;
+                return (speedStick.getY() + Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
             } else {
-                return (speedStick.getY() - Constants.controllerDeadband) * -1.0;
+                return (speedStick.getY() - Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
             }
         }
     }
@@ -32,17 +32,17 @@ public class Controller {
             if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+                return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * Constants.kSpeedMultiplier * -1.0;
             } else {
-                return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * -1.0;
+                return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * Constants.kSpeedMultiplier * -1.0;
             }
         } else {
             if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + Constants.controllerDeadband) * -1.0;
+                return (rotStick.getX() + Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
             } else {
-                return (rotStick.getX() - Constants.controllerDeadband) * -1.0;
+                return (rotStick.getX() - Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
             }
         }
     }
