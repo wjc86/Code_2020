@@ -7,16 +7,14 @@
 
 package frc.robot;
 
+import frc.robot.Intake;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import javax.lang.model.util.ElementScanner6;
 
-import com.ctre.phoenix.*;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -29,14 +27,11 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  
-  Joystick leftJoystick = new Joystick(0);
-  Joystick rightJoystick = new Joystick(1);
-  
-  TalonFX leftMotor = new TalonFX(1);
-  TalonFX rightMotor = new TalonFX(2);
 
-  public static double deadband = 0.1;
+  Joystick Joy = new Joystick(0);
+
+  public Intake intake = new Intake(1, 0.9);
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -99,24 +94,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    leftMotor.set(ControlMode.PercentOutput, leftJoystick.getY());
-    rightMotor.set(ControlMode.PercentOutput, rightJoystick.getY());
-    rightMotor.setInverted(true);
-  
-    if (leftJoystick.getY()<deadband && leftJoystick.getY()>-deadband) {
-        leftMotor.set(ControlMode.PercentOutput, 0);
+    if(Joy.getRawButton(3)) {
+      intake.start();
     }
-    else { 
-        leftMotor.set(ControlMode.PercentOutput, leftJoystick.getY());
+    if(Joy.getRawButton(4)) {
+      intake.reverse();
     }
-    if (rightJoystick.getY()<deadband && rightJoystick.getY()>-deadband) {
-      rightMotor.set(ControlMode.PercentOutput, 0);
+    if(Joy.getRawButton(5)) {
+      intake.stop();
+    }
+
+
+
+
+
   }
-  else { 
-      rightMotor.set(ControlMode.PercentOutput, rightJoystick.getY());
-  }
-  }
- 
+
   /**
    * This function is called periodically during test mode.
    */

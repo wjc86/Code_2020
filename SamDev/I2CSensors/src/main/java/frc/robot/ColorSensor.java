@@ -38,7 +38,7 @@ public class ColorSensor{
         return "";
     }
 
-    public void rotateToColor(String color){}
+    public void rotateToColor(String color)
 
     public void deploy(){}
 
