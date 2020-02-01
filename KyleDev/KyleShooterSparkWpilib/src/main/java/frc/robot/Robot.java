@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode; //Importing what we need from 
 
 import frc.robot.MotorTest; //Imports our other files
 import frc.robot.motorTestJoystick;
-// import frc.robot.ourpid;
+import frc.robot.ourpid;
 
 public class Robot extends TimedRobot {
   //2nd number is the CAN ID and its creating them under the MotorTest Class
@@ -22,9 +22,9 @@ public class Robot extends TimedRobot {
   public motorTestJoystick Joy = new motorTestJoystick(1,3);
 
   //Creates the controllers in the built in pid controllers
-  public PIDController controller1 = new PIDController();
-  public PIDController controller0 = new PIDController(); 
-  public PIDController controller2 = new PIDController(); 
+  public PIDController controller0;
+  public PIDController controller1;
+  public PIDController controller2;
   
   private PIDController[] controllers = new PIDController[3];
 
@@ -61,8 +61,11 @@ public class Robot extends TimedRobot {
     double KI=0.02;
     double KD=0.0002;
     for(int i=0;i<3;i++){
-      controllers[i].setGains(KP, KI, KD);
+      controller1 = new PIDController(KP, KI, KD);
+      controller0 = new PIDController(KP, KI, KD);
+      controller2 = new PIDController(KP, KI, KD);
     }
+  }
   @Override
   public void teleopPeriodic() {
 

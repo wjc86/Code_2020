@@ -7,16 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Joystick;
 
-import javax.lang.model.util.ElementScanner6;
-
-import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import frc.robot.constants;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -29,14 +28,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  
-  Joystick leftJoystick = new Joystick(0);
-  Joystick rightJoystick = new Joystick(1);
-  
   TalonFX leftMotor = new TalonFX(1);
   TalonFX rightMotor = new TalonFX(2);
-
-  public static double deadband = 0.1;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -46,6 +39,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    rightMotor.setInverted(true);  
   }
 
   /**
@@ -99,24 +93,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    leftMotor.set(ControlMode.PercentOutput, leftJoystick.getY());
-    rightMotor.set(ControlMode.PercentOutput, rightJoystick.getY());
-    rightMotor.setInverted(true);
-  
-    if (leftJoystick.getY()<deadband && leftJoystick.getY()>-1 * deadband) {
-        leftMotor.set(ControlMode.PercentOutput, 0);
+    if(Math.abs(leftStick.getY()) < constants.DEADBAND) {
+      leftMotor.set(ControlMode.PercentOutput, 0);
+    }else{
+      leftMotor.set(ControlMode.PercentOutput, leftStick.getY());
     }
-    else { 
-        leftMotor.set(ControlMode.PercentOutput, leftJoystick.getY());
-    }
-    if (rightJoystick.getY()<deadband && rightJoystick.getY()>-1 * deadband) {
+
+    if(Math.abs(rightStick.getY()) < constants.DEADBAND) {
       rightMotor.set(ControlMode.PercentOutput, 0);
+    }else{
+      rightMotor.set(ControlMode.PercentOutput, rightStick.getY());
+    }
   }
-  else { 
-      rightMotor.set(ControlMode.PercentOutput, rightJoystick.getY());
-  }
-  }
- 
+
   /**
    * This function is called periodically during test mode.
    */
