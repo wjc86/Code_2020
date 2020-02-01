@@ -1,4 +1,4 @@
-package frc.robot;
+package dc;
 
 import edu.wpi.first.hal.sim.DriverStationSim;
 import edu.wpi.first.wpilibj.DriverStation;
