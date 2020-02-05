@@ -13,7 +13,8 @@ public class turret {
 
     public Boolean visionTracking = false;
     public Boolean visionLocked = false;
-
+    public double motorPosition = 0;
+    public Boolean atHome = true;
 
     public void limitReached() {}
     public void SlowDown() {}
@@ -22,17 +23,24 @@ public class turret {
 
     public void StateTransition(){
         if (this.visionTracking == true && this.visionLocked == true){
-            this.state = 1;
+            this.state = 1;//ready to fire
         }
         else if (this.visionTracking == false && this.visionLocked == true) {
-            this.state = 2;
+            this.state = 2;//go back to home
         }
         else if (this.visionTracking == true && this.visionLocked == false) {
-            this.state = 3;
+            this.state = 3;//Home in on target
         }
         else if (this.visionTracking == false && this.visionLocked == false) {
-            this.state = 4;
-        }    
+            this.state = 4; //Oscillating
+        }
+        if (this.atHome == false) {
+            //SmartDashboard return not at home
+        }
+        else if (this.atHome == true) {
+            //SmartDashboard return at home
+        }
+
     }
 }
   
