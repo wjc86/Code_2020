@@ -8,15 +8,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Robot extends TimedRobot {
-  private Joystick joy = new Joystick(100);
-  private ColorSensor colorSensor = new ColorSensor();
+  private Joystick joy = new Joystick(0);
+  private ColorSensor mColorSensor = new ColorSensor();
+  private ColorSensor.color mColor;
 
   @Override
   public void robotInit() {
-    colorSensor.setup();
+    mColorSensor.setup();
   }
   
   @Override
@@ -33,7 +35,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+    if(joy.getRawButtonPressed(8)){
+      mColor = mColorSensor.detectColor();
+    }
+    SmartDashboard.putString("Robot's Detected Color", mColor.toString());
   }
 
   @Override
