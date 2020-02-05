@@ -12,7 +12,7 @@ import frc.robot.ourpid;
 public class Robot extends TimedRobot {
   //2nd number is the CAN ID and its creating them under the MotorTest Class
   private MotorTest spar1 = new MotorTest(true, 1);
-  private MotorTest spar2 = new MotorTest(true, 6);
+  private MotorTest spar2 = new MotorTest(true, 4);
   private MotorTest tal1 = new MotorTest(false, 11);
 
   private MotorTest[] motors = new MotorTest[3];
@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
     controllers[1].setMeasuredOutput(motors[1].getSpark().getEncoder().getVelocity());
     
     
-    motors[0].getSpark().set(-1* (controllers[0].calcControleEffort()+speed2throt_pct(controllers[0].target_output)));
+    motors[0].getSpark().set(controllers[0].calcControleEffort()+speed2throt_pct(controllers[0].target_output));
     motors[2].getTalon().set(ControlMode.PercentOutput,speed2throt_pct(controllers[2].target_output)); //set SIMS motor to target speed as pct.
     
     //Shows the Flywheel Values on the Smart Dashboard
