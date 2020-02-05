@@ -56,10 +56,10 @@ public class Drivetrain {
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        double leftOutput = /*m_leftPIDController.calculate(/_leftMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.leftMetersPerSecond)
-            + */leftFeedforward.calculate(speeds.leftMetersPerSecond);
-        double rightOutput = /*m_rightPIDController.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
-            + */rightFeedforward.calculate(speeds.rightMetersPerSecond);
+        double leftOutput = m_leftPIDController.calculate(m_leftMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.leftMetersPerSecond)
+            + leftFeedforward.calculate(speeds.leftMetersPerSecond);
+        double rightOutput = m_rightPIDController.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
+            + rightFeedforward.calculate(speeds.rightMetersPerSecond);
         // m_leftGroup.set(leftOutput);
         // m_rightGroup.set(rightOutput);
         m_leftMaster.setVoltage(leftOutput);
@@ -80,7 +80,19 @@ public class Drivetrain {
         SmartDashboard.putNumber("Rot", rot);
         SmartDashboard.putNumber("left wheel speed", wheelSpeeds.leftMetersPerSecond);
         SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
+        updateOdometry();
         printOdometry();
+    }
+
+    @SuppressWarnings("ParameterName")
+    public void drive(ChassisSpeeds m_chassisSpeeds){
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(m_chassisSpeeds);
+        setSpeeds(wheelSpeeds);
+        SmartDashboard.putNumber("left wheel speed", wheelSpeeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
+        updateOdometry();
+        printOdometry();
+        System.out.println("6");
     }
 
     public void updateOdometry() {
@@ -90,9 +102,9 @@ public class Drivetrain {
     }
 
     public void printOdometry() {
-        updateOdometry();
         SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getTranslation().getX());
         SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getTranslation().getY());
+        SmartDashboard.putNumber("Rot Pos", m_odometry.getPoseMeters().getRotation().getDegrees());
     }
 
     public void resetOdometry() {
@@ -106,5 +118,9 @@ public class Drivetrain {
         SmartDashboard.putNumber("left out", m_leftMaster.getStatorCurrent());
         SmartDashboard.putNumber("right draw", m_rightMaster.getSupplyCurrent());
         SmartDashboard.putNumber("right out" , m_rightMaster.getStatorCurrent());
+    }
+
+    public Pose2d getCurrentPose() {
+        return m_odometry.getPoseMeters();
     }
 }

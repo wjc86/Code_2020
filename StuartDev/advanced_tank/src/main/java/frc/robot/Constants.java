@@ -27,4 +27,6 @@ public class Constants {
     public static final double controllerDeadband = .1;
     public static final double slowdownSpeed = .5;
     public static final double slowdownRot = .25;
+
+    public static final boolean inTajectoryMode = false;
 }
