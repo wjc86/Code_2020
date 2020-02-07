@@ -43,7 +43,7 @@ public class TrajectoryFolower {
         System.out.println("4");
     }
 
-    public ChassisSpeeds calculateTrajectory(Pose2d currentPose){
+    public ChassisSpeeds calculateCurrentTrajectory(Pose2d currentPose){
         double passedTime = Timer.getFPGATimestamp()-startTime;
         Trajectory.State currentGoal = mTrajectory.sample(passedTime);
         System.out.println("5");

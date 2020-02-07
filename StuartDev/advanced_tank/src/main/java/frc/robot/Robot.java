@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
     m_batteryMonitor = new BatteryMonitoring();
     m_trajectoryFollower = new TrajectoryFolower();
     putDashboard();
+    Rotation2d finalRot = new Rotation2d(0);
+    
   }
 
   @Override
@@ -64,7 +66,7 @@ public class Robot extends TimedRobot {
       m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, SmartDashboard.getNumber("final speed", 0), new ArrayList<Translation2d>(), 10.0, 10.0, SmartDashboard.getBoolean("final reversed",false));
       SmartDashboard.putBoolean("entered 3", true);
     }
-    m_drive.drive(m_trajectoryFollower.calculateTrajectory(m_drive.getCurrentPose()));
+    m_drive.drive(m_trajectoryFollower.calculateCurrentTrajectory(m_drive.getCurrentPose()));
     System.out.println("2");
   }
 
