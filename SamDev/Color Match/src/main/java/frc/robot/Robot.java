@@ -58,13 +58,15 @@ public class Robot extends TimedRobot {
   private static final int RED_CALIBRATION = 30;
   private static final int GREEN_CALIBRATION = 130;
   private static final int CYAN_CALIBRATION = 184;
+  private int Last_Color = 0;
 
   @Override
   public void robotInit() {
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
-    m_colorMatcher.addColorMatch(kYellowTarget);    
+    m_colorMatcher.addColorMatch(kYellowTarget);
+    SmartDashboard.putString("Helllo", "World");    
   }
 
   @Override
@@ -79,6 +81,7 @@ public class Robot extends TimedRobot {
      * an object is the more light from the surroundings will bleed into the 
      * measurements and make it difficult to accurately determine its color.
      */
+   SmartDashboard.putString("Helllo2w", "World2");
     Color detectedColor = m_colorSensor.getColor();
 
     /**
@@ -115,6 +118,7 @@ public class Robot extends TimedRobot {
       if(h < 0){
         h += 360;
       }
+      break;
     }
 
     if((h >= 0 && h <= ((RED_CALIBRATION + YELLOW_CALIBRATION)/2)) || (h >= 300 && h <= 360)){
@@ -133,13 +137,14 @@ public class Robot extends TimedRobot {
       colorString = "Unknown";
       color = 0;
     }
-
-    SmartDashboard.putNumber("Color Graph", color);
-    SmartDashboard.putString("Color", colorString);
-    SmartDashboard.putNumber("H", h);
-    SmartDashboard.putNumber("S", s);
-    SmartDashboard.putNumber("V", v);
-
+    if (color == Last_Color) {
+      SmartDashboard.putNumber("Color Graph", color);
+      SmartDashboard.putString("Color", colorString);
+      SmartDashboard.putNumber("H", h);
+      SmartDashboard.putNumber("S", s);
+      SmartDashboard.putNumber("V", v);
+    }
+    Last_Color = color; 
     /*if (match.color == kBlueTarget) {
       colorString = "Blue";
     } else if (match.color == kRedTarget) {
