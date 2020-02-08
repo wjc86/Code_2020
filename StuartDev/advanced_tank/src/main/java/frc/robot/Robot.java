@@ -27,7 +27,11 @@ public class Robot extends TimedRobot {
     m_batteryMonitor = new BatteryMonitoring();
     m_trajectoryFollower = new TrajectoryFolower();
     putDashboard();
-    Rotation2d finalRot = new Rotation2d(0);
+    m_drive.resetOdometry();
+    // Rotation2d finalRot = new Rotation2d(0);
+    // Pose2d finalPose = new Pose2d(10, 0, finalRot);
+    // ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
+    // m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0, finalPose, 0, waypoints, 4, 4, false);
     
   }
 
@@ -45,27 +49,27 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    currentDriveState = SmartDashboard.getBoolean("drive mode", true);
-    if(!currentDriveState){
-      trajectoryMode();
-      System.out.println("1");
-    } else {
+    // currentDriveState = SmartDashboard.getBoolean("drive mode", true);
+    // if(!currentDriveState){
+      // trajectoryMode();
+    //   System.out.println("1");
+    // } else {
       m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
-    }
+    // }
     m_batteryMonitor.overallMonitoring(m_drive);
     if(m_controller.resetOdometry()) {
       m_drive.resetOdometry();
     }
-    lastDriveState = currentDriveState;
+    // lastDriveState = currentDriveState;
   }
 
   public void trajectoryMode(){
-    if(lastDriveState){
-      Rotation2d finalRot = new Rotation2d(SmartDashboard.getNumber("final rot", 0) * (Math.PI/180.0));
-      Pose2d finalPose = new Pose2d(SmartDashboard.getNumber("final x", 0), SmartDashboard.getNumber("final y", 0), finalRot);
-      m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, SmartDashboard.getNumber("final speed", 0), new ArrayList<Translation2d>(), 10.0, 10.0, SmartDashboard.getBoolean("final reversed",false));
-      SmartDashboard.putBoolean("entered 3", true);
-    }
+    // if(lastDriveState){
+    //   Rotation2d finalRot = new Rotation2d(SmartDashboard.getNumber("final rot", 0) * (Math.PI/180.0));
+    //   Pose2d finalPose = new Pose2d(SmartDashboard.getNumber("final x", 0), SmartDashboard.getNumber("final y", 0), finalRot);
+    //   m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, SmartDashboard.getNumber("final speed", 0), new ArrayList<Translation2d>(), 10.0, 10.0, SmartDashboard.getBoolean("final reversed",false));
+    //   SmartDashboard.putBoolean("entered 3", true);
+    // }
     m_drive.drive(m_trajectoryFollower.calculateCurrentTrajectory(m_drive.getCurrentPose()));
     System.out.println("2");
   }
