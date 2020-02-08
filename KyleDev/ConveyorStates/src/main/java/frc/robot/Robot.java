@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -16,7 +17,9 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public Joystick controller = new Joystick(1);
   public CANSparkMax upperMotor = new CANSparkMax(1, MotorType.kBrushless);
-  
+  public Timer time = new Timer();
+  public double  timTim = 0.0;
+  public double percentage = 0.4;
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -55,14 +58,21 @@ public class Robot extends TimedRobot {
   
   @Override
   public void teleopPeriodic() {
-      if (controller.getRawButton(1)) {
-          upperMotor.set(0.5);
+      if (controller.getRawButton(2)) {
+          upperMotor.set(percentage);
+          time.start();
       }
-      else {
-        upperMotor.set(0);
+      if (time.get() > 0.015) {
+         upperMotor.set(0);
+         time.stop();
+      }
          
+      if (controller.getRawButton(1)) {
+        time.reset();
       }
+      
     SmartDashboard.putNumber("speed", upperMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("time", time.get());
   }
 
  
