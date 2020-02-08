@@ -28,7 +28,8 @@ public class Robot extends TimedRobot {
     m_trajectoryFollower = new TrajectoryFolower();
     putDashboard();
     Rotation2d finalRot = new Rotation2d(0);
-    
+    Pose2d finalPose = new Pose2d(10, 0, finalRot);
+    m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, 0.0, null, 10, 10, false);
   }
 
   @Override
@@ -60,12 +61,12 @@ public class Robot extends TimedRobot {
   }
 
   public void trajectoryMode(){
-    if(lastDriveState){
-      Rotation2d finalRot = new Rotation2d(SmartDashboard.getNumber("final rot", 0) * (Math.PI/180.0));
-      Pose2d finalPose = new Pose2d(SmartDashboard.getNumber("final x", 0), SmartDashboard.getNumber("final y", 0), finalRot);
-      m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, SmartDashboard.getNumber("final speed", 0), new ArrayList<Translation2d>(), 10.0, 10.0, SmartDashboard.getBoolean("final reversed",false));
-      SmartDashboard.putBoolean("entered 3", true);
-    }
+    // if(lastDriveState){
+    //   Rotation2d finalRot = new Rotation2d(SmartDashboard.getNumber("final rot", 0) * (Math.PI/180.0));
+    //   Pose2d finalPose = new Pose2d(SmartDashboard.getNumber("final x", 0), SmartDashboard.getNumber("final y", 0), finalRot);
+    //   m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, SmartDashboard.getNumber("final speed", 0), new ArrayList<Translation2d>(), 10.0, 10.0, SmartDashboard.getBoolean("final reversed",false));
+    //   SmartDashboard.putBoolean("entered 3", true);
+    // }
     m_drive.drive(m_trajectoryFollower.calculateCurrentTrajectory(m_drive.getCurrentPose()));
     System.out.println("2");
   }
