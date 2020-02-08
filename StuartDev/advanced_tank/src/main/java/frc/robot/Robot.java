@@ -27,9 +27,12 @@ public class Robot extends TimedRobot {
     m_batteryMonitor = new BatteryMonitoring();
     m_trajectoryFollower = new TrajectoryFolower();
     putDashboard();
-    Rotation2d finalRot = new Rotation2d(0);
-    Pose2d finalPose = new Pose2d(10, 0, finalRot);
-    m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0.0, finalPose, 0.0, null, 10, 10, false);
+    m_drive.resetOdometry();
+    // Rotation2d finalRot = new Rotation2d(0);
+    // Pose2d finalPose = new Pose2d(10, 0, finalRot);
+    // ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
+    // m_trajectoryFollower.generateTrajectory(m_drive.getCurrentPose(), 0, finalPose, 0, waypoints, 4, 4, false);
+    
   }
 
   @Override
@@ -46,18 +49,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    currentDriveState = SmartDashboard.getBoolean("drive mode", true);
-    if(!currentDriveState){
-      trajectoryMode();
-      System.out.println("1");
-    } else {
+    // currentDriveState = SmartDashboard.getBoolean("drive mode", true);
+    // if(!currentDriveState){
+      // trajectoryMode();
+    //   System.out.println("1");
+    // } else {
       m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
-    }
+    // }
     m_batteryMonitor.overallMonitoring(m_drive);
     if(m_controller.resetOdometry()) {
       m_drive.resetOdometry();
     }
-    lastDriveState = currentDriveState;
+    // lastDriveState = currentDriveState;
   }
 
   public void trajectoryMode(){
