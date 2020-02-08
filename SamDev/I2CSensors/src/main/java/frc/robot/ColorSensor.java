@@ -19,7 +19,7 @@ public class ColorSensor{
     private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch mColorMatcher = new ColorMatch();
 
-    private VL53L0X sensor1 = new VL53L0X();
+    private VL53L0XSensor sensor1 = new VL53L0XSensor();
 
     private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);

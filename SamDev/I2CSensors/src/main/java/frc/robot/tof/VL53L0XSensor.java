@@ -49,5 +49,9 @@ public class VL53L0XSensor {
         return sensor.readRangeSingleMillimeters();
     }
 
+    public boolean changeAddress(int address){
+        return sensor.changeAddress(address);
+    }
+
     public class SingleNotInitalizedException extends IOException {}
 }
