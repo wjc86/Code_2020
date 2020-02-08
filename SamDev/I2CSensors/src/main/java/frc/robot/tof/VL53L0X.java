@@ -3,6 +3,7 @@ package frc.robot.tof;
 import java.nio.ByteBuffer;
 
 import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.tof.VL53L0X.vcselPeriodType.*;
 
@@ -899,5 +900,17 @@ public class VL53L0X extends I2CUpdatableAddress {
 
     private byte encodeVcselPeriod(byte period_pclks) {
         return (byte)(((period_pclks) >> 1) - 1);
-    }
+	}
+	
+	public boolean changeAddress(int address){
+		int received = 15;
+		try{
+			received = super.setAddress(address);
+		} catch(NACKException nack){
+			System.out.println("NACK EXCEPTION " + nack.getStackTrace());
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return received == address;
+	}
 }

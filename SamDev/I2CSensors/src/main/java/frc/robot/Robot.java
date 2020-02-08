@@ -9,16 +9,23 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.TOFSensors.SensorNotInitialized;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Robot extends TimedRobot {
   private Joystick joy = new Joystick(0);
   private ColorSensor mColorSensor = new ColorSensor();
   private ColorSensor.color mColor;
+  private TOFSensors mTOFSensors = new TOFSensors();
 
   @Override
   public void robotInit() {
     mColorSensor.setup();
+    try{
+      mTOFSensors.setup(0, 1);
+    } catch(SensorNotInitialized notInit){
+      notInit.print();
+    }
   }
   
   @Override
@@ -35,10 +42,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if(joy.getRawButtonPressed(8)){
-      mColor = mColorSensor.detectColor();
-    }
+    mColor = mColorSensor.detectColor();
     SmartDashboard.putString("Robot's Detected Color", mColor.toString());
+
+    double[] values = mTOFSensors.readDistance();
+    SmartDashboard.putString("Sensor 1 Distance", ((Double) values[0]).toString());
+    SmartDashboard.putString("Sensor 2 Distance", ((Double) values[1]).toString());
   }
 
   @Override

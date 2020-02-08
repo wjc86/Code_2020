@@ -68,7 +68,7 @@ public class I2CUpdatableAddress {
         HAL.report(tResourceType.kResourceType_I2C, m_deviceAddress);
     }
 
-    private final int setAddress(int new_address) throws NACKException {
+    public final int setAddress(int new_address) throws NACKException {
         //NOTICE: CHANGING THE ADDRESS IS NOT STORED IN NON-VOLATILE MEMORY
         // POWER CYCLING THE DEVICE REVERTS ADDRESS BACK TO 0x29
         if (m_defaultAddress == new_address || new_address > 127)
