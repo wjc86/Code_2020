@@ -92,7 +92,6 @@ public class Drivetrain {
         SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
         updateOdometry();
         printOdometry();
-        System.out.println("6");
     }
 
     public void updateOdometry() {
@@ -109,6 +108,12 @@ public class Drivetrain {
 
     public void resetOdometry() {
         m_odometry.resetPosition(new Pose2d(), getAngle());
+        m_rightMaster.setSelectedSensorPosition(0);
+        m_leftMaster.setSelectedSensorPosition(0);
+    }
+
+    public void setPose(Pose2d setPose) {
+        m_odometry.resetPosition(setPose, getAngle());
         m_rightMaster.setSelectedSensorPosition(0);
         m_leftMaster.setSelectedSensorPosition(0);
     }

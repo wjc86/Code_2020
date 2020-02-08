@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class Controller {
@@ -47,7 +48,18 @@ public class Controller {
         }
     }
 
-    public Boolean resetOdometry(){
+    public Boolean resetOdometry() {
         return speedStick.getRawButton(6);
+    }
+
+    public Boolean trajectoryMode() {
+        if(rotStick.getRawButtonPressed(1)){
+            Robot.startTrajectoryTime = Timer.getFPGATimestamp();
+        }
+        if(rotStick.getRawButton(1)){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
