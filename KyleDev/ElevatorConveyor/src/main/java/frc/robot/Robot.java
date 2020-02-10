@@ -25,10 +25,10 @@ public class Robot extends TimedRobot {
 		return myRobot; 
 	}
 
-	@Override
-	public void robotInit() {
-		mElevator.registerLoop();
-	}
+	// @Override
+	// public void robotInit() {
+	// 	mElevator.registerLoop();
+	// }
 
 	public void autonomousPeriodic() {
 		driverControl();
