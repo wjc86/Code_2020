@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -10,40 +9,27 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class Robot extends TimedRobot {
-  public Joystick control;
   public CANSparkMax cMotor;
   public CANPIDController cPID;
   public CANEncoder cEncoder;
-  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-
-
-  public Timer time = new Timer();
-  // public double timTim = 0.0;
-  public double percentage = 0.5;
-  public double speed = 0;
-  
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   @Override
   public void robotInit() {
-    control = new Joystick(1);
     cMotor = new CANSparkMax(1, MotorType.kBrushless);
     cMotor.restoreFactoryDefaults();
     cPID = cMotor.getPIDController();
     cEncoder = cMotor.getEncoder();
 
-    //PID coefficients
-    kP = 6e-5;
-    kI = 0;
-    kD = 0;
+    kP = 0.1;
+    kI = 1e-4;
+    kD = 1;
     kIz = 0;
-    kFF = 0.000015;
+    kFF = 0;
     kMaxOutput = 1;
     kMinOutput = -1;
-    maxRPM = 5700;
-
+    
     cPID.setP(kP);
     cPID.setI(kI);
     cPID.setD(kD);
@@ -58,8 +44,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Feed Forward", kFF);
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
-
-    // cMotor.getEncoder().setVelocityConversionFactor(1.0/*/60.0/8.75*Units.inchesToMeters(2)*Math.PI*/);
+    SmartDashboard.putNumber("Set Rotations", 0);
   }
 
   @Override
@@ -71,6 +56,7 @@ public class Robot extends TimedRobot {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
+    double rotations = SmartDashboard.getNumber("Set Rotations", 0);
 
     if((p != kP)) {cPID.setP(p); kP = p;}
     if((i != kI)) {cPID.setI(i); kI = i;}
@@ -82,27 +68,9 @@ public class Robot extends TimedRobot {
       kMinOutput = min; kMaxOutput = max;
     }
 
-    double setPoint = control.getY() * maxRPM;
-    cPID.setReference(setPoint , ControlType.kVelocity);
+    cPID.setReference(rotations, ControlType.kPosition);
 
-    SmartDashboard.putNumber("SetPoint", setPoint);
-    SmartDashboard.putNumber("ProcessVariable", cEncoder.getVelocity());
-
-    // if (control.getRawButton(2) && time.get() <= 0.02) {
-    //   cMotor.set(percentage);
-    //   time.start();
-    //   speed = cMotor.getEncoder().getVelocity();
-    // }
-    // if (time.get() > 0.02) {
-    //    cMotor.set(0);
-    //    time.stop();
-    // }       
-    // if (control.getRawButton(1)) {
-    //   time.reset();
-    // }
-      
-      
-    // SmartDashboard.putNumber("speed", speed);
-    // SmartDashboard.putNumber("time", time.get());
+    SmartDashboard.putNumber("SetPoint", rotations);
+    SmartDashboard.putNumber("ProcessVariable", cEncoder.getPosition());
   }
 }
