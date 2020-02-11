@@ -9,7 +9,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 public class Robot extends TimedRobot {
+  public Joystick Joy;
   public CANSparkMax cMotor;
   public CANPIDController cPID;
   public CANEncoder cEncoder;
@@ -21,10 +24,11 @@ public class Robot extends TimedRobot {
     cMotor.restoreFactoryDefaults();
     cPID = cMotor.getPIDController();
     cEncoder = cMotor.getEncoder();
+    Joy = new Joystick(1);
 
-    kP = 0.1;
-    kI = 1e-4;
-    kD = 1;
+    kP = 0.015;
+    kI = 0.01;
+    kD = 0.005;
     kIz = 0;
     kFF = 0;
     kMaxOutput = 1;
@@ -49,6 +53,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    if(Joy.getRawButton(1)) {
+      cMotor.set(-1);
+    } else {
+      cMotor.set(0);
+    }
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);
     double d = SmartDashboard.getNumber("D Gain", 0);
