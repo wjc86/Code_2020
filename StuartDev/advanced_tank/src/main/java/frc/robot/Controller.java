@@ -62,4 +62,12 @@ public class Controller {
             return false;
         }
     }
+
+    public Boolean ballChaseMode() {
+        if(speedStick.getRawButton(5)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

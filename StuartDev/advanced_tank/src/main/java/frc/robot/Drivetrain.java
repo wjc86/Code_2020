@@ -94,6 +94,16 @@ public class Drivetrain {
         printOdometry();
     }
 
+    public void ballChase(double distance, double angle) {
+        double xSpeed = distance*Constants.ballChaseDistanceP;
+        double rot = angle*Constants.ballChaseAngleP;
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(
+            new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+        updateOdometry();
+        printOdometry();
+    }
+
     public void updateOdometry() {
         m_odometry.update(getAngle(),
             m_leftMaster.getSelectedSensorPosition()*Constants.postitionConversion,
