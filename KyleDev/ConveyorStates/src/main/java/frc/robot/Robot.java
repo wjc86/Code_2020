@@ -24,11 +24,12 @@ public class Robot extends TimedRobot {
     cMotor.restoreFactoryDefaults();
     cPID = cMotor.getPIDController();
     cEncoder = cMotor.getEncoder();
+    cEncoder.setPosition(0);
     Joy = new Joystick(1);
 
-    kP = 0.015;
-    kI = 0.01;
-    kD = 0.005;
+    kP = 0;
+    kI = 0;
+    kD = 0;
     kIz = 0;
     kFF = 0;
     kMaxOutput = 1;
@@ -53,11 +54,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if(Joy.getRawButton(1)) {
-      cMotor.set(-1);
-    } else {
-      cMotor.set(0);
-    }
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);
     double d = SmartDashboard.getNumber("D Gain", 0);
@@ -66,6 +62,12 @@ public class Robot extends TimedRobot {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
     double rotations = SmartDashboard.getNumber("Set Rotations", 0);
+
+    if(Joy.getRawButton(1)) {
+      cMotor.set(0.5);
+    } else {
+      cMotor.set(0);
+    }
 
     if((p != kP)) {cPID.setP(p); kP = p;}
     if((i != kI)) {cPID.setI(i); kI = i;}
@@ -76,7 +78,7 @@ public class Robot extends TimedRobot {
       cPID.setOutputRange(min, max);
       kMinOutput = min; kMaxOutput = max;
     }
-
+    
     cPID.setReference(rotations, ControlType.kPosition);
 
     SmartDashboard.putNumber("SetPoint", rotations);
