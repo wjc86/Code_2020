@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
     // return units and units/s
     //
 
-    double encoderConstant = 7.1631/100000.0;
+    double encoderConstant = (7.1631/100000.0)*0.3048;
 
     leftMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                                                 PIDIDX, 10);
