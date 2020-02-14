@@ -10,13 +10,14 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
-
+import java.lang.Math;
 public class Robot extends TimedRobot {
   public Joystick Joy;
   public CANSparkMax cMotor;
   public CANPIDController cPID;
   public CANEncoder cEncoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  public double distancePerRot;
 
   @Override
   public void robotInit() {
@@ -26,7 +27,7 @@ public class Robot extends TimedRobot {
     cEncoder = cMotor.getEncoder();
     cEncoder.setPosition(0);
     Joy = new Joystick(1);
-
+    distancePerRot = 7.0037; // in/rev
     kP = 0;
     kI = 0;
     kD = 0;
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Feed Forward", kFF);
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
-    SmartDashboard.putNumber("Set Rotations", 0);
+    SmartDashboard.putNumber("Set Belt Position", 0);
   }
 
   @Override
@@ -61,8 +62,8 @@ public class Robot extends TimedRobot {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
-    double rotations = SmartDashboard.getNumber("Set Rotations", 0);
-
+    double beltPosition = SmartDashboard.getNumber("Set Belt Position", 0);
+    
     if(Joy.getRawButton(1)) {
       cMotor.set(0.5);
     } else {
@@ -79,9 +80,10 @@ public class Robot extends TimedRobot {
       kMinOutput = min; kMaxOutput = max;
     }
     
-    cPID.setReference(rotations, ControlType.kPosition);
+     cPID.setReference(beltPosition/distancePerRot, ControlType.kPosition);
 
-    SmartDashboard.putNumber("SetPoint", rotations);
+    SmartDashboard.putNumber("SetPoint", beltPosition);
     SmartDashboard.putNumber("ProcessVariable", cEncoder.getPosition());
+    
   }
 }
