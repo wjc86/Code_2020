@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
   */
   private Boolean currentDriveState = true;
   private Boolean lastDriveState = true;
+  private VisionClient m_VisionClient;
   public static double startTrajectoryTime = 0;
   
   @Override
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
     m_trajectoryFollower = new TrajectoryFolower();
     putDashboard();
     m_drive.resetOdometry();
+    m_VisionClient = new VisionClient();
   }
 
   @Override
@@ -50,7 +52,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
+    if(m_controller.ballChaseMode()){
+      m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle(), true);
+    } else {
+      m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
+    }
     m_batteryMonitor.overallMonitoring(m_drive);
     if(m_controller.resetOdometry()) {
       m_drive.resetOdometry();

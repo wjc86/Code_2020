@@ -33,17 +33,17 @@ public class Controller {
             if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * Constants.kSpeedMultiplier * -1.0;
+                return (rotStick.getX() + Constants.controllerDeadband) * Constants.slowdownRot * Constants.kRotationMultiplier * -1.0;
             } else {
-                return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * Constants.kSpeedMultiplier * -1.0;
+                return (rotStick.getX() - Constants.controllerDeadband) * Constants.slowdownRot * Constants.kRotationMultiplier * -1.0;
             }
         } else {
             if(Math.abs(rotStick.getX()) < Constants.controllerDeadband) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
+                return (rotStick.getX() + Constants.controllerDeadband) * Constants.kRotationMultiplier * -1.0;
             } else {
-                return (rotStick.getX() - Constants.controllerDeadband) * Constants.kSpeedMultiplier * -1.0;
+                return (rotStick.getX() - Constants.controllerDeadband) * Constants.kRotationMultiplier * -1.0;
             }
         }
     }
@@ -57,6 +57,14 @@ public class Controller {
             Robot.startTrajectoryTime = Timer.getFPGATimestamp();
         }
         if(rotStick.getRawButton(1)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean ballChaseMode() {
+        if(speedStick.getRawButton(5)){
             return true;
         } else {
             return false;
