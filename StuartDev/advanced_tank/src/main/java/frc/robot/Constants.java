@@ -4,7 +4,8 @@ public class Constants {
     public static final double kHighMaxSpeed = 4;
     public static final double kLowMaxSpeed = 0;
     public static final double kMaxAngularSpeed = 2.0 * Math.PI;
-    public static final double kSpeedMultiplier = 4;
+    public static final double kSpeedMultiplier = 8;
+    public static final double kRotationMultiplier = 4.0 * Math.PI;
 
     public static final double kTrackWidth = 0.6096;
     public static final double kWheelRadius = .1524;
