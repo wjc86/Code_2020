@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -18,32 +19,46 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain {
-    private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(Constants.leftMasterID);
-    // private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.leftFollowerID);
-    private final WPI_TalonFX m_rightMaster = new WPI_TalonFX(Constants.rightMasterID);
-    // private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(Constants.rightFollowerID);
+    private final DoubleSolenoid m_shifter = new DoubleSolenoid(Constants.shifterIDOne, Constants.shifterIDTwo);
 
-    private final SpeedControllerGroup m_leftGroup
-        = new SpeedControllerGroup(m_leftMaster);//, m_leftFollower);
-    private final SpeedControllerGroup m_rightGroup
-        = new SpeedControllerGroup(m_rightMaster);//, m_rightFollower);
+    private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(Constants.leftMasterID);
+    private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.leftFollowerID);
+    private final WPI_TalonFX m_rightMaster = new WPI_TalonFX(Constants.rightMasterID);
+    private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(Constants.rightFollowerID);
 
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-    private final SimpleMotorFeedforward leftFeedforward
-        = new SimpleMotorFeedforward(Constants.leftFF[0],
-        Constants.leftFF[1], Constants.leftFF[2]);
-    private final SimpleMotorFeedforward rightFeedforward
-        = new SimpleMotorFeedforward(Constants.rightFF[0],
-        Constants.rightFF[1], Constants.rightFF[2]);
-    private final PIDController m_leftPIDController = new PIDController(
-        Constants.leftPID[0], Constants.leftPID[1], Constants.leftPID[2]);
-    private final PIDController m_rightPIDController = new PIDController(
-        Constants.rightPID[0], Constants.rightPID[1], Constants.rightPID[2]);
+    private final SimpleMotorFeedforward leftFeedforwardHigh
+        = new SimpleMotorFeedforward(Constants.leftFF[1][0],
+        Constants.leftFF[1][1], Constants.leftFF[1][2]);
+    private final SimpleMotorFeedforward rightFeedforwardHigh
+        = new SimpleMotorFeedforward(Constants.rightFF[1][0],
+        Constants.rightFF[1][1], Constants.rightFF[1][2]);
+    private final PIDController m_leftPIDControllerHigh = new PIDController(
+        Constants.leftPID[1][0], Constants.leftPID[1][1], Constants.leftPID[1][2]);
+    private final PIDController m_rightPIDControllerHigh = new PIDController(
+        Constants.rightPID[1][0], Constants.rightPID[1][1], Constants.rightPID[1][2]);
+
+    private final SimpleMotorFeedforward leftFeedforwardLow
+        = new SimpleMotorFeedforward(Constants.leftFF[0][0],
+        Constants.leftFF[0][1], Constants.leftFF[0][2]);
+    private final SimpleMotorFeedforward rightFeedforwardLow
+        = new SimpleMotorFeedforward(Constants.rightFF[0][0],
+        Constants.rightFF[0][1], Constants.rightFF[0][2]);
+    private final PIDController m_leftPIDControllerLow = new PIDController(
+        Constants.leftPID[0][0], Constants.leftPID[0][1], Constants.leftPID[0][2]);
+    private final PIDController m_rightPIDControllerLow = new PIDController(
+        Constants.rightPID[0][0], Constants.rightPID[0][1], Constants.rightPID[0][2]);
 
     private final DifferentialDriveKinematics m_kinematics
         = new DifferentialDriveKinematics(Constants.kTrackWidth);
     private final DifferentialDriveOdometry m_odometry;
+
+    /*
+    1=in high gear
+    0=not in high gear
+    */
+    private int inHighGear = 1;
 
     public Drivetrain() {
         m_gyro.reset();
@@ -56,15 +71,23 @@ public class Drivetrain {
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        double leftOutput = m_leftPIDController.calculate(m_leftMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.leftMetersPerSecond)
-            + leftFeedforward.calculate(speeds.leftMetersPerSecond);
-        double rightOutput = m_rightPIDController.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
-            + rightFeedforward.calculate(speeds.rightMetersPerSecond);
-        // m_leftGroup.set(leftOutput);
-        // m_rightGroup.set(rightOutput);
+        double leftOutput;
+        double rightOutput;
+        if(inHighGear == 1){
+            leftOutput = m_leftPIDControllerHigh.calculate(m_leftMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.leftMetersPerSecond)
+                + leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
+            rightOutput = m_rightPIDControllerHigh.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
+                + rightFeedforwardHigh.calculate(speeds.rightMetersPerSecond);
+        } else {
+            leftOutput = m_leftPIDControllerLow.calculate(m_leftMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.leftMetersPerSecond)
+                + leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
+            rightOutput = m_rightPIDControllerLow.calculate(m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion, speeds.rightMetersPerSecond)
+                + rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
+        }
         m_leftMaster.setVoltage(leftOutput);
-        m_rightMaster.setVoltage(rightOutput
-        );
+        m_rightMaster.setVoltage(rightOutput);
+        // m_leftFollower.follow(m_leftMaster);
+        // m_rightFollower.follow(m_rightMaster);
         SmartDashboard.putNumber("right output", rightOutput);
         SmartDashboard.putNumber("left output", leftOutput);
         SmartDashboard.putNumber("right speed", m_rightMaster.getSelectedSensorVelocity()*Constants.velocityConversion);
@@ -94,9 +117,16 @@ public class Drivetrain {
         printOdometry();
     }
 
-    public void ballChase(double distance, double angle) {
-        double xSpeed = distance*Constants.ballChaseDistanceP;
-        double rot = angle*Constants.ballChaseAngleP;
+    public void ballChase(double distance, double angle, Boolean seesBall) {
+        double xSpeed;
+        double rot;
+        if(seesBall){
+            xSpeed = distance*Constants.ballChaseDistanceP;
+            rot = angle*Constants.ballChaseAngleP;
+        } else {
+            xSpeed = 0;
+            rot = 2.0 * Math.PI;
+        }
         var wheelSpeeds = m_kinematics.toWheelSpeeds(
             new ChassisSpeeds(xSpeed, 0.0, rot));
         setSpeeds(wheelSpeeds);
@@ -137,5 +167,24 @@ public class Drivetrain {
 
     public Pose2d getCurrentPose() {
         return m_odometry.getPoseMeters();
+    }
+
+    public int getInHighGear() {
+        return inHighGear;
+    }
+
+    public void setInHighGear(int inHighGear) {
+        this.inHighGear = inHighGear;
+    }
+    public void updateShifter() {
+        if(inHighGear == 1){
+            if(m_shifter.get() == DoubleSolenoid.Value.kReverse){
+                m_shifter.set(DoubleSolenoid.Value.kForward);
+            }
+        } else{
+            if(m_shifter.get() == DoubleSolenoid.Value.kForward){
+                m_shifter.set(DoubleSolenoid.Value.kReverse);
+            }
+        }
     }
 }
