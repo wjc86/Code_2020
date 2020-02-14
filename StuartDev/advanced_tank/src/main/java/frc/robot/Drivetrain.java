@@ -92,7 +92,16 @@ public class Drivetrain {
         SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
         updateOdometry();
         printOdometry();
-        System.out.println("6");
+    }
+
+    public void ballChase(double distance, double angle) {
+        double xSpeed = distance*Constants.ballChaseDistanceP;
+        double rot = angle*Constants.ballChaseAngleP;
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(
+            new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+        updateOdometry();
+        printOdometry();
     }
 
     public void updateOdometry() {
@@ -109,6 +118,12 @@ public class Drivetrain {
 
     public void resetOdometry() {
         m_odometry.resetPosition(new Pose2d(), getAngle());
+        m_rightMaster.setSelectedSensorPosition(0);
+        m_leftMaster.setSelectedSensorPosition(0);
+    }
+
+    public void setPose(Pose2d setPose) {
+        m_odometry.resetPosition(setPose, getAngle());
         m_rightMaster.setSelectedSensorPosition(0);
         m_leftMaster.setSelectedSensorPosition(0);
     }
