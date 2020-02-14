@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if(m_controller.ballChaseMode()){
-      m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle());
+      m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle(), true);
     } else {
       m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
     }
