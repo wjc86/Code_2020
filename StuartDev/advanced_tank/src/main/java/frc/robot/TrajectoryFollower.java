@@ -27,23 +27,15 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 /**
  * Add your docs here.
  */
-public class TrajectoryFolower {
+public class TrajectoryFollower {
+    private static TrajectoryFollower instance = new TrajectoryFollower();
     Trajectory mTrajectory;
     RamseteController mRamseteController = new RamseteController();
     String trajectoryJSON = "paths/output/Unnamed.wpilib.json";
 
-    // public void generateTrajectory(Pose2d currentPose, double currentSpeed, Pose2d finalPose, double finalSpeed,
-    //         ArrayList<Translation2d> waypoints, double maxVelocity, double maxAcceleration, boolean reversed) {
-    //     TrajectoryConfig config = new TrajectoryConfig(maxVelocity, maxAcceleration);
-    //     config.setStartVelocity(currentSpeed);
-    //     config.setEndVelocity(finalSpeed);
-    //     config.setReversed(reversed);
-    //     waypoints.add(currentPose.getTranslation());
-    //     waypoints.add(finalPose.getTranslation());
-    //     mTrajectory = TrajectoryGenerator.generateTrajectory(currentPose, waypoints, finalPose, config);
-    //     // startTime = Timer.getFPGATimestamp();
-    //     System.out.println("4");
-    // }
+    public static TrajectoryFollower getInstance() {
+        return instance;
+    }
 
     public void generateTrajectory() {
         Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);

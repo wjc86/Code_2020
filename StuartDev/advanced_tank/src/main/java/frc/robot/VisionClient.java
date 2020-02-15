@@ -13,34 +13,49 @@ import edu.wpi.first.networktables.*;
  * Add your docs here.
  */
 public class VisionClient {
-        double[] defaultArray = {0.0,0.0,0.0,5.0,5.0};
-        NetworkTableInstance instance;
-        NetworkTable ballTable;
-        NetworkTableEntry ballTableEntry;
+    private static VisionClient instance = new VisionClient();
+    double[] defaultArray = { 0.0, 0.0, 0.0, 5.0, 5.0 };
+    NetworkTableInstance tableInstance;
+    NetworkTable ballTable;
+    NetworkTableEntry ballTableEntry;
+    NetworkTableEntry returnData;
 
-        public VisionClient() {
-            instance = NetworkTableInstance.getDefault();
-            ballTable  = instance.getTable("ballVision");
-            ballTableEntry = ballTable.getEntry("target_data");
-        }
+    public VisionClient() {
+        tableInstance = NetworkTableInstance.getDefault();
+        ballTable = tableInstance.getTable("ballVision");
+        ballTableEntry = ballTable.getEntry("target_data");
+        returnData = ballTable.getEntry("return_data");
+    }
 
-        public double getTimestamp() {
-            return ballTableEntry.getDoubleArray(defaultArray)[0];
-        }
+    public static VisionClient getInstance() {
+        return instance;
+    }
 
-        public Boolean isBallTargetAvail() {
-            if(ballTableEntry.getDoubleArray(defaultArray)[1] == 1.0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+    public double[] getVisionArray() {
+        return ballTableEntry.getDoubleArray(defaultArray);
+    }
 
-        public double getBallDistance() {
-            return ballTableEntry.getDoubleArray(defaultArray)[3];
-        }
+    public double getTimestamp() {
+        return ballTableEntry.getDoubleArray(defaultArray)[0];
+    }
 
-        public double getBallAngle() {
-            return ballTableEntry.getDoubleArray(defaultArray)[4];
+    public Boolean isBallTargetAvail() {
+        if (ballTableEntry.getDoubleArray(defaultArray)[1] == 1.0) {
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    public double getBallDistance() {
+        return ballTableEntry.getDoubleArray(defaultArray)[3];
+    }
+
+    public double getBallAngle() {
+        return ballTableEntry.getDoubleArray(defaultArray)[4];
+    }
+
+    public void pushToTable(double timestamp) {
+        returnData.setNumber(timestamp);
+    }
 }
