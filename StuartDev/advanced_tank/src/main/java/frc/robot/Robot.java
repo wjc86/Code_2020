@@ -14,12 +14,6 @@ public class Robot extends TimedRobot {
   private Controller m_controller;
   private BatteryMonitoring m_batteryMonitor;
   private TrajectoryFolower m_trajectoryFollower;
-  /*
-  true = joystick/driver controller
-  false = tajectory
-  */
-  private Boolean currentDriveState = true;
-  private Boolean lastDriveState = true;
   private VisionClient m_VisionClient;
   public static double startTrajectoryTime = 0;
   
@@ -29,9 +23,15 @@ public class Robot extends TimedRobot {
     m_controller = new Controller();
     m_batteryMonitor = new BatteryMonitoring();
     m_trajectoryFollower = new TrajectoryFolower();
-    putDashboard();
     m_drive.resetOdometry();
     m_VisionClient = new VisionClient();
+  }
+
+  @Override
+  public void robotPeriodic() {
+    // TODO Auto-generated method stub
+    super.robotPeriodic();
+    putDashboard();
   }
 
   @Override
@@ -52,11 +52,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if(m_controller.ballChaseMode()){
-      m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle(), true);
-    } else {
+    // if(m_controller.ballChaseMode()){
+    //   m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle(), m_VisionClient.isBallTargetAvail());
+    // } else {
       m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
-    }
+    // }
     m_batteryMonitor.overallMonitoring(m_drive);
     if(m_controller.resetOdometry()) {
       m_drive.resetOdometry();
@@ -68,6 +68,10 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboard() {
+    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
+    SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
+    SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
+    SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
   }
 
   @Override

@@ -187,4 +187,28 @@ public class Drivetrain {
             }
         }
     }
+
+    /*
+    case closedLoopArcade
+        speed = controller.getSpeed
+        rot = controller.getRot
+        wheelSpeeds = kinematics.toWheelSpeeds(speed, rot)
+        setSpeeds(wheelSpeeds)
+    case ballChase
+        double xSpeed;
+        double rot;
+        if(seesBall){
+            xSpeed = distance*Constants.ballChaseDistanceP;
+            rot = angle*Constants.ballChaseAngleP;
+        } else {
+            xSpeed = 0;
+            rot = 2.0 * Math.PI;
+        }
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(
+            new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+    case pathFollow
+        getT
+        setSpeeds(getTrajectoryWheelSpeeds)
+    */
 }

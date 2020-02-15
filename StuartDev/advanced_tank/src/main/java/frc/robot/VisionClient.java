@@ -13,16 +13,34 @@ import edu.wpi.first.networktables.*;
  * Add your docs here.
  */
 public class VisionClient {
-        NetworkTableInstance instance = NetworkTableInstance.getDefault();
-        NetworkTable ballTable = instance.getTable("ballTable");
-        NetworkTableEntry ballDistanceEntry = ballTable.getEntry("ballDistance");
-        NetworkTableEntry ballAngleEntry = ballTable.getEntry("ballAngle");
+        double[] defaultArray = {0.0,0.0,0.0,5.0,5.0};
+        NetworkTableInstance instance;
+        NetworkTable ballTable;
+        NetworkTableEntry ballTableEntry;
+
+        public VisionClient() {
+            instance = NetworkTableInstance.getDefault();
+            ballTable  = instance.getTable("ballVision");
+            ballTableEntry = ballTable.getEntry("target_data");
+        }
+
+        public double getTimestamp() {
+            return ballTableEntry.getDoubleArray(defaultArray)[0];
+        }
+
+        public Boolean isBallTargetAvail() {
+            if(ballTableEntry.getDoubleArray(defaultArray)[1] == 1.0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         public double getBallDistance() {
-            return ballDistanceEntry.getDouble(-1);
+            return ballTableEntry.getDoubleArray(defaultArray)[3];
         }
 
         public double getBallAngle() {
-            return ballAngleEntry.getDouble(-1);
+            return ballTableEntry.getDoubleArray(defaultArray)[4];
         }
 }
