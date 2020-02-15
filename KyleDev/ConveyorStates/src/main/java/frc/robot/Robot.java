@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
     cEncoder.setPosition(0);
     Joy = new Joystick(1);
     distancePerRot = 7.0037; // in/rev
+    cEncoder.setPositionConversionFactor(1);
     kP = 0;
     kI = 0;
     kD = 0;
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
     kFF = 0;
     kMaxOutput = 1;
     kMinOutput = -1;
-    
+  
     cPID.setP(kP);
     cPID.setI(kI);
     cPID.setD(kD);
@@ -85,5 +86,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("SetPoint", beltPosition);
     SmartDashboard.putNumber("ProcessVariable", cEncoder.getPosition());
     
+    if(Joy.getRawButton(2)){
+      cEncoder.setPosition(0.0);
+    }
   }
 }
