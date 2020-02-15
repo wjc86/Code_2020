@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +24,10 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private static final int ULTRA_PORT = 0;
+  private final AnalogInput ultrasonic = new AnalogInput(ULTRA_PORT);
+  private static final double INCH_CF = .125;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -86,6 +91,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // sensor returns a value from 0-4095 that is scaled to inches
+    // saves distance between object and sensor to objDistance
+    double objDistance = ultrasonic.getValue() * INCH_CF;
+    System.out.println(objDistance);
   }
 
   /**
