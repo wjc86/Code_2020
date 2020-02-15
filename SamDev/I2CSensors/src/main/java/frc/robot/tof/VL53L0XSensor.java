@@ -1,22 +1,32 @@
 package frc.robot.tof;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.tof.I2CUpdatableAddress.NACKException;
+import frc.robot.tof.I2CUpdatableAddress.Port;
 
 public class VL53L0XSensor {
     private boolean initialized = false;
     private VL53L0X sensor;
-    private Timer distanceTimer = null;
 
     public VL53L0XSensor(){
         try{
             sensor = new VL53L0X();
+        } catch(NACKException nack){
+            System.out.println("NACK EXCEPTION at Line 21 of VS");
         } catch(Exception e){
-            e.printStackTrace();
+            System.out.println("EXCEPTION at Line 23 of VS");
+        }
+    }
+
+    public VL53L0XSensor(Port port, int defaultAddress, int deviceAddress){
+        try{
+            sensor = new VL53L0X(port, defaultAddress, defaultAddress);
+        } catch(NACKException nack){
+            System.out.println("NACK EXCEPTION at Sensor ID " + defaultAddress);
+        } catch(Exception e){
+            System.out.println("EXCEPTION at Line 33 of VS");
         }
     }
 
@@ -35,10 +45,6 @@ public class VL53L0XSensor {
             SmartDashboard.putString("NE", e.toString());
         }
         initialized = result;
-        if(initialized){
-            distanceTimer = new Timer();
-            System.out.println("---!!!Starting VL53L0X Timer!!!---");
-        }
         return result;
     }
 
@@ -53,5 +59,7 @@ public class VL53L0XSensor {
         return sensor.changeAddress(address);
     }
 
-    public class SingleNotInitalizedException extends IOException {}
+    public class SingleNotInitalizedException extends IOException {
+        private static final long serialVersionUID = 1L;
+    }
 }
