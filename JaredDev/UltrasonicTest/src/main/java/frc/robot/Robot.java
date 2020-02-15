@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
 
   private static final int ULTRA_PORT = 0;
   private final AnalogInput ultrasonic = new AnalogInput(ULTRA_PORT);
-  private static final double INCH_CF = .125;
+  private static final double INCH_CF = 19.52573529411765;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -93,8 +93,17 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // sensor returns a value from 0-4095 that is scaled to inches
     // saves distance between object and sensor to objDistance
-    double objDistance = ultrasonic.getValue() * INCH_CF;
-    System.out.println(objDistance);
+    
+    double objReading = ultrasonic.getValue();
+    double objInches = ultrasonic.getValue() / INCH_CF;
+    double objCentimeters = objInches * 2.54;
+    double objCentimeters2 = objReading * (5.0 / 4095.0) / .00977;
+    double objInches2 = objCentimeters2 / 2.54;
+    SmartDashboard.putNumber("Raw Reading", objReading);
+    SmartDashboard.putNumber("Inches", objInches);
+    SmartDashboard.putNumber("Inches2", objInches2);
+    SmartDashboard.putNumber("Centimeters", objCentimeters);
+    SmartDashboard.putNumber("Centimeters2", objCentimeters2);
   }
 
   /**
