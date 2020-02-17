@@ -1,183 +1,67 @@
 
-MohsinDev/Main/gradle/wrapper/gradle-wrapper.jar
-MohsinDev/Main/build.gradle
-MohsinDev/Main/gradle/wrapper/gradle-wrapper.jar
-MohsinDev/Main/gradle/wrapper/gradle-wrapper.properties
-MohsinDev/Main/gradlew
-MohsinDev/Main/gradlew.bat
-MohsinDev/Main/.vscode/launch.json
-MohsinDev/Main/.vscode/settings.json
-MohsinDev/Main/.wpilib/wpilib_preferences.json
-MohsinDev/Main/build.gradle
-MohsinDev/Main/gradle/wrapper/gradle-wrapper.jar
-MohsinDev/Main/gradle/wrapper/gradle-wrapper.properties
-MohsinDev/Main/gradlew
-MohsinDev/Main/gradlew.bat
-MohsinDev/Main/settings.gradle
-MohsinDev/Main/src/main/deploy/example.txt
-MohsinDev/Main/src/main/java/frc/robot/Main.java
-MohsinDev/Main/src/main/java/frc/robot/Robot.java
-JennaDev/Main/.vscode/launch.json
-JennaDev/Main/.vscode/settings.json
-JennaDev/Main/.wpilib/wpilib_preferences.json
-JennaDev/Main/build.gradle
-JennaDev/Main/gradle/wrapper/gradle-wrapper.jar
-JennaDev/Main/gradle/wrapper/gradle-wrapper.properties
-JennaDev/Main/gradlew
-JennaDev/Main/gradlew.bat
-JennaDev/Main/settings.gradle
-JennaDev/Main/src/main/deploy/example.txt
-JennaDev/Main/src/main/java/frc/robot/Main.java
-JennaDev/Main/src/main/java/frc/robot/Robot.java
-JacobDev/Main/.vscode/launch.json
-JacobDev/Main/.vscode/settings.json
-JacobDev/Main/.wpilib/wpilib_preferences.json
-JacobDev/Main/build.gradle
-JacobDev/Main/gradle/wrapper/gradle-wrapper.jar
-JacobDev/Main/gradle/wrapper/gradle-wrapper.properties
-JacobDev/Main/gradlew
-JacobDev/Main/gradlew.bat
-JacobDev/Main/settings.gradle
-JacobDev/Main/src/main/deploy/example.txt
-JacobDev/Main/src/main/java/frc/robot/Main.java
-JacobDev/Main/src/main/java/frc/robot/Robot.java
-JackDev/Main/src/main/java/frc/robot/Robot.java
-JackDev/Main/src/main/java/frc/robot/Main.java
-JackDev/Main/src/main/deploy/example.txt
-JackDev/Main/settings.gradle
-JackDev/Main/gradlew.bat
-JackDev/Main/gradlew
-JackDev/Main/gradle/wrapper/gradle-wrapper.properties
-JackDev/Main/gradle/wrapper/gradle-wrapper.jar
-JackDev/Main/build.gradle
-JackDev/Main/.wpilib/wpilib_preferences.json
-JackDev/Main/.vscode/settings.json
-JackDev/Main/.vscode/launch.json
-JackDev/Main-Imported/vendordeps/WPILibOldCommands.json
-JackDev/Main-Imported/src/main/java/frc/robot/Robot.java
-JackDev/Main-Imported/src/main/java/frc/robot/Main.java
-JackDev/Main-Imported/src/main/deploy/example.txt
-JackDev/Main-Imported/settings.gradle
-JackDev/Main-Imported/gradlew.bat
-JackDev/Main-Imported/gradlew
-JackDev/Main-Imported/gradle/wrapper/gradle-wrapper.properties
-JackDev/Main-Imported/gradle/wrapper/gradle-wrapper.jar
-JackDev/Main-Imported/build.gradle
-JackDev/Main-Imported/.wpilib/wpilib_preferences.json
-JackDev/Main-Imported/.vscode/settings.json
-JackDev/Main-Imported/.vscode/launch.json
-DianaDev/Shooter/vendordeps/WPILibOldCommands.json
-DianaDev/Shooter/src/main/java/frc/robot/Robot.java
-DianaDev/Shooter/src/main/java/frc/robot/Main.java
-DianaDev/Shooter/src/main/deploy/example.txt
-DianaDev/Shooter/settings.gradle
-DianaDev/Shooter/gradlew.bat
-DianaDev/Shooter/gradlew
-DianaDev/Shooter/gradle/wrapper/gradle-wrapper.properties
-DianaDev/Shooter/gradle/wrapper/gradle-wrapper.jar
-DianaDev/Shooter/build.gradle
-DianaDev/Shooter/.wpilib/wpilib_preferences.json
-DianaDev/Shooter/.vscode/settings.json
-DianaDev/Shooter/.vscode/launch.json
-DianaDev/Main/src/main/java/frc/robot/Robot.java
-DianaDev/Main/src/main/java/frc/robot/Main.java
-DianaDev/Main/src/main/deploy/example.txt
-DianaDev/Main/settings.gradle
-DianaDev/Main/gradlew.bat
-DianaDev/Main/gradlew
-DianaDev/Main/gradle/wrapper/gradle-wrapper.properties
-DianaDev/Main/gradle/wrapper/gradle-wrapper.jar
-DianaDev/Main/build.gradle
-DianaDev/Main/.wpilib/wpilib_preferences.json
-DianaDev/Main/.vscode/settings.json
-DianaDev/Main/.vscode/launch.json
-ConnorDev/Main/.vscode/launch.json
-ConnorDev/Main/.vscode/settings.json
-ConnorDev/Main/.wpilib/wpilib_preferences.json
-ConnorDev/Main/build.gradle
-ConnorDev/Main/gradle/wrapper/gradle-wrapper.jar
-ConnorDev/Main/gradle/wrapper/gradle-wrapper.properties
-ConnorDev/Main/gradlew
-ConnorDev/Main/gradlew.bat
-ConnorDev/Main/settings.gradle
-ConnorDev/Main/src/main/deploy/example.txt
-ConnorDev/Main/src/main/java/frc/robot/Main.java
-ConnorDev/Main/src/main/java/frc/robot/Robot.java
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/.vscode/launch.json
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/.vscode/settings.json
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/.wpilib/wpilib_preferences.json
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/build.gradle
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/gradle/wrapper/gradle-wrapper.jar
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/gradle/wrapper/gradle-wrapper.properties
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/gradlew
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/gradlew.bat
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/settings.gradle
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/src/main/deploy/example.txt
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/src/main/java/frc/robot/Main.java
-ConnorDev/preSeasonTankNeo/preseasonTankNeo/src/main/java/frc/robot/Robot.java
-ConnorDev/Tankbot Brown/.vscode/launch.json
-ConnorDev/Tankbot Brown/.vscode/settings.json
-ConnorDev/Tankbot Brown/.wpilib/wpilib_preferences.json
-ConnorDev/Tankbot Brown/build.gradle
-ConnorDev/Tankbot Brown/gradle/wrapper/gradle-wrapper.jar
-ConnorDev/Tankbot Brown/gradle/wrapper/gradle-wrapper.properties
-ConnorDev/Tankbot Brown/gradlew
-ConnorDev/Tankbot Brown/gradlew.bat
-ConnorDev/Tankbot Brown/settings.gradle
-ConnorDev/Tankbot Brown/src/main/deploy/example.txt
-ConnorDev/Tankbot Brown/src/main/java/frc/robot/Main.java
-ConnorDev/Tankbot Brown/src/main/java/frc/robot/Robot.java
-ConnorDev/Tankbot/.vscode/launch.json
-ConnorDev/Tankbot/.vscode/launch.json
-ConnorDev/Tankbot/.vscode/launch.json
-ConnorDev/Tankbot/.vscode/settings.json
-ConnorDev/Tankbot/.wpilib/wpilib_preferences.json
-ConnorDev/Tankbot/build.gradle
-ConnorDev/Tankbot/gradle/wrapper/gradle-wrapper.jar
-ConnorDev/Tankbot/gradle/wrapper/gradle-wrapper.properties
-ConnorDev/Tankbot/gradlew
-ConnorDev/Tankbot/gradlew.bat
-ConnorDev/Tankbot/settings.gradle
-ConnorDev/Tankbot/src/main/deploy/example.txt
-ConnorDev/Tankbot/src/main/java/frc/robot/Main.java
-ConnorDev/Tankbot/src/main/java/frc/robot/Robot.java
-ConnorDev/The Claw/.vscode/launch.json
-ConnorDev/The Claw/.vscode/settings.json
-ConnorDev/The Claw/.wpilib/wpilib_preferences.json
-ConnorDev/The Claw/build.gradle
-ConnorDev/The Claw/gradle/wrapper/gradle-wrapper.jar
-ConnorDev/The Claw/gradle/wrapper/gradle-wrapper.properties
-ConnorDev/The Claw/gradlew
-ConnorDev/The Claw/gradlew.bat
-ConnorDev/The Claw/settings.gradle
-ConnorDev/The Claw/src/main/deploy/example.txt
-ConnorDev/The Claw/src/main/java/frc/robot/Claw.java
-ConnorDev/The Claw/src/main/java/frc/robot/Main.java
-ConnorDev/The Claw/src/main/java/frc/robot/Robot.java
-CalebDev/Main/.vscode/launch.json
-CalebDev/Main/.vscode/settings.json
-CalebDev/Main/.wpilib/wpilib_preferences.json
-CalebDev/Main/build.gradle
-CalebDev/Main/gradle/wrapper/gradle-wrapper.jar
-CalebDev/Main/gradle/wrapper/gradle-wrapper.properties
-CalebDev/Main/gradlew
-CalebDev/Main/gradlew.bat
-CalebDev/Main/settings.gradle
-CalebDev/Main/src/main/deploy/example.txt
-CalebDev/Main/src/main/java/frc/robot/Main.java
-CalebDev/Main/src/main/java/frc/robot/Robot.java
-CalebDev/Tank Example/Tank_Example/.vscode/launch.json
-CalebDev/Tank Example/Tank_Example/.vscode/settings.json
-CalebDev/Tank Example/Tank_Example/.wpilib/wpilib_preferences.json
-CalebDev/Tank Example/Tank_Example/build.gradle
-CalebDev/Tank Example/Tank_Example/gradle/wrapper/gradle-wrapper.jar
-CalebDev/Tank Example/Tank_Example/gradle/wrapper/gradle-wrapper.properties
-CalebDev/Tank Example/Tank_Example/gradlew
-CalebDev/Tank Example/Tank_Example/gradlew.bat
-CalebDev/Tank Example/Tank_Example/settings.gradle
-CalebDev/Tank Example/Tank_Example/src/main/deploy/example.txt
-CalebDev/Tank Example/Tank_Example/src/main/java/frc/robot/Main.java
-CalebDev/Tank Example/Tank_Example/src/main/java/frc/robot/Robot.java
-CalebDev/Tank Example/Tank_Example/vendordeps/navx_frc.json
-CalebDev/Tank Example/Tank_Example/vendordeps/Phoenix.json
-CalebDev/Tank Example/Tank_Example/vendordeps/WPILibOldCommands.json
+DianaDev/Main/.gradle/5.0/fileHashes/fileHashes.lock
+DianaDev/Main/.gradle/5.0/fileContent/fileContent.lock
+DianaDev/Main/.gradle/5.0/fileChanges/last-build.bin
+DianaDev/Main/.classpath
+KyleDev/subteamPractice/vendordeps/WPILibOldCommands.json
+KyleDev/subteamPractice/vendordeps/WPILibNewCommands.json
+KyleDev/subteamPractice/vendordeps/REVRobotics.json
+KyleDev/subteamPractice/vendordeps/Phoenix.json
+KyleDev/subteamPractice/vendordeps/navx_frc.json
+KyleDev/subteamPractice/src/main/java/frc/robot/Robot.java
+KyleDev/subteamPractice/src/main/java/frc/robot/Main.java
+KyleDev/subteamPractice/src/main/deploy/example.txt
+KyleDev/subteamPractice/settings.gradle
+KyleDev/subteamPractice/gradlew.bat
+KyleDev/subteamPractice/gradlew
+KyleDev/subteamPractice/gradle/wrapper/gradle-wrapper.properties
+KyleDev/subteamPractice/gradle/wrapper/gradle-wrapper.jar
+KyleDev/subteamPractice/build.gradle
+KyleDev/subteamPractice/.wpilib/wpilib_preferences.json
+KyleDev/subteamPractice/.vscode/settings.json
+KyleDev/subteamPractice/.vscode/launch.json
+KyleDev/Newpractice/build/tmp/jar/MANIFEST.MF
+KyleDev/Newpractice/build/libs/Newpractice.jar
+KyleDev/Newpractice/bin/main/frc/robot/Robot.class
+KyleDev/Newpractice/bin/main/frc/robot/Main.class
+KyleDev/Newpractice/bin/main/frc/robot/controller.class
+KyleDev/Newpractice/bin/main/frc/robot/constants.class
+KyleDev/Newpractice/bin/main/frc/robot/constants.class
+KyleDev/Newpractice/.settings/org.eclipse.buildship.core.prefs
+KyleDev/Newpractice/.project
+KyleDev/Newpractice/.gradle/vcs-1/gc.properties
+KyleDev/Newpractice/.gradle/buildOutputCleanup/outputFiles.bin
+KyleDev/Newpractice/.gradle/buildOutputCleanup/cache.properties
+KyleDev/Newpractice/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+KyleDev/Newpractice/.gradle/6.0.1/javaCompile/taskHistory.bin
+KyleDev/Newpractice/.gradle/6.0.1/javaCompile/javaCompile.lock
+KyleDev/Newpractice/.gradle/6.0.1/javaCompile/jarAnalysis.bin
+KyleDev/Newpractice/.gradle/6.0.1/javaCompile/classAnalysis.bin
+KyleDev/Newpractice/.gradle/6.0.1/gc.properties
+KyleDev/Newpractice/.gradle/6.0.1/fileHashes/resourceHashesCache.bin
+KyleDev/Newpractice/.gradle/6.0.1/fileHashes/fileHashes.lock
+KyleDev/Newpractice/.gradle/6.0.1/fileHashes/fileHashes.bin
+KyleDev/Newpractice/.gradle/6.0.1/fileContent/fileContent.lock
+KyleDev/Newpractice/.gradle/6.0.1/fileChanges/last-build.bin
+KyleDev/Newpractice/.gradle/6.0.1/executionHistory/executionHistory.lock
+KyleDev/Newpractice/.gradle/6.0.1/executionHistory/executionHistory.bin
+KyleDev/Newpractice/.classpath
+KyleDev/Main/src/main/java/frc/robot/Robot.java
+KyleDev/Main/src/main/java/frc/robot/Main.java
+KyleDev/Main/src/main/deploy/example.txt
+KyleDev/Main/settings.gradle
+KyleDev/Main/gradlew.bat
+KyleDev/Main/gradlew
+KyleDev/Main/gradle/wrapper/gradle-wrapper.properties
+KyleDev/Main/gradle/wrapper/gradle-wrapper.jar
+KyleDev/Main/build.gradle
+KyleDev/Main/.wpilib/wpilib_preferences.json
+KyleDev/Main/.vscode/settings.json
+KyleDev/Main/.vscode/launch.json
+KyleDev/Test123/vendordeps/WPILibNewCommands.json
+KyleDev/Test123/vendordeps/Phoenix.json
+KyleDev/Test123/src/main/java/frc/robot/Robot.java
+KyleDev/Test123/src/main/deploy/example.txt
+KyleDev/Test123/gradlew
+KyleDev/Test123/gradle/wrapper/gradle-wrapper.jar
+KyleDev/Test123/.vscode/launch.json

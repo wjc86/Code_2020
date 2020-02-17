@@ -16,6 +16,8 @@ public class Conveyor2 {
     double beltDelta_ui;
     double beltPosition;
     double distancePerRot = 7.0037; // inches per revolution
+    // Boolean isStaged = false;
+    // int state = 0;
     
     public Conveyor2(){
         this.getData();
@@ -63,4 +65,10 @@ public class Conveyor2 {
         conveyorPID.setReference(this.beltPosition/this.distancePerRot + this.beltDelta, ControlType.kPosition);
         this.beltDelta = 0;
     }
+    /*public void stateTransfer() {
+         if (controller.getRawButton(1) && isStaged == false) {this.state = 1;}
+        else if(controller.getRawButton(1) && isStaged == true){this.state = 2;}
+        else if (controller.getRawButton(2) && isStaged == false){this.state = 3;}
+        else if (controller.getRawButton(2) && isStaged == true){this.state = 4;}
+    }*/
 }
