@@ -17,3 +17,15 @@ MohsinDev/Main/settings.gradle
 MohsinDev/Main/src/main/deploy/example.txt
 MohsinDev/Main/src/main/java/frc/robot/Main.java
 MohsinDev/Main/src/main/java/frc/robot/Robot.java
+JennaDev/Main/.vscode/launch.json
+JennaDev/Main/.vscode/settings.json
+JennaDev/Main/.wpilib/wpilib_preferences.json
+JennaDev/Main/build.gradle
+JennaDev/Main/gradle/wrapper/gradle-wrapper.jar
+JennaDev/Main/gradle/wrapper/gradle-wrapper.properties
+JennaDev/Main/gradlew
+JennaDev/Main/gradlew.bat
+JennaDev/Main/settings.gradle
+JennaDev/Main/src/main/deploy/example.txt
+JennaDev/Main/src/main/java/frc/robot/Main.java
+JennaDev/Main/src/main/java/frc/robot/Robot.java
