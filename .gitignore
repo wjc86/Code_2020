@@ -29,3 +29,15 @@ JennaDev/Main/settings.gradle
 JennaDev/Main/src/main/deploy/example.txt
 JennaDev/Main/src/main/java/frc/robot/Main.java
 JennaDev/Main/src/main/java/frc/robot/Robot.java
+JacobDev/Main/.vscode/launch.json
+JacobDev/Main/.vscode/settings.json
+JacobDev/Main/.wpilib/wpilib_preferences.json
+JacobDev/Main/build.gradle
+JacobDev/Main/gradle/wrapper/gradle-wrapper.jar
+JacobDev/Main/gradle/wrapper/gradle-wrapper.properties
+JacobDev/Main/gradlew
+JacobDev/Main/gradlew.bat
+JacobDev/Main/settings.gradle
+JacobDev/Main/src/main/deploy/example.txt
+JacobDev/Main/src/main/java/frc/robot/Main.java
+JacobDev/Main/src/main/java/frc/robot/Robot.java
