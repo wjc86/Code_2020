@@ -7,25 +7,21 @@
 
 package frc.robot;
 
+import java.util.Vector;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.TOFSensors.SensorNotInitialized;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.tof.VL53L0XSensors;
 
 public class Robot extends TimedRobot {
-  private Joystick joy = new Joystick(0);
-  private ColorSensor mColorSensor = new ColorSensor();
+  //private ColorSensor mColorSensor = new ColorSensor();
   private ColorSensor.color mColor;
-  private TOFSensors mTOFSensors = new TOFSensors();
+  private VL53L0XSensors mSensors = new VL53L0XSensors();
 
   @Override
   public void robotInit() {
-    mColorSensor.setup();
-    try{
-      mTOFSensors.setup(0, 1);
-    } catch(SensorNotInitialized notInit){
-      notInit.print();
-    }
+    SmartDashboard.putString("Initializing...", "Please Wait");
+    //mColorSensor.setup();
+    mSensors.init();
   }
   
   @Override
@@ -42,12 +38,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    mColor = mColorSensor.detectColor();
-    SmartDashboard.putString("Robot's Detected Color", mColor.toString());
+    SmartDashboard.putBoolean("teleopPeriodic", true);
+    //mColorSensor.detectColor();
+    SmartDashboard.putBoolean("Got Color", true);
 
-    double[] values = mTOFSensors.readDistance();
-    SmartDashboard.putString("Sensor 1 Distance", ((Double) values[0]).toString());
-    SmartDashboard.putString("Sensor 2 Distance", ((Double) values[1]).toString());
+    Vector<Integer> distances = new Vector<>();
+    try{
+      distances = mSensors.readRangeSingleMillimeters();
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+    for(int i = 0; i < mSensors.getNumberOfSensors(); i++){
+      SmartDashboard.putNumber("Sensor " + i + " Distance" , distances.get(i));
+    }
   }
 
   @Override

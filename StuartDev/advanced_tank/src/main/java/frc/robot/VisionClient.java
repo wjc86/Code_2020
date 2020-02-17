@@ -13,16 +13,49 @@ import edu.wpi.first.networktables.*;
  * Add your docs here.
  */
 public class VisionClient {
-        NetworkTableInstance instance = NetworkTableInstance.getDefault();
-        NetworkTable ballTable = instance.getTable("ballTable");
-        NetworkTableEntry ballDistanceEntry = ballTable.getEntry("ballDistance");
-        NetworkTableEntry ballAngleEntry = ballTable.getEntry("ballAngle");
+    private static VisionClient instance = new VisionClient();
+    double[] defaultArray = { 0.0, 0.0, 0.0, 5.0, 5.0 };
+    NetworkTableInstance tableInstance;
+    NetworkTable ballTable;
+    NetworkTableEntry ballTableEntry;
+    NetworkTableEntry returnData;
 
-        public double getBallDistance() {
-            return ballDistanceEntry.getDouble(-1);
-        }
+    public VisionClient() {
+        tableInstance = NetworkTableInstance.getDefault();
+        ballTable = tableInstance.getTable("ballVision");
+        ballTableEntry = ballTable.getEntry("target_data");
+        returnData = ballTable.getEntry("return_data");
+    }
 
-        public double getBallAngle() {
-            return ballAngleEntry.getDouble(-1);
+    public static VisionClient getInstance() {
+        return instance;
+    }
+
+    public double[] getVisionArray() {
+        return ballTableEntry.getDoubleArray(defaultArray);
+    }
+
+    public double getTimestamp() {
+        return ballTableEntry.getDoubleArray(defaultArray)[0];
+    }
+
+    public Boolean isBallTargetAvail() {
+        if (ballTableEntry.getDoubleArray(defaultArray)[1] == 1.0) {
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    public double getBallDistance() {
+        return ballTableEntry.getDoubleArray(defaultArray)[3];
+    }
+
+    public double getBallAngle() {
+        return ballTableEntry.getDoubleArray(defaultArray)[4];
+    }
+
+    public void pushToTable(double timestamp) {
+        returnData.setNumber(timestamp);
+    }
 }

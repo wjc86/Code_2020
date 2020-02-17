@@ -16,9 +16,16 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
+import frc.robot.Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain {
+    private static Drivetrain instance = new Drivetrain();
+
+    private LoopManager m_LoopManager = LoopManager.getInstance();
+    private Controller m_Contoller = Controller.getInstance();
+    private VisionClient m_VisionClient = VisionClient.getInstance();
+
     private final DoubleSolenoid m_shifter = new DoubleSolenoid(Constants.shifterIDOne, Constants.shifterIDTwo);
 
     private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(Constants.leftMasterID);
@@ -54,6 +61,9 @@ public class Drivetrain {
         = new DifferentialDriveKinematics(Constants.kTrackWidth);
     private final DifferentialDriveOdometry m_odometry;
 
+    PIDController rotController = new PIDController(SmartDashboard.getNumber("Angle P", 0), SmartDashboard.getNumber("Angle I", 0), SmartDashboard.getNumber("Angle D", 0));
+        PIDController distanceController = new PIDController(SmartDashboard.getNumber("Distance P", 0), SmartDashboard.getNumber("Distance I", 0), SmartDashboard.getNumber("Distance D", 0));
+
     /*
     1=in high gear
     0=not in high gear
@@ -64,6 +74,10 @@ public class Drivetrain {
         m_gyro.reset();
         m_odometry = new DifferentialDriveOdometry(getAngle());
         m_rightMaster.setInverted(true);
+    }
+
+    public static Drivetrain getInstance() {
+        return instance;
     }
 
     public Rotation2d getAngle() {
@@ -117,15 +131,24 @@ public class Drivetrain {
         printOdometry();
     }
 
-    public void ballChase(double distance, double angle, Boolean seesBall) {
+    public void ballChase(double distance, double angle, double seesBall) {
         double xSpeed;
         double rot;
-        if(seesBall){
-            xSpeed = distance*Constants.ballChaseDistanceP;
-            rot = angle*Constants.ballChaseAngleP;
+        distanceController.setP(SmartDashboard.getNumber("Distance P", 0));
+        distanceController.setI(SmartDashboard.getNumber("Distance I", 0));
+        distanceController.setD(SmartDashboard.getNumber("Distance D", 0));
+        rotController.setP(SmartDashboard.getNumber("Angle P", 0));
+        rotController.setI(SmartDashboard.getNumber("Angle I", 0));
+        rotController.setD(SmartDashboard.getNumber("Angle D", 0));
+        if(seesBall == 1.0){
+            xSpeed = -distanceController.calculate(distance+1, 0);
+            rot = rotController.calculate(angle, 0);
+        } else if(angle < 0) {
+            xSpeed = 0;
+            rot = 1 * Math.PI;
         } else {
             xSpeed = 0;
-            rot = 2.0 * Math.PI;
+            rot = -1 * Math.PI;
         }
         var wheelSpeeds = m_kinematics.toWheelSpeeds(
             new ChassisSpeeds(xSpeed, 0.0, rot));
@@ -176,6 +199,7 @@ public class Drivetrain {
     public void setInHighGear(int inHighGear) {
         this.inHighGear = inHighGear;
     }
+    
     public void updateShifter() {
         if(inHighGear == 1){
             if(m_shifter.get() == DoubleSolenoid.Value.kReverse){
@@ -187,4 +211,54 @@ public class Drivetrain {
             }
         }
     }
+
+    /*
+    case closedLoop
+        case arcade
+            speed = controller.getSpeed
+            rot = controller.getRot
+            wheelSpeeds = kinematics.toWheelSpeeds(speed, rot)
+            setSpeeds(wheelSpeeds)
+        case ballChase
+            double xSpeed;
+            double rot;
+            if(seesBall){
+                xSpeed = distance*Constants.ballChaseDistanceP;
+                rot = angle*Constants.ballChaseAngleP;
+            } else {
+                xSpeed = 0;
+                rot = 2.0 * Math.PI;
+            }
+            var wheelSpeeds = m_kinematics.toWheelSpeeds(
+                new ChassisSpeeds(xSpeed, 0.0, rot));
+            setSpeeds(wheelSpeeds);
+        case pathFollow
+            getTrajectoryChassisSpeeds
+            wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds)
+            setSpeeds(wheelSpeeds)
+    case manual
+        leftSpeed = controller.getleftSpeed
+        rightSpeed = controler.getrightSpeed
+        openLoopSpeeds
+    */
+
+    /*
+    @Override
+    public void registerLoop()
+    {
+        m_LoopManager.addLoop(new Loop() {
+            @Override
+            public void onStart() {
+                m_CurrentState = state.NEUTRAL;
+                m_WantedState = state.NEUTRAL;
+            }
+            @Override
+            public void onLoop() {
+                if(m_Controller.resetOdometry()) {
+                    resetOdometry();
+                }
+            }
+        })
+    }
+    */
 }
