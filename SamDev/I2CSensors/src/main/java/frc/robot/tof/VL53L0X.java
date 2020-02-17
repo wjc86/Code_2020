@@ -3,23 +3,21 @@ package frc.robot.tof;
 import java.nio.ByteBuffer;
 
 import edu.wpi.first.hal.HALUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.tof.VL53L0X.vcselPeriodType.*;
 
 public class VL53L0X extends I2CUpdatableAddress {
-	
-	private Port m_port = Port.kOnboard;
 	//Store address given when the class is initialized.
-	
 	public static final int DEFAULT_ADDRESS = 0x29;
 	// The value of the address above the default address.
-	private int deviceAddress;
 	private byte stop_variable;
 	private int measurement_timing_budget_us;
 	private int timeout_start_ms;
 	private int io_timeout = 0;
-	private boolean did_timeout;
+
+	public VL53L0X(Port port, int defaultAddress, int deviceAddress) throws NACKException{
+		super(port, defaultAddress, deviceAddress);
+	}
 	
 	private enum BYTE_SIZE {
 		SINGLE(1),
@@ -58,12 +56,10 @@ public class VL53L0X extends I2CUpdatableAddress {
 
 	public VL53L0X(int deviceAddress) throws NACKException {
 		super(Port.kOnboard, DEFAULT_ADDRESS, DEFAULT_ADDRESS + deviceAddress);
-        this.did_timeout = false;
 	}
 
 	public VL53L0X() throws NACKException {
 		super(Port.kOnboard);
-		this.did_timeout = false;
 	}
 	  
 	public final boolean init(boolean io_2v8) throws NACKException {
@@ -298,7 +294,6 @@ public class VL53L0X extends I2CUpdatableAddress {
 	  {
 	    if (checkTimeoutExpired())
 	    {
-	      did_timeout = true;
 	      return 65535;
 	    }
 	  }
@@ -316,7 +311,6 @@ public class VL53L0X extends I2CUpdatableAddress {
 	  {
 	    if (checkTimeoutExpired())
 	    {
-	      did_timeout = true;
 	      return 65535;
 	    }
 	  }
@@ -330,12 +324,6 @@ public class VL53L0X extends I2CUpdatableAddress {
 	  write(VL53L0X_Constants.SYSTEM_INTERRUPT_CLEAR.value, 0x01);
 //	  byte_buffer_range.clear();
 	  return range;
-	}
-	
-	private int getAddressFromDevice() throws NACKException {
-		ByteBuffer deviceAddress = ByteBuffer.allocateDirect(BYTE_SIZE.SINGLE.value);
-		read(VL53L0X_Constants.I2C_SLAVE_DEVICE_ADDRESS.value, BYTE_SIZE.SINGLE.value, deviceAddress);
-		return deviceAddress.get();
 	}
 	
 	// Writing two bytes of data back-to-back is a special case of writeBulk

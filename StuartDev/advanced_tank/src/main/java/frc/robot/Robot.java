@@ -10,21 +10,19 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
-  private Drivetrain m_drive;
-  private Controller m_controller;
-  private BatteryMonitoring m_batteryMonitor;
-  private TrajectoryFolower m_trajectoryFollower;
-  private VisionClient m_VisionClient;
+  private LoopManager m_LoopManager = LoopManager.getInstance();
+  private Drivetrain m_Drivetrain = Drivetrain.getInstance();
+  private Controller m_Controller = Controller.getInstance();
+  private BatteryMonitoring m_BatteryMonitoring = BatteryMonitoring.getInstance();
+  private TrajectoryFollower m_TrajectoryFollower = TrajectoryFollower.getInstance();
+  private VisionClient m_VisionClient = VisionClient.getInstance();
   public static double startTrajectoryTime = 0;
   
   @Override
   public void robotInit() {
-    m_drive = new Drivetrain();
-    m_controller = new Controller();
-    m_batteryMonitor = new BatteryMonitoring();
-    m_trajectoryFollower = new TrajectoryFolower();
-    m_drive.resetOdometry();
-    m_VisionClient = new VisionClient();
+    // m_Loo
+    m_Drivetrain.resetOdometry();
+    putDashboardInit();
   }
 
   @Override
@@ -36,8 +34,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_trajectoryFollower.generateTrajectory();
-    m_drive.setPose(new Pose2d(10, -10, new Rotation2d(Math.PI/2.0)));
+    m_TrajectoryFollower.generateTrajectory();
+    m_Drivetrain.setPose(new Pose2d(10, -10, new Rotation2d(Math.PI/2.0)));
     startTrajectoryTime = Timer.getFPGATimestamp();
   }
 
@@ -52,19 +50,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // if(m_controller.ballChaseMode()){
-    //   m_drive.ballChase(m_VisionClient.getBallDistance(), m_VisionClient.getBallAngle(), m_VisionClient.isBallTargetAvail());
-    // } else {
-      m_drive.drive(m_controller.getSpeed(), m_controller.getRot());
-    // }
-    m_batteryMonitor.overallMonitoring(m_drive);
-    if(m_controller.resetOdometry()) {
-      m_drive.resetOdometry();
+    double[] visionData = m_VisionClient.getVisionArray();
+    if(m_Controller.ballChaseMode()){m_Drivetrain.ballChase(visionData[3], visionData[4], visionData[1]);
+    } else {
+      m_Drivetrain.drive(m_Controller.getSpeed(), m_Controller.getRot());
     }
+    m_BatteryMonitoring.overallMonitoring(m_Drivetrain);
+    if(m_Controller.resetOdometry()) {
+      m_Drivetrain.resetOdometry();
+    }
+    m_VisionClient.pushToTable(visionData[0]);
   }
 
   public void trajectoryMode(){
-    m_drive.drive(m_trajectoryFollower.calculateCurrentTrajectory(m_drive.getCurrentPose()));
+    m_Drivetrain.drive(m_TrajectoryFollower.calculateCurrentTrajectory(m_Drivetrain.getCurrentPose()));
   }
 
   public void putDashboard() {
@@ -72,6 +71,19 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
     SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
+  }
+
+  public void putDashboardInit() {
+    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
+    SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
+    SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
+    SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
+    SmartDashboard.putNumber("Angle P", 0);
+    SmartDashboard.putNumber("Angle I", 0);
+    SmartDashboard.putNumber("Angle D", 0);
+    SmartDashboard.putNumber("Distance P", 0);
+    SmartDashboard.putNumber("Distance I", 0);
+    SmartDashboard.putNumber("Distance D", 0);
   }
 
   @Override
