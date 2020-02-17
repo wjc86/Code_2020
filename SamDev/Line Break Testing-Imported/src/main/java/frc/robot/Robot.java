@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Robot extends TimedRobot {
-  private DigitalInput input = new DigitalInput(2);
+  private DigitalInput input = new DigitalInput(4);
 
   @Override
   public void robotInit() {
