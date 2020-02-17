@@ -58,3 +58,10 @@ KyleDev/Main/build.gradle
 KyleDev/Main/.wpilib/wpilib_preferences.json
 KyleDev/Main/.vscode/settings.json
 KyleDev/Main/.vscode/launch.json
+KyleDev/Test123/vendordeps/WPILibNewCommands.json
+KyleDev/Test123/vendordeps/Phoenix.json
+KyleDev/Test123/src/main/java/frc/robot/Robot.java
+KyleDev/Test123/src/main/deploy/example.txt
+KyleDev/Test123/gradlew
+KyleDev/Test123/gradle/wrapper/gradle-wrapper.jar
+KyleDev/Test123/.vscode/launch.json
