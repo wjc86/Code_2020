@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Controller;
+import frc.robot.VisionClient;
 
 public class Drivetrain extends SubsystemBase {
   /**
@@ -35,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
   private Controller m_Contoller = Controller.getInstance();
   private VisionClient m_VisionClient = VisionClient.getInstance();
 
-  private final DoubleSolenoid m_shifter = new DoubleSolenoid(Constants.shifterIDOne, Constants.shifterIDTwo);
+  // private final DoubleSolenoid m_shifter = new DoubleSolenoid(Constants.shifterIDOne, Constants.shifterIDTwo);
 
   private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(Constants.leftMasterID);
   private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.leftFollowerID);
@@ -73,12 +75,20 @@ public class Drivetrain extends SubsystemBase {
   private int inHighGear = 1;
 
   public Drivetrain() {
-
+    m_gyro.reset();
+    m_odometry = new DifferentialDriveOdometry(getAngle());
+    m_rightMaster.setInverted(true);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    updateOdometry();
+    printOdometry();
+    // updateShifter();
+  }
+
+  public static Drivetrain getInstance() {
+    return instance;
   }
 
   public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
@@ -115,8 +125,6 @@ public class Drivetrain extends SubsystemBase {
     setSpeeds(wheelSpeeds);
     SmartDashboard.putNumber("left wheel speed", wheelSpeeds.leftMetersPerSecond);
     SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
-    updateOdometry();
-    printOdometry();
   }
 
   public void updateOdometry() {
@@ -128,6 +136,13 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getTranslation().getX());
     SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getTranslation().getY());
     SmartDashboard.putNumber("Rot Pos", m_odometry.getPoseMeters().getRotation().getDegrees());
+  }
+
+  public void motorMonitoring() {
+    SmartDashboard.putNumber("left draw", m_leftMaster.getSupplyCurrent());
+    SmartDashboard.putNumber("left out", m_leftMaster.getStatorCurrent());
+    SmartDashboard.putNumber("right draw", m_rightMaster.getSupplyCurrent());
+    SmartDashboard.putNumber("right out", m_rightMaster.getStatorCurrent());
   }
 
   public void resetOdometry() {
@@ -158,15 +173,15 @@ public class Drivetrain extends SubsystemBase {
     this.inHighGear = inHighGear;
   }
 
-  public void updateShifter() {
-    if (inHighGear == 1) {
-      if (m_shifter.get() == DoubleSolenoid.Value.kReverse) {
-        m_shifter.set(DoubleSolenoid.Value.kForward);
-      }
-    } else {
-      if (m_shifter.get() == DoubleSolenoid.Value.kForward) {
-        m_shifter.set(DoubleSolenoid.Value.kReverse);
-      }
-    }
-  }
+  // public void updateShifter() {
+  //   if (inHighGear == 1) {
+  //     if (m_shifter.get() == DoubleSolenoid.Value.kReverse) {
+  //       m_shifter.set(DoubleSolenoid.Value.kForward);
+  //     }
+  //   } else {
+  //     if (m_shifter.get() == DoubleSolenoid.Value.kForward) {
+  //       m_shifter.set(DoubleSolenoid.Value.kReverse);
+  //     }
+  //   }
+  // }
 }
