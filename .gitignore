@@ -192,3 +192,13 @@ BenDev/shooterTest/settings.gradle
 BenDev/shooterTest/src/main/java/frc/robot/Main.java
 BenDev/shooterTest/src/main/java/frc/robot/Robot.java
 BenDev/shooterTest/vendordeps/WPILibOldCommands.json
+BenDev/ThrowawayTest/.vscode/launch.json
+BenDev/ThrowawayTest/.vscode/settings.json
+BenDev/ThrowawayTest/.wpilib/wpilib_preferences.json
+BenDev/ThrowawayTest/build.gradle
+BenDev/ThrowawayTest/gradle/wrapper/gradle-wrapper.properties
+BenDev/ThrowawayTest/gradlew.bat
+BenDev/ThrowawayTest/src/main/deploy/example.txt
+BenDev/ThrowawayTest/src/main/java/frc/robot/Robot.java
+BenDev/ThrowawayTest/vendordeps/Phoenix.json
+BenDev/ThrowawayTest/vendordeps/WPILibOldCommands.json
