@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private VisionClient m_VisionClient = VisionClient.getInstance();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,6 +33,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    putDashboardInit();
   }
 
   /**
@@ -47,6 +50,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    putDashboard();
   }
 
   /**
@@ -65,12 +69,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // // schedule the autonomous command (example)
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
   }
 
   /**
@@ -109,5 +113,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void putDashboardInit() {
+    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
+    SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
+    SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
+    SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
+    SmartDashboard.putNumber("Distance P", 0);
+    SmartDashboard.putNumber("Angle P", 0);
+    SmartDashboard.putNumber("Angle I", 0);
+    SmartDashboard.putNumber("Angle D", 0);
+
+
+  }
+
+  public void putDashboard() {
+    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
+    SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
+    SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
+    SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
   }
 }
