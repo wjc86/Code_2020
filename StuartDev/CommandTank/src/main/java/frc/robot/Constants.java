@@ -44,8 +44,8 @@ public final class Constants {
 
     public static final double controllerDeadband = .1;
 
-    public static final double ballChaseAngleP = .0001;
-    public static final double ballChaseDistanceP = 0.0;
+    public static final double driveToSetpointAngleP = 0;
+    public static final double driveToSetpointDistanceP = 0;
 
     public static final int shifterIDOne = 0;
     public static final int shifterIDTwo = 1;
