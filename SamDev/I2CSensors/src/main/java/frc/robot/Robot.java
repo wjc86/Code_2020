@@ -42,15 +42,18 @@ public class Robot extends TimedRobot {
     //mColorSensor.detectColor();
     SmartDashboard.putBoolean("Got Color", true);
 
-    Vector<Integer> distances = new Vector<>();
+    /*Vector<Integer> distances = new Vector<>();
     try{
       distances = mSensors.readRangeSingleMillimeters();
     } catch(Exception e){
       e.printStackTrace();
     }
-    for(int i = 0; i < mSensors.getNumberOfSensors(); i++){
-      SmartDashboard.putNumber("Sensor " + i + " Distance" , distances.get(i));
-    }
+    
+    if(distances != null && distances.capacity() > 0){
+      for(int i = 0; i < distances.capacity(); i++){
+        SmartDashboard.putNumber("Sensor " + i + " Distance" , distances.get(i));
+      }
+    }*/
   }
 
   @Override

@@ -70,7 +70,7 @@ public class VL53L0XSensors {
             arrayBlockingQueueList = Collections.synchronizedList(blockingQueueList);
             distanceTimer = new java.util.Timer();
             System.out.println("---!!!Starting VL530L0X timer!!!---");
-            // distanceTimer.schedule(new DistanceBackgroundTask(this), 0L, 20L);
+            distanceTimer.schedule(new DistanceBackgroundTask(this), 0L, 20L);
         }
         SmartDashboard.putBoolean("Result", result);
         return result;
@@ -103,6 +103,10 @@ public class VL53L0XSensors {
                 for (int i=0; i<vl53L0XSensors.getNumberOfSensors(); ++i) {
                     results.add(8190);
                 }
+            }
+
+            for(int i = 0; i < results.capacity(); i++){
+                SmartDashboard.putNumber("Distance", results.get(i));
             }
 
             int resultsNum = 0;
