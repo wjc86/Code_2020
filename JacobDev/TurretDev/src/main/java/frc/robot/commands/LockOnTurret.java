@@ -30,8 +30,7 @@ public class LockOnTurret extends CommandBase {
     }
     else {
       visionAngle = SmartDashboard.getNumber("angle", 0);
-      angleDiff = visionAngle + turret.getTurretAngle();
-      turret.setTurretPosition(angleDiff / 360);
+      turret.setTurretPosition(visionAngle + turret.getTurrentAngle());
     }
   }
 
