@@ -13,14 +13,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     conveyor = new Conveyor2(); 
     Joy = new Joystick(1);
-  } 
+    } 
 
   @Override
   public void teleopPeriodic() {
     conveyor.getData();
     conveyor.pushData();
 
-    if(Joy.getRawButton(1)) {
+    if(Joy.getRawButtonPressed(1)) {
       conveyor.setData();
       System.out.println(conveyor.K[0]);
     }
