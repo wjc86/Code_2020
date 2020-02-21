@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if (joystick.getRawButton(1)){
-      colorWheel.set(0.5);
+      colorWheel.set(0.1);
     }  else{
       colorWheel.set(0);
     }
