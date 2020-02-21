@@ -6,22 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.Joystick;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -34,12 +25,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private TalonFX lmotor = new TalonFX(0);
-  private TalonFX rmotor = new TalonFX(1);
-  private Joystick joy1 = new Joystick(1);
-
-  private Compressor comp = new Compressor();
-
+  CANSparkMax colorWheel;
+  Joystick joystick;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -49,7 +36,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    comp.start();
+    colorWheel = new CANSparkMax(4, MotorType.kBrushless);
+    joystick = new Joystick(1);
   }
 
   /**
@@ -103,11 +91,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-      lmotor.set(ControlMode.PercentOutput, joy1.getY());
-      rmotor.set(ControlMode.PercentOutput, joy1.getY());
+    if (joystick.getRawButton(1)){
+      colorWheel.set(0.1);
+    }  else{
+      colorWheel.set(0);
+    }
   }
 
-  d
+  /**
+   * This function is called periodically during test mode.
+   */
   @Override
   public void testPeriodic() {
   }
