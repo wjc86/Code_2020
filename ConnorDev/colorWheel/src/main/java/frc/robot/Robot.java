@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    colorWheel = new CANSparkMax(1, MotorType.kBrushless);
+    colorWheel = new CANSparkMax(4, MotorType.kBrushless);
     joystick = new Joystick(1);
   }
 
@@ -93,7 +93,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (joystick.getRawButton(1)){
       colorWheel.set(0.5);
-    }  
+    }  else{
+      colorWheel.set(0);
+    }
   }
 
   /**
