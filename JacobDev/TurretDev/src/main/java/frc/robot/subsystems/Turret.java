@@ -23,7 +23,7 @@ public class Turret extends SubsystemBase {
 
     //Measurements
     private int ticks = encoder.getPosition() * encoder.getCountsPerRevolution();
-    private double degrees = (double)encoder.getCountsPerRevolution() / 360;
+    private double degrees = (double)360 / encoder.getCountsPerRevolution();
     private final double degrees2Rotations = (double)1 / 360;
 
     private PIDContoller pid = new PIDController(0.01, 0.01, 0.01);
@@ -38,7 +38,7 @@ public class Turret extends SubsystemBase {
         //pid.setP(SmartDashboard.getNumber("kP", 0));
         //pid.setI(SmartDashboard.getNumber("kI", 0));
         //pid.setD(SmartDashboard.getNumber("kD", 0));
-        rotateMotor.set(pid.calculate(degrees, wantedDegrees) * Constants.TURRET_PERCENT_OUTPUT);
+        rotateMotor.set(pid.calculate(degrees, wantedDegrees) * Constants.TURRET_PERCENT_OUTPUT * Constants.TURRET_TO_MOTOR_GEAR_RATIO);
     }
 
     public void setTurretPercentOut(double percent) {
