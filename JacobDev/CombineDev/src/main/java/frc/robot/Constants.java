@@ -16,7 +16,4 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    //TURRET CONSTANTS
-    public static final double TURRET_PERCENT_OUTPUT = 0.5;
-    public static final double TURRET_TO_MOTOR_GEAR_RATIO = 120/16;
 }
