@@ -20,9 +20,10 @@ public class Robot extends TimedRobot {
     conveyor.getData();
     conveyor.pushData();
 
-    if(Joy.getRawButtonPressed(1)) {
+    if(Joy.getRawButton(1)) {
       conveyor.setData();
-      System.out.println(conveyor.K[0]);
+      // System.out.println(conveyor.K[0]);
     }
+    conveyor.advanceBelt();
   }
 }
