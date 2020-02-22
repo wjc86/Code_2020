@@ -8,13 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Conveyor;
 
 public class ConveyorIntake extends CommandBase {
+  private Conveyor m_Conveyor = Conveyor.getInstance();
   /**
    * Creates a new ConveyorIntake.
    */
   public ConveyorIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_Conveyor);
   }
 
   // Called when the command is initially scheduled.
@@ -25,6 +28,13 @@ public class ConveyorIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_Conveyor.getTopSensor()){
+      if(!m_Conveyor.getBottomSensor()){
+        m_Conveyor.driveMotor(.25);
+      } else {
+        m_Conveyor.driveMotor(0);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
