@@ -5,8 +5,13 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class Controller {
+    private static Controller instance = new Controller();
     private final Joystick speedStick = new Joystick(0);
     private final Joystick rotStick = new Joystick(1);
+
+    public static Controller getInstance() {
+        return instance;
+    }
 
     public double getSpeed() {
         if(!speedStick.getRawButton(1)){

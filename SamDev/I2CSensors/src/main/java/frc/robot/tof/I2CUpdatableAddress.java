@@ -470,5 +470,7 @@ public class I2CUpdatableAddress {
         cleanMethod.invoke(cleaner);
     }
 
-    public class NACKException extends IOException{}
+    public class NACKException extends IOException{
+        private static final long serialVersionUID = 1L;
+    }
 }

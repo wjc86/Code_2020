@@ -5,8 +5,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class BatteryMonitoring {
+    private static BatteryMonitoring instance = new BatteryMonitoring();
     PowerDistributionPanel m_pdp = new PowerDistributionPanel();
-    
+
+    public static BatteryMonitoring getInstance() {
+        return instance;
+    }    
     public void pdpMonitoring() {
         SmartDashboard.putNumber("Total Current", m_pdp.getTotalCurrent());
         SmartDashboard.putNumber("Total Voltage", m_pdp.getVoltage());
