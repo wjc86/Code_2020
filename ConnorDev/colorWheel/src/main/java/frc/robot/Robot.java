@@ -21,23 +21,24 @@ import edu.wpi.first.wpilibj.Joystick;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   CANSparkMax colorWheel;
   Joystick joystick;
+  ColorSensor mColorSensor;
+  ColorSensor.color mDetectedColor;
+  ColorSensor.color mWantedColor;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
     colorWheel = new CANSparkMax(4, MotorType.kBrushless);
     joystick = new Joystick(1);
+    mColorSensor = new ColorSensor();
+    mDetectedColor = ColorSensor.color.UNKNOWN;
+    mWantedColor = ColorSensor.color.UNKNOWN;
+    SmartDashboard.putString("Wanted Color", "UNKNOWN");
   }
 
   /**
@@ -65,9 +66,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /**
@@ -75,15 +73,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 
   /**
@@ -91,11 +80,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    if (joystick.getRawButton(1)){
+    mWantedColor = mColorSensor.toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+    mDetectedColor = mColorSensor.detectColor();
+    if(joystick.getRawButton(1) && mDetectedColor != mWantedColor){
       colorWheel.set(0.1);
-    }  else{
+    } else{
       colorWheel.set(0);
     }
+    SmartDashboard.putBoolean("Joystick Button", joystick.getRawButton(1));
+    SmartDashboard.putBoolean("Color Equals", mDetectedColor == mWantedColor);
+    SmartDashboard.putString("Detected Color", mDetectedColor.toString());
+    SmartDashboard.putNumber("Detected Color", mDetectedColor.toInt());
   }
 
   /**
@@ -103,5 +98,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    if(joystick.getRawButton(1)){
+      colorWheel.set(0.1);
+    } else{
+      colorWheel.set(0);
+    }
   }
 }
