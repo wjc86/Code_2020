@@ -1,26 +1,26 @@
-package frc.robot;
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
 
-public class ColorSensor{
-    private CANSparkMax colorWheel = new CANSparkMax(4, MotorType.kBrushless);
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
-    private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-    private static final int YELLOW_CALIBRATION_LIGHT_OFF = 60;
+public class ColorSensor extends SubsystemBase {
+  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  public final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
+
+  private static final int YELLOW_CALIBRATION_LIGHT_OFF = 60;
     private static final int RED_CALIBRATION_LIGHT_OFF = 20;
     private static final int GREEN_CALIBRATION_LIGHT_OFF = 90;
     private static final int CYAN_CALIBRATION_LIGHT_OFF = 120;
@@ -38,8 +38,8 @@ public class ColorSensor{
     private static final int COLOR_LIMIT = 5;
     private ColorSensor.color lastValidColor = ColorSensor.color.UNKNOWN;
 
-    private ColorSensor.color mWantedColor = ColorSensor.color.UNKNOWN;
-    private ColorSensor.color mDetectedColor = ColorSensor.color.UNKNOWN;
+    public ColorSensor.color wantedColor = ColorSensor.color.UNKNOWN;
+    public ColorSensor.color detectedColor = ColorSensor.color.UNKNOWN;
 
     private ArrayList<ColorSensor.color> colors = new ArrayList<>();
 
@@ -125,15 +125,15 @@ public class ColorSensor{
 
     public void rotateToColor(){
         SmartDashboard.putString("Wanted Color", "UNKNOWN");
-        while(mWantedColor == ColorSensor.color.UNKNOWN){
-            mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+        while(wantedColor == ColorSensor.color.UNKNOWN){
+            wantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
         }
-        mDetectedColor = ColorSensor.color.UNKNOWN;
-        while(mWantedColor != mDetectedColor){
-            mDetectedColor = detectColor();
-            colorWheel.set(MOTOR_SPEED);
+        detectedColor = ColorSensor.color.UNKNOWN;
+        while(wantedColor != detectedColor){
+            detectedColor = detectColor();
+            //colorWheel.set(MOTOR_SPEED);
         }
-        colorWheel.set(0);
+        //colorWheel.set(0);
     }
 
     public void rotateNumber(){
@@ -147,9 +147,9 @@ public class ColorSensor{
         timer.start();
         while(timer.get() <= 0.1){}*/
 
-        mWantedColor = detectColor();
-        while(mWantedColor == ColorSensor.color.UNKNOWN){
-            mWantedColor = detectColor();
+        wantedColor = detectColor();
+        while(wantedColor == ColorSensor.color.UNKNOWN){
+            wantedColor = detectColor();
         }
         SmartDashboard.putString("Position Wanted Color", ColorSensor.color.RED.toString());
         colors.clear();
@@ -159,11 +159,11 @@ public class ColorSensor{
         //ColorSensor.color lastColor = firstColor;
         ColorSensor.color currentColor;
         while(counter < 7){
-            colorWheel.set(MOTOR_SPEED);
+            //colorWheel.set(MOTOR_SPEED);
             currentColor = detectColor();
             /*if((kColors.indexOf(lastColor)+1 == kColors.indexOf(currentColor)) || (kColors.indexOf(lastColor) == 3 && kColors.indexOf(currentColor) == 0)){
                 colors.add(currentColor);
-                if(currentColor == mWantedColor){
+                if(currentColor == wantedColor){
                     counter++;
                 }
             }*/
@@ -173,15 +173,11 @@ public class ColorSensor{
             lastColor = currentColor;
             SmartDashboard.putNumber("Counter", counter);
             SmartDashboard.putString("ArrayList Values", iterate(colors));
-            if(Robot.joystick.getRawButton(1)){
+            /*if(Robot.joystick.getRawButton(1)){
                 break;
-            }
+            }*/
         }
-        colorWheel.set(0);
-    }
-
-    public void manualOverride(){
-        colorWheel.set(0.1);
+        //colorWheel.set(0);
     }
 
     private String iterate(ArrayList<ColorSensor.color> colors){
@@ -268,7 +264,7 @@ public class ColorSensor{
         SmartDashboard.putString("Color", colorString);
     }
 
-    public ColorSensor.color toColor(String color){
+    public static ColorSensor.color toColor(String color){
         if(color.equals("RED")){
             return ColorSensor.color.RED;
         } else if(color.equals("GREEN")){
