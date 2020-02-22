@@ -7,17 +7,13 @@
 
 package frc.robot;
 
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,12 +30,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private TalonFX lmotor = new TalonFX(0);
-  private TalonFX rmotor = new TalonFX(1);
-  private Joystick joy1 = new Joystick(1);
-
-  private Compressor comp = new Compressor();
-
+  TalonFX shooter = new TalonFX(0);
+  TalonSRX shooter2 = new TalonSRX(1);
+  Joystick joy = new Joystick(1);
+  int toggle = 0;
+  double shooterv = 0;
+  double shooter2v = 0;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -49,7 +45,6 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    comp.start();
   }
 
   /**
@@ -103,9 +98,36 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-      lmotor.set(ControlMode.PercentOutput, joy1.getY());
-      rmotor.set(ControlMode.PercentOutput, joy1.getY());
+    if(joy.getRawButtonPressed(1)){
+      if (toggle < 3){
+        toggle++;
+      }
+      else{
+        toggle = 0;
+      }
+    }
+    switch(toggle) {
+      case 1:
+        shooterv = Math.abs((-1.0 + joy.getRawAxis(3))/2.0);
+        break;
+      case 2:
+        //in between state
+        break;
+      case 3:
+        shooter2v = Math.abs((-1.0 + joy.getRawAxis(3))/2.0);
+        break;
+      default: 
+        //in between state
+    }
+    System.out.println("Shooter 1: " + shooterv);
+    System.out.println("Shooter 2: " + shooter2v); 
+    
+  
   } 
+
+  /**
+   * This function is called periodically during test mode.
+   */
   @Override
   public void testPeriodic() {
   }
