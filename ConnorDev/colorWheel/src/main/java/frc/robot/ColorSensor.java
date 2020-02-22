@@ -24,6 +24,9 @@ public class ColorSensor{
     private static final int COLOR_LIMIT = 5;
     private ColorSensor.color lastValidColor = ColorSensor.color.UNKNOWN;
 
+    private ColorSensor.color mWantedColor = ColorSensor.color.UNKNOWN;
+    private ColorSensor.color mDetectedColor = ColorSensor.color.UNKNOWN;
+
     public ColorSensor.color detectColor(){
         Color detectedColor = mColorSensor.getColor();
 
@@ -146,7 +149,17 @@ public class ColorSensor{
         }
     }*/
 
-    public void rotateToColor(String color){}
+    public void rotateToColor(){
+    mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+    mDetectedColor = detectColor();
+    if(Robot.joystick.getRawButton(1) && mDetectedColor != mWantedColor){
+      Robot.colorWheel.set(0.1);
+    } else{
+      Robot.colorWheel.set(0);
+    }
+    SmartDashboard.putString("Detected Color", mDetectedColor.toString());
+    SmartDashboard.putNumber("Detected Color", mDetectedColor.toInt());
+    }
 
     public void deploy(){}
 

@@ -21,11 +21,9 @@ import edu.wpi.first.wpilibj.Joystick;
  * project.
  */
 public class Robot extends TimedRobot {
-  CANSparkMax colorWheel;
-  Joystick joystick;
+  static CANSparkMax colorWheel;
+  static Joystick joystick;
   ColorSensor mColorSensor;
-  ColorSensor.color mDetectedColor;
-  ColorSensor.color mWantedColor;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -36,8 +34,6 @@ public class Robot extends TimedRobot {
     colorWheel = new CANSparkMax(4, MotorType.kBrushless);
     joystick = new Joystick(1);
     mColorSensor = new ColorSensor();
-    mDetectedColor = ColorSensor.color.UNKNOWN;
-    mWantedColor = ColorSensor.color.UNKNOWN;
     SmartDashboard.putString("Wanted Color", "UNKNOWN");
   }
 
@@ -80,17 +76,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    mWantedColor = mColorSensor.toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
-    mDetectedColor = mColorSensor.detectColor();
-    if(joystick.getRawButton(1) && mDetectedColor != mWantedColor){
-      colorWheel.set(0.1);
-    } else{
-      colorWheel.set(0);
-    }
-    SmartDashboard.putBoolean("Joystick Button", joystick.getRawButton(1));
-    SmartDashboard.putBoolean("Color Equals", mDetectedColor == mWantedColor);
-    SmartDashboard.putString("Detected Color", mDetectedColor.toString());
-    SmartDashboard.putNumber("Detected Color", mDetectedColor.toInt());
+    mColorSensor.rotateToColor();
   }
 
   /**
