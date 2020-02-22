@@ -10,7 +10,7 @@ public class LockOnTurret extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Turret turret = Turret.getInstance();
-  private OscillateTurret oscillateTurret = new OscillateTurret(turret);
+  private OscillateTurret oscillateTurret = new OscillateTurret();
 
   private boolean seesTarget;
 
@@ -26,11 +26,11 @@ public class LockOnTurret extends CommandBase {
   public void execute() {
     if(!seesTarget) {
       oscillateTurret.execute();
-      seesTarget = SmartDashboard.getNumber("seesAG2", false);
+      seesTarget = SmartDashboard.getBoolean("seesAG2", false);
     }
     else {
-      visionAngle = SmartDashboard.getNumber("angle", 0);
-      turret.setTurretPosition(visionAngle + turret.getTurrentAngle());
+      double visionAngle = SmartDashboard.getNumber("angle", 0);
+      turret.setTurretPosition(visionAngle + turret.getTurretAngle());
     }
   }
 

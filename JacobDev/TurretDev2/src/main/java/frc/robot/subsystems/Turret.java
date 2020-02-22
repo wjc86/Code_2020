@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANEncoder;
+import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,17 +17,17 @@ public class Turret extends SubsystemBase {
     //Sensors
     private DigitalInput hallEffect = new DigitalInput(0);
     private TalonSRX rotateMotor = new TalonSRX(11);
-    private CANEncoder encoder;
+    private CANCoder encoder;
     
     
     //Measured in Degrees
     private double minPos = 0;
-    private double midPos = 144;
-    private double maxPos = 288;
+    private double midPos = 90;
+    private double maxPos = 180;
 
     //Measurements
-    private int ticks = (int)(rotateMotor.getSelectedSensorPosition(0) * encoder.getCountsPerRevolution());
-    private double degrees = (double)360 / encoder.getCountsPerRevolution();
+    private int ticks = (int)(rotateMotor.getSelectedSensorPosition(0) * Constants.ENCODER_TICKS_PER_REVOLUTION);
+    private double degrees = (double)360 / Constants.ENCODER_TICKS_PER_REVOLUTION;
     private final double degrees2Rotations = (double)1 / 360;
 
     private PIDController pid = new PIDController(0.01, 0.01, 0.01);

@@ -10,9 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.ChaseBall;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.OscillateTurret;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,15 +26,12 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
 
-  private Drivetrain m_Drivetrain = Drivetrain.getInstance();
-  private Controller m_Controller = Controller.getInstance();
+  private final Joystick stick = new Joystick(0);
+  private OscillateTurret oscillateTurret = new OscillateTurret();
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
-    m_Drivetrain.setDefaultCommand(new ArcadeDrive(
-      () -> m_Controller.getSpeed(), () -> m_Controller.getRot()));
   }
 
   /**
@@ -44,9 +40,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
-    System.out.println("1");
-    m_Controller.getBallChaseButton().whenHeld(new ChaseBall());
+  private void configureButtonBindings() {  
+    if(stick.getRawButton(1)) {
+      oscillateTurret.execute();
+    }
   }
 
 

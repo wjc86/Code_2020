@@ -9,7 +9,7 @@ public class HomeTurret extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Turret turret = Turret.getInstance();
-  private OscillateTurret oscillateTurret = new OscillateTurret(turret);
+  private OscillateTurret oscillateTurret = new OscillateTurret();
 
   private boolean isHomed;
 
