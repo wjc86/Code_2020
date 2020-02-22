@@ -8,11 +8,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.Constants;
 
 public class SpinUpFlywheel extends CommandBase {
   /**
    * Creates a new SpinUpFlywheel.
    */
+  private final Flywheel flywheel = Flywheel.getInstance();
+
   public SpinUpFlywheel() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -25,13 +29,13 @@ public class SpinUpFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Flywheel.startFlywheel();
+    flywheel.startFlywheel(Constants.k_FLYWHEEL_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Flywheel.stopFlywheel();
+    flywheel.stopFlywheel();
   }
 
   // Returns true when the command should end.

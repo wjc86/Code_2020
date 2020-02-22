@@ -18,8 +18,10 @@ package frc.robot;
 public final class Constants {
 
     // Later, this value should come from somebody else's code
-    public static final double k_FLYWHEEL_SPEED = .5;
+    public static final double k_FLYWHEEL_SPEED = .25;
 
-    public static final int k_FLYWHEEL_PORT = 0;
+    public static final int k_FLYWHEEL_PORT = 12;
+    public static final int k_JOYSTICK_TRIGGER = 1;
+    public static final int k_JOYSTICK_PORT = 0;
 
 }

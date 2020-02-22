@@ -19,7 +19,8 @@ public class Flywheel extends SubsystemBase {
   /**
    * Creates a new Flywheel.
    */
-  TalonFX flywheelMotor = new TalonFX(Constants.k_FLYWHEEL_PORT);
+  private TalonFX flywheelMotor = new TalonFX(Constants.k_FLYWHEEL_PORT);
+  private static Flywheel instance = new Flywheel();
 
   public Flywheel() {
     
@@ -30,12 +31,15 @@ public class Flywheel extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public static Flywheel getInstance() {
+    return instance;
+  }
+
   public void startFlywheel(double speed) {
-    speed = Constants.k_FLYWHEEL_SPEED;
     flywheelMotor.set(TalonFXControlMode.PercentOutput, speed);
   }
 
   public void stopFlywheel() {
-    flywheelMotor.set(TalonFXControlMode.PercentOutput, 0);
+    flywheelMotor.set(TalonFXControlMode.PercentOutput, 0.0);
   }
 }
