@@ -24,7 +24,7 @@ public class ClimberWinch extends SubsystemBase {
 
   private Encoder winchEncoder = new Encoder(Constants.winchEncoderChannel1, Constants.winchEncoderChannel2);
   // private TalonSRX winchMotor = new TalonSRX(Constants.winchMotorID);
-  private SparkMax winchMotor;
+  // private SparkMax winchMotor;
 
   // private PIDController winchPID = new PIDController(Constants.winchP, Constants.winchI, Constants.winchD);
 
@@ -40,12 +40,12 @@ public class ClimberWinch extends SubsystemBase {
   }
 
   public void setClimberPostition(double pos) {
-    winchMotor.set(ControlMode.Position, pos);
+    // winchMotor.set(ControlMode.Position, pos);
     // winchMotor.configSelectedFeedbackSensor(winchEncoder);
   }
 
   public void setManualClimb(double percent) {
-    winchMotor.set(ControlMode.PercentOutput, percent);
+    // winchMotor.set(ControlMode.PercentOutput, percent);
   }
 
   public double getClimberPosition() {
