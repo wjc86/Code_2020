@@ -30,7 +30,7 @@ public class ConveyorIntake extends CommandBase {
   public void execute() {
     if(m_Conveyor.getTopSensor()){
       if(!m_Conveyor.getBottomSensor()){
-        m_Conveyor.driveMotor(.25);
+        m_Conveyor.driveMotor( .25);
       } else {
         m_Conveyor.driveMotor(0);
       }
