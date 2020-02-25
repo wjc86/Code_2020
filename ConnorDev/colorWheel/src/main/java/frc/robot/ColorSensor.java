@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
+import com.revrobotics.ColorSensorV3.ColorSensorResolution;
+import com.revrobotics.ColorSensorV3.GainFactor;
 
 import java.util.ArrayList;
 
@@ -16,10 +19,10 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 
 public class ColorSensor{
-    private CANSparkMax colorWheel = new CANSparkMax(4, MotorType.kBrushless);
+    private CANSparkMax colorWheel = new CANSparkMax(10, MotorType.kBrushless);
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
-
+  
     private static final int YELLOW_CALIBRATION_LIGHT_OFF = 60;
     private static final int RED_CALIBRATION_LIGHT_OFF = 20;
     private static final int GREEN_CALIBRATION_LIGHT_OFF = 90;
@@ -46,10 +49,13 @@ public class ColorSensor{
     private final double MOTOR_SPEED = 0.15;
     private int colorReadBefore = 0;
     private int colorReadAfter = 0;
-
+   // this bit of code right below might wreck something until we find a good spot to put it, we dont know where we should.
+    public void configureColorSensor(){
+        mColorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain3x);
+    }
     public ColorSensor.color detectColor(){
         Color detectedColor = mColorSensor.getColor();
-
+        
         double[] RGB = {detectedColor.red, detectedColor.green, detectedColor.blue};
         
         double min, max, delta, h;
@@ -161,15 +167,15 @@ public class ColorSensor{
         while(counter < 7){
             colorWheel.set(MOTOR_SPEED);
             currentColor = detectColor();
-            /*if((kColors.indexOf(lastColor)+1 == kColors.indexOf(currentColor)) || (kColors.indexOf(lastColor) == 3 && kColors.indexOf(currentColor) == 0)){
+            if((kColors.indexOf(lastColor)+1 == kColors.indexOf(currentColor)) || (kColors.indexOf(lastColor) == 3 && kColors.indexOf(currentColor) == 0)){
                 colors.add(currentColor);
                 if(currentColor == mWantedColor){
                     counter++;
                 }
-            }*/
-            if(currentColor == ColorSensor.color.RED && lastColor != ColorSensor.color.RED){
-                counter++;
             }
+          /*  if(currentColor == ColorSensor.color.RED && lastColor != ColorSensor.color.RED){
+                counter++;
+            }*/
             lastColor = currentColor;
             SmartDashboard.putNumber("Counter", counter);
             SmartDashboard.putString("ArrayList Values", iterate(colors));
