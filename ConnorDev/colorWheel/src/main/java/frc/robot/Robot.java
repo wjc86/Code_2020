@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     joystick = new Joystick(1);
     mColorSensor = new ColorSensor();
+    mColorSensor.configureColorSensor();
   }
 
   /**
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
       mColorSensor.rotateToColor();
     } else if(joystick.getRawButton(4)){
       mColorSensor.rotateNumber();
+      
     }
   }
 
