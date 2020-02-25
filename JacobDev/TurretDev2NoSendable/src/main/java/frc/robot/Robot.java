@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command turretCommand;
+  //private Command turretCommand;
 
   private RobotContainer robotContainer;
 
@@ -86,10 +86,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretCommand = robotContainer.getTurretCommand();
-    if(turretCommand != null) {
-      //turretCommand.schedule();
-    }
+    //turret command crap in here
   }
 
   /**
@@ -113,6 +110,7 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboardInit() {
+    /*
     SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp()); 
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
@@ -121,6 +119,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle P", 0);
     SmartDashboard.putNumber("Angle I", 0);
     SmartDashboard.putNumber("Angle D", 0);
+    */
 
     //Turret
     SmartDashboard.putNumber("kP", 0.0);
@@ -129,15 +128,14 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboard() {
+    /*
     SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
     SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
-    Command command = robotContainer.getTurretCommand();
-    String commandText = "None";
-    if(command != null) {
-      commandText = command.getName();
-    }
-    SmartDashboard.putString("___Selected Command", commandText);
+    */
+    SmartDashboard.putNumber("kP", 0.0);
+    SmartDashboard.putNumber("kI", 0.0);
+    SmartDashboard.putNumber("kD", 0.0);
   }
 }

@@ -9,15 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.commands.HomeTurret;
-import frc.robot.commands.LockOnTurret;
-import frc.robot.commands.OscillateTurret;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,31 +21,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
+  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
-
-  private XboxController controller = new XboxController(2);
-
-  SendableChooser<Command> chooser = new SendableChooser<>();
-
-  private Command homeTurret = new HomeTurret();
-  private Command lockOnTurret = new LockOnTurret();
-  private Command oscillateTurret = new OscillateTurret();
-
-
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-  
-    chooser.addOption("HomeTurret", homeTurret);
-    chooser.addOption("LockOnTurret", lockOnTurret);
-    chooser.addOption("OscillateTurret", oscillateTurret);
-
-    //chooser.setDefaultOption("OscillateTurret", oscillateTurret);
-
-    Shuffleboard.getTab("Turret Comands").add(chooser);
   }
 
   /**
@@ -60,27 +41,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {  
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(homeTurret);
-    new JoystickButton(controller, Button.kX.value)
-      .whenPressed(oscillateTurret);
-    new JoystickButton(controller, Button.kB.value)
-      .whenPressed(lockOnTurret);
+  private void configureButtonBindings() {
   }
 
 
-    /**
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
-   *
+   */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
-  }
-  */
-
-  public Command getTurretCommand() {
-    return chooser.getSelected();
+    // An ExampleCommand will run in autonomous
+    return m_autoCommand;
   }
 }
