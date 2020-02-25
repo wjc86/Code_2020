@@ -6,12 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.util.concurrent.CompletableFuture;
+
 import edu.wpi.first.wpilibj.Joystick;
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,9 +22,9 @@ import edu.wpi.first.wpilibj.Joystick;
  * project.
  */
 public class Robot extends TimedRobot {
-  static CANSparkMax colorWheel;
   static Joystick joystick;
   ColorSensor mColorSensor;
+  boolean completed = false;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -31,10 +32,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    colorWheel = new CANSparkMax(4, MotorType.kBrushless);
     joystick = new Joystick(1);
     mColorSensor = new ColorSensor();
-    SmartDashboard.putString("Wanted Color", "UNKNOWN");
+    mColorSensor.configureColorSensor();
   }
 
   /**
@@ -71,12 +71,23 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
   }
 
+  @Override
+  public void teleopInit() {
+    SmartDashboard.putString("Wanted Color", "UNKNOWN");
+    SmartDashboard.putString("Position Wanted Color", "UNKNOWN");
+  }
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
-    mColorSensor.rotateToColor();
+    if(joystick.getRawButton(3)){
+      mColorSensor.rotateToColor();
+    } else if(joystick.getRawButton(4)){
+      mColorSensor.rotateNumber();
+      
+    }
   }
 
   /**
@@ -84,10 +95,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    if(joystick.getRawButton(1)){
-      colorWheel.set(0.1);
-    } else{
-      colorWheel.set(0);
-    }
+    mColorSensor.calibrate();
   }
 }
