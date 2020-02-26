@@ -16,7 +16,7 @@ public class StowCombine extends CommandBase {
     @Override
     public void initialize() {
         combine.retractCombine();
-        if(combine.)
+        //if(combine.)
     }
   
     @Override
@@ -32,5 +32,4 @@ public class StowCombine extends CommandBase {
         }
         return false;
     }
-  }
 }

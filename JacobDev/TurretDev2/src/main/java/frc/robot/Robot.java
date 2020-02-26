@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private Command turretCommand;
 
-  private RobotContainer m_robotContainer;
+  private RobotContainer robotContainer;
 
   private VisionClient m_VisionClient = VisionClient.getInstance();
   /**
@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    robotContainer = new RobotContainer();
     putDashboardInit();
   }
 
@@ -86,12 +86,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    turretCommand = robotContainer.getTurretCommand();
+    if(turretCommand != null) {
+      //turretCommand.schedule();
     }
   }
 
@@ -116,7 +113,7 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboardInit() {
-    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
+    SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp()); 
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
     SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
@@ -125,7 +122,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle I", 0);
     SmartDashboard.putNumber("Angle D", 0);
 
-
+    //Turret
+    SmartDashboard.putNumber("kP", 0.0);
+    SmartDashboard.putNumber("kI", 0.0);
+    SmartDashboard.putNumber("kD", 0.0);
   }
 
   public void putDashboard() {
@@ -133,5 +133,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
     SmartDashboard.putNumber("Ball Angle", m_VisionClient.getBallAngle());
+    Command command = robotContainer.getTurretCommand();
+    String commandText = "None";
+    if(command != null) {
+      commandText = command.getName();
+    }
+    SmartDashboard.putString("___Selected Command", commandText);
   }
 }
