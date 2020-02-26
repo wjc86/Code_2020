@@ -1,0 +1,47 @@
+
+package frc.robot.commands;
+
+import frc.robot.subsystems.Turret;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+public class HomeTurret extends CommandBase {
+
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+
+  private final Turret turret = Turret.getInstance();
+  private OscillateTurret oscillateTurret = new OscillateTurret();
+
+  private final String name = "homeTurret";
+
+  private boolean isHomed;
+
+  public HomeTurret() {
+    isHomed = false;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+
+  @Override
+  public void initialize() {
+  }
+
+  @Override
+  public void execute() {
+    oscillateTurret.execute();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+  @Override
+  public boolean isFinished() {
+    if(turret.isOnHallEffect()) {
+        return true;
+    }
+    return false;
+  }
+}

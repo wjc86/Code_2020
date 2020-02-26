@@ -53,6 +53,7 @@ public class Conveyor2 {
         SmartDashboard.putNumber("Target Value ", 0);
         SmartDashboard.putBoolean("Top Line ", sensor1.get()); 
         SmartDashboard.putBoolean("Bottom Line ", sensor2.get());
+        SmartDashboard.putNumber("Set Belt Delta", 0);
     }
 
     public void advanceBelt(){
