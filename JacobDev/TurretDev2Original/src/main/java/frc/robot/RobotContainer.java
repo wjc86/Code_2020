@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.HomeTurret;
 import frc.robot.commands.LockOnTurret;
 import frc.robot.commands.OscillateTurret;
@@ -32,6 +33,8 @@ public class RobotContainer {
 
   private XboxController controller = new XboxController(2);
 
+  SendableChooser<Command> chooser = new SendableChooser<>();
+
   private Command homeTurret = new HomeTurret();
   private Command lockOnTurret = new LockOnTurret();
   private Command oscillateTurret = new OscillateTurret();
@@ -40,6 +43,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+  
+    chooser.addOption("HomeTurret", homeTurret);
+    chooser.addOption("LockOnTurret", lockOnTurret);
+    chooser.addOption("OscillateTurret", oscillateTurret);
+
+    //chooser.setDefaultOption("OscillateTurret", oscillateTurret);
+
+    Shuffleboard.getTab("Turret Comands").add(chooser);
   }
 
   /**
@@ -67,4 +78,8 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
   */
+
+  public Command getTurretCommand() {
+    return chooser.getSelected();
+  }
 }
