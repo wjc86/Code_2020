@@ -22,7 +22,9 @@ public class ColorSensor{
     private CANSparkMax colorWheel = new CANSparkMax(10, MotorType.kBrushless);
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
-  
+    
+    private int colorSearchState = 0;
+
     private static final int YELLOW_CALIBRATION_LIGHT_OFF = 60;
     private static final int RED_CALIBRATION_LIGHT_OFF = 20;
     private static final int GREEN_CALIBRATION_LIGHT_OFF = 90;
@@ -129,18 +131,39 @@ public class ColorSensor{
         return lastValidColor;
     }
 
-    public void rotateToColor(){
-        SmartDashboard.putString("Wanted Color", "UNKNOWN");
-        while(mWantedColor == ColorSensor.color.UNKNOWN){
-            mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+     public void rotateToColor(){
+        colorSearchState = 1;
+
+
+    //     SmartDashboard.putString("Wanted Color", "UNKNOWN");
+    //     while(mWantedColor == ColorSensor.color.UNKNOWN){
+    //         mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+    //     }
+    //     mDetectedColor = ColorSensor.color.UNKNOWN;
+    //     while(mWantedColor != mDetectedColor){
+    //         mDetectedColor = detectColor();
+    //         colorWheel.set(MOTOR_SPEED);
+    //     }
+    //     colorWheel.set(0);
+    } 
+
+    public void colorSearch(){
+        mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
+        mDetectedColor = detectColor();
+        switch(colorSearchState){
+         case 0 : 
+         break;
+         case 1 : 
+            // colorWheel.set(MOTOR_SPEED);
+            if(mDetectedColor == mWantedColor){
+                colorSearchState = 0;
+                // colorWheel.set(0);
+                SmartDashboard.putString("FOUND COLOR", mDetectedColor.toString());
+            }
+         break;
         }
-        mDetectedColor = ColorSensor.color.UNKNOWN;
-        while(mWantedColor != mDetectedColor){
-            mDetectedColor = detectColor();
-            colorWheel.set(MOTOR_SPEED);
-        }
-        colorWheel.set(0);
     }
+
 
     public void rotateNumber(){
         ArrayList<ColorSensor.color> kColors = new ArrayList<>();
