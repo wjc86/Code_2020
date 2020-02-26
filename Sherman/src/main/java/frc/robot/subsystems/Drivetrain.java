@@ -28,16 +28,10 @@ import frc.robot.constants.DrivetrainConstants;
 // import frc.robot.VisionClient;
 
 public class Drivetrain extends SubsystemBase {
-  /**
-   * Creates a new Drivetrain.
-   */
-
   private static Drivetrain instance = new Drivetrain();
 
-  // private Controller m_Contoller = Controller.getInstance();
-  // private VisionClient m_VisionClient = VisionClient.getInstance();
-
-  private final DoubleSolenoid m_shifter = new DoubleSolenoid(DrivetrainConstants.SHIFTER_ID_1, DrivetrainConstants.SHIFTER_ID_2);
+  private final DoubleSolenoid m_shifter = new DoubleSolenoid(DrivetrainConstants.SHIFTER_ID_1,
+      DrivetrainConstants.SHIFTER_ID_2);
 
   private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(DrivetrainConstants.LEFT_MASTER_ID);
   private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_ID);
@@ -46,25 +40,26 @@ public class Drivetrain extends SubsystemBase {
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-  private final SimpleMotorFeedforward leftFeedforwardHigh = new SimpleMotorFeedforward(DrivetrainConstants.LEFT_FF[1][0],
-      DrivetrainConstants.LEFT_FF[1][1], DrivetrainConstants.LEFT_FF[1][2]);
-  private final SimpleMotorFeedforward rightFeedforwardHigh = new SimpleMotorFeedforward(DrivetrainConstants.RIGHT_FF[1][0],
-      DrivetrainConstants.RIGHT_FF[1][1], DrivetrainConstants.RIGHT_FF[1][2]);
+  private final SimpleMotorFeedforward m_leftFeedforwardHigh = new SimpleMotorFeedforward(
+      DrivetrainConstants.LEFT_FF[1][0], DrivetrainConstants.LEFT_FF[1][1], DrivetrainConstants.LEFT_FF[1][2]);
+  private final SimpleMotorFeedforward m_rightFeedforwardHigh = new SimpleMotorFeedforward(
+      DrivetrainConstants.RIGHT_FF[1][0], DrivetrainConstants.RIGHT_FF[1][1], DrivetrainConstants.RIGHT_FF[1][2]);
   private final PIDController m_leftPIDControllerHigh = new PIDController(DrivetrainConstants.LEFT_PID[1][0],
       DrivetrainConstants.LEFT_PID[1][1], DrivetrainConstants.LEFT_PID[1][2]);
   private final PIDController m_rightPIDControllerHigh = new PIDController(DrivetrainConstants.RIGHT_PID[1][0],
       DrivetrainConstants.RIGHT_PID[1][1], DrivetrainConstants.RIGHT_PID[1][2]);
 
-  private final SimpleMotorFeedforward leftFeedforwardLow = new SimpleMotorFeedforward(DrivetrainConstants.LEFT_FF[0][0],
-      DrivetrainConstants.LEFT_FF[0][1], DrivetrainConstants.LEFT_FF[0][2]);
-  private final SimpleMotorFeedforward rightFeedforwardLow = new SimpleMotorFeedforward(DrivetrainConstants.RIGHT_FF[0][0],
-      DrivetrainConstants.RIGHT_FF[0][1], DrivetrainConstants.RIGHT_FF[0][2]);
+  private final SimpleMotorFeedforward m_leftFeedforwardLow = new SimpleMotorFeedforward(
+      DrivetrainConstants.LEFT_FF[0][0], DrivetrainConstants.LEFT_FF[0][1], DrivetrainConstants.LEFT_FF[0][2]);
+  private final SimpleMotorFeedforward rightFeedforwardLow = new SimpleMotorFeedforward(
+      DrivetrainConstants.RIGHT_FF[0][0], DrivetrainConstants.RIGHT_FF[0][1], DrivetrainConstants.RIGHT_FF[0][2]);
   private final PIDController m_leftPIDControllerLow = new PIDController(DrivetrainConstants.LEFT_PID[0][0],
       DrivetrainConstants.LEFT_PID[0][1], DrivetrainConstants.LEFT_PID[0][2]);
   private final PIDController m_rightPIDControllerLow = new PIDController(DrivetrainConstants.RIGHT_PID[0][0],
       DrivetrainConstants.RIGHT_PID[0][1], DrivetrainConstants.RIGHT_PID[0][2]);
 
-  private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(DrivetrainConstants.TRACK_WIDTH);
+  private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
+      DrivetrainConstants.TRACK_WIDTH);
   private final DifferentialDriveOdometry m_odometry;
 
   PIDController rotController = new PIDController(SmartDashboard.getNumber("Angle P", 0),
@@ -84,7 +79,6 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     printOdometry();
-    updateShifter();
   }
 
   public static Drivetrain getInstance() {
@@ -97,14 +91,14 @@ public class Drivetrain extends SubsystemBase {
     if (inHighGear == 1) {
       leftOutput = m_leftPIDControllerHigh.calculate(
           m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
-          + leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
+          + m_leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
       rightOutput = m_rightPIDControllerHigh.calculate(
           m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
-          + rightFeedforwardHigh.calculate(speeds.rightMetersPerSecond);
+          + m_rightFeedforwardHigh.calculate(speeds.rightMetersPerSecond);
     } else {
       leftOutput = m_leftPIDControllerLow.calculate(
           m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
-          + leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
+          + m_leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
       rightOutput = m_rightPIDControllerLow.calculate(
           m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
           + rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
@@ -115,8 +109,10 @@ public class Drivetrain extends SubsystemBase {
     // m_rightFollower.follow(m_rightMaster);
     SmartDashboard.putNumber("right output", rightOutput);
     SmartDashboard.putNumber("left output", leftOutput);
-    SmartDashboard.putNumber("right speed", m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
-    SmartDashboard.putNumber("left speed", m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
+    SmartDashboard.putNumber("right speed",
+        m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
+    SmartDashboard.putNumber("left speed",
+        m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
   }
 
   @SuppressWarnings("ParameterName")
@@ -173,16 +169,13 @@ public class Drivetrain extends SubsystemBase {
     this.inHighGear = inHighGear;
   }
 
-  public void updateShifter() {
-    if (inHighGear == 1) {
-      if (m_shifter.get() == DoubleSolenoid.Value.kReverse) {
-        m_shifter.set(DoubleSolenoid.Value.kForward);
-      }
-    } else {
-      if (m_shifter.get() == DoubleSolenoid.Value.kForward) {
-        m_shifter.set(DoubleSolenoid.Value.kReverse);
-      }
+  public void shift() {
+    if (m_shifter.get() == DoubleSolenoid.Value.kReverse) {
+      m_shifter.set(DoubleSolenoid.Value.kForward);
+      inHighGear = 1;
+    } else{} {
+      m_shifter.set(DoubleSolenoid.Value.kReverse);
+      inHighGear = 0;
     }
-    // m
   }
 }
