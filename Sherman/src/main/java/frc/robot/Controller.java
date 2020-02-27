@@ -25,21 +25,21 @@ public class Controller {
         // Switches between a fast and slow drive control by multiplying joystick output by a constant
         if (!speedStick.getRawButton(1)) {
             // Adds in deadband logic
-            if (Math.abs(speedStick.getY()) < ControllerConstants.CONTROLLER_DEADBAND) {
+            if (Math.abs(speedStick.getY()) < ControllerConstants.DEADBAND) {
                 return 0.0;
             } else if (speedStick.getY() < 0) {
-                return (speedStick.getY() + ControllerConstants.CONTROLLER_DEADBAND) * ControllerConstants.SLOW_SPEED_MULT * -1.0;
+                return (speedStick.getY() + ControllerConstants.DEADBAND) * ControllerConstants.SLOW_SPEED_MULT * -1.0;
             } else {
-                return (speedStick.getY() - ControllerConstants.CONTROLLER_DEADBAND) * ControllerConstants.SLOW_SPEED_MULT * -1.0;
+                return (speedStick.getY() - ControllerConstants.DEADBAND) * ControllerConstants.SLOW_SPEED_MULT * -1.0;
             }
         } else {
             // Adds in deadband logic
-            if (Math.abs(speedStick.getY()) < ControllerConstants.CONTROLLER_DEADBAND) {
+            if (Math.abs(speedStick.getY()) < ControllerConstants.DEADBAND) {
                 return 0.0;
             } else if (speedStick.getY() < 0) {
-                return (speedStick.getY() + ControllerConstants.CONTROLLER_DEADBAND) * -1.0;
+                return (speedStick.getY() + ControllerConstants.DEADBAND) * -1.0;
             } else {
-                return (speedStick.getY() - ControllerConstants.CONTROLLER_DEADBAND) * -1.0;
+                return (speedStick.getY() - ControllerConstants.DEADBAND) * -1.0;
             }
         }
     }
@@ -48,21 +48,21 @@ public class Controller {
     public double getArcadeDriveRot() {
         if(!speedStick.getRawButton(1)){
             // Adds in deadband logic
-            if (Math.abs(rotStick.getX()) < ControllerConstants.CONTROLLER_DEADBAND) {
+            if (Math.abs(rotStick.getX()) < ControllerConstants.DEADBAND) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + ControllerConstants.CONTROLLER_DEADBAND) * ControllerConstants.SLOW_ROT_MULT * -1.0;
+                return (rotStick.getX() + ControllerConstants.DEADBAND) * ControllerConstants.SLOW_ROT_MULT * -1.0;
             } else {
-                return (rotStick.getX() - ControllerConstants.CONTROLLER_DEADBAND) * ControllerConstants.SLOW_ROT_MULT * -1.0;
+                return (rotStick.getX() - ControllerConstants.DEADBAND) * ControllerConstants.SLOW_ROT_MULT * -1.0;
             }
         } else {
             // Adds in deadband logic
-            if (Math.abs(rotStick.getX()) < ControllerConstants.CONTROLLER_DEADBAND) {
+            if (Math.abs(rotStick.getX()) < ControllerConstants.DEADBAND) {
                 return 0.0;
             } else if (rotStick.getX() < 0) {
-                return (rotStick.getX() + ControllerConstants.CONTROLLER_DEADBAND) * -1.0;
+                return (rotStick.getX() + ControllerConstants.DEADBAND) * -1.0;
             } else {
-                return (rotStick.getX() - ControllerConstants.CONTROLLER_DEADBAND) * -1.0;
+                return (rotStick.getX() - ControllerConstants.DEADBAND) * -1.0;
             }
         }
     }

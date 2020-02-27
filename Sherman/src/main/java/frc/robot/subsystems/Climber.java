@@ -11,9 +11,9 @@ import frc.robot.constants.ClimberConstants;
 public class Climber extends SubsystemBase {
   private static Climber instance = new Climber();
 
-  private CANSparkMax m_CANSparkMax= new CANSparkMax(ClimberConstants.MOTOR_ID, MotorType.kBrushless);
-  private CANEncoder m_CANEncoder = m_CANSparkMax.getEncoder();
-  private DoubleSolenoid m_DoubleSolenoid = new DoubleSolenoid(ClimberConstants.PISTON_ID_1, ClimberConstants.PISTON_ID_2);
+  private CANSparkMax motor= new CANSparkMax(ClimberConstants.MOTOR_ID, MotorType.kBrushless);
+  private CANEncoder encoder = motor.getEncoder();
+  private DoubleSolenoid piston = new DoubleSolenoid(ClimberConstants.PISTON_ID_1, ClimberConstants.PISTON_ID_2);
 
   public Climber() {}
 
@@ -26,14 +26,14 @@ public class Climber extends SubsystemBase {
   }
 
   public void set(double percent) {
-    m_CANSparkMax.set(percent);
+    motor.set(percent);
   }
 
   public void lock() {
-    m_DoubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    piston.set(DoubleSolenoid.Value.kForward);
   }
 
   public double getPosition() {
-    return m_CANEncoder.getPosition();
+    return encoder.getPosition();
   }
 }

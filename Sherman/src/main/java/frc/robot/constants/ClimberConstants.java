@@ -9,5 +9,6 @@ public class ClimberConstants {
     public static final double POS_I = 0.0;
     public static final double POS_D = 0.0;
 
-    public static final double CLIMBER_ACTUATION_DISTANCE = 12.0;
+    public static final double CLIMB_HEIGHT = 12.0;
+    public static final double DEPLOY_HEIGHT = 12.0;
 }
