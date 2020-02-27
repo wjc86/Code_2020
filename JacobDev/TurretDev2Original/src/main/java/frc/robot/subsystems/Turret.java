@@ -18,7 +18,7 @@ public class Turret extends SubsystemBase {
     //Sensors
     private DigitalInput hallEffect = new DigitalInput(0);
     private TalonSRX rotateMotor = new TalonSRX(11); //Might be (port) 12
-    private CANCoder encoder; //THE ENCODER IS NEVER INSTANTIATED/INITIALIZED
+    private CANCoder encoder;
     
     
     //Measured in Degrees
@@ -28,9 +28,10 @@ public class Turret extends SubsystemBase {
 
     //Measurements
     private int ticks = (int)(rotateMotor.getSelectedSensorPosition(0) * Constants.ENCODER_TICKS_PER_REVOLUTION);
-    private final double DEGREES_2_ROTATIONS = (double)1 / 360;
+    private double degrees = (double)360 / Constants.ENCODER_TICKS_PER_REVOLUTION * rotateMotor.getSelectedSensorPosition(0);
+    private final double degrees2Rotations = (double)1 / 360;
 
-    private PIDController pid = new PIDController(0.0001, 0.0001, 0.0001);
+    private PIDController pid = new PIDController(0.1, 0.1, 0.1);
 
     public Turret() {}
 
@@ -39,17 +40,12 @@ public class Turret extends SubsystemBase {
         return instance;
     }
 
-    public double getTurretPosition() {
-        return encoder.getPosition();
-    }
-
     public void setTurretPosition(double wantedDegrees) {
         //For tuning in the smartDashboard
         //pid.setP(SmartDashboard.getNumber("kP", 0));
         //pid.setI(SmartDashboard.getNumber("kI", 0));
         //pid.setD(SmartDashboard.getNumber("kD", 0));
-        //rotateMotor.set(ControlMode.Position, pid.calculate(degrees, wantedDegrees) *
-            //DEGREES_2_ROTATIONS * Constants.TURRET_PERCENT_OUTPUT * Constants.MOTOR_TO_TURRET_GEAR_RATIO);
+        rotateMotor.set(ControlMode.Position, pid.calculate(degrees, wantedDegrees) * Constants.TURRET_PERCENT_OUTPUT * Constants.MOTOR_TO_TURRET_GEAR_RATIO);
     }
 
     public void setTurretPercentOut(double percent) {
@@ -58,14 +54,12 @@ public class Turret extends SubsystemBase {
 
     //Returns the angle offset where 0 degrees is where the turret and robot are facing the same direction
     public double getTurretAngle() {
-        double degrees = (double)360 / Constants.ENCODER_TICKS_PER_REVOLUTION
-         * rotateMotor.getSelectedSensorPosition(0);
         return degrees - midPos;
     }
 
     //Sets the encoder to where the hallEffect sensor should be (midPos)
     public void resetTurretEncoder() {
-        encoder.setPosition(midPos * DEGREES_2_ROTATIONS);
+        encoder.setPosition(midPos * degrees2Rotations);
     }
 
     public double getMinPos() { return minPos; }
