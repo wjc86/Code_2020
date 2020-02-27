@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final SimpleMotorFeedforward m_leftFeedforwardLow = new SimpleMotorFeedforward(
       DrivetrainConstants.LEFT_FF[0][0], DrivetrainConstants.LEFT_FF[0][1], DrivetrainConstants.LEFT_FF[0][2]);
-  private final SimpleMotorFeedforward rightFeedforwardLow = new SimpleMotorFeedforward(
+  private final SimpleMotorFeedforward m_rightFeedforwardLow = new SimpleMotorFeedforward(
       DrivetrainConstants.RIGHT_FF[0][0], DrivetrainConstants.RIGHT_FF[0][1], DrivetrainConstants.RIGHT_FF[0][2]);
   private final PIDController m_leftPIDControllerLow = new PIDController(DrivetrainConstants.LEFT_PID[0][0],
       DrivetrainConstants.LEFT_PID[0][1], DrivetrainConstants.LEFT_PID[0][2]);
@@ -61,11 +61,6 @@ public class Drivetrain extends SubsystemBase {
   private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(
       DrivetrainConstants.TRACK_WIDTH);
   private final DifferentialDriveOdometry m_odometry;
-
-  PIDController rotController = new PIDController(SmartDashboard.getNumber("Angle P", 0),
-      SmartDashboard.getNumber("Angle I", 0), SmartDashboard.getNumber("Angle D", 0));
-  PIDController distanceController = new PIDController(SmartDashboard.getNumber("Distance P", 0),
-      SmartDashboard.getNumber("Distance I", 0), SmartDashboard.getNumber("Distance D", 0));
 
   private int inHighGear = 1;
 
@@ -88,6 +83,7 @@ public class Drivetrain extends SubsystemBase {
   public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
     double leftOutput;
     double rightOutput;
+    
     if (inHighGear == 1) {
       leftOutput = m_leftPIDControllerHigh.calculate(
           m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
@@ -101,26 +97,19 @@ public class Drivetrain extends SubsystemBase {
           + m_leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
       rightOutput = m_rightPIDControllerLow.calculate(
           m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
-          + rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
+          + m_rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
     }
+
     m_leftMaster.setVoltage(leftOutput);
     m_rightMaster.setVoltage(rightOutput);
-    // m_leftFollower.follow(m_leftMaster);
-    // m_rightFollower.follow(m_rightMaster);
-    SmartDashboard.putNumber("right output", rightOutput);
-    SmartDashboard.putNumber("left output", leftOutput);
-    SmartDashboard.putNumber("right speed",
-        m_rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
-    SmartDashboard.putNumber("left speed",
-        m_leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO);
+    m_leftFollower.follow(m_leftMaster);
+    m_rightFollower.follow(m_rightMaster);
   }
 
   @SuppressWarnings("ParameterName")
   public void drive(ChassisSpeeds m_chassisSpeeds) {
     var wheelSpeeds = m_kinematics.toWheelSpeeds(m_chassisSpeeds);
     setSpeeds(wheelSpeeds);
-    SmartDashboard.putNumber("left wheel speed", wheelSpeeds.leftMetersPerSecond);
-    SmartDashboard.putNumber("right wheel speed", wheelSpeeds.rightMetersPerSecond);
   }
 
   public void updateOdometry() {

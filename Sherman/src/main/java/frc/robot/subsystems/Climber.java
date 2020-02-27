@@ -1,24 +1,39 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
-  /**
-   * Creates a new Climber.
-   */
-  public Climber() {
+  private static Climber instance = new Climber();
 
-  }
+  private CANSparkMax m_CANSparkMax= new CANSparkMax(ClimberConstants.MOTOR_ID, MotorType.kBrushless);
+  private CANEncoder m_CANEncoder = m_CANSparkMax.getEncoder();
+  private DoubleSolenoid m_DoubleSolenoid = new DoubleSolenoid(ClimberConstants.PISTON_ID_1, ClimberConstants.PISTON_ID_2);
+
+  public Climber() {}
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+  }
+
+  public static Climber getInstance() {
+    return instance;
+  }
+
+  public void set(double percent) {
+    m_CANSparkMax.set(percent);
+  }
+
+  public void lock() {
+    m_DoubleSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public double getPosition() {
+    return m_CANEncoder.getPosition();
   }
 }

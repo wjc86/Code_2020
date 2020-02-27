@@ -7,6 +7,7 @@ import frc.robot.Constants;
 
 public class Controller {
     private static Controller instance = new Controller();
+
     private final Joystick speedStick = new Joystick(0);
     private final Joystick rotStick = new Joystick(1);
 
@@ -58,25 +59,6 @@ public class Controller {
 
     public Boolean resetOdometry() {
         return speedStick.getRawButton(6);
-    }
-
-    // public Boolean trajectoryMode() {
-    //     if(rotStick.getRawButtonPressed(1)){
-    //         Robot.startTrajectoryTime = Timer.getFPGATimestamp();
-    //     }
-    //     if(rotStick.getRawButton(1)){
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    public Boolean ballChaseMode() {
-        if(speedStick.getRawButton(5)){
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public JoystickButton getBallChaseButton() {

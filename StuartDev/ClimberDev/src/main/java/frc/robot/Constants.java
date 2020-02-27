@@ -16,12 +16,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int winchEncoderChannel1 = 0;
-    public static final int winchEncoderChannel2 = 1;
     public static final int winchMotorID = 1;
     public static final double winchP = 0;
     public static final double winchI = 0;
     public static final double winchD = 0;
 
     public static final double climbHeight = 12;
+    
+    public static final int resetButtonPort = 1;
+    public static final int climbButtonPort = 2;
+    public static final int manualButtonPort = 3;
+
 }
