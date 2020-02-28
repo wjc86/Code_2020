@@ -106,6 +106,32 @@ public class Drivetrain extends SubsystemBase {
     rightFollower.follow(rightMaster);
   }
 
+  public void setSpeedsDouble(double leftMetersPerSecond, double rightMetersPerSecond) {
+    double leftOutput;
+    double rightOutput;
+    
+    if (inHighGear == 1) {
+      leftOutput = leftPIDControllerHigh.calculate(
+          leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, leftMetersPerSecond)
+          + leftFeedforwardHigh.calculate(leftMetersPerSecond);
+      rightOutput = rightPIDControllerHigh.calculate(
+          rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, rightMetersPerSecond)
+          + rightFeedforwardHigh.calculate(rightMetersPerSecond);
+    } else {
+      leftOutput = leftPIDControllerLow.calculate(
+          leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, leftMetersPerSecond)
+          + leftFeedforwardLow.calculate(leftMetersPerSecond);
+      rightOutput = rightPIDControllerLow.calculate(
+          rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, rightMetersPerSecond)
+          + rightFeedforwardLow.calculate(rightMetersPerSecond);
+    }
+
+    leftMaster.setVoltage(leftOutput);
+    rightMaster.setVoltage(rightOutput);
+    leftFollower.follow(leftMaster);
+    rightFollower.follow(rightMaster);
+  }
+
   @SuppressWarnings("ParameterName")
   public void drive(ChassisSpeeds m_chassisSpeeds) {
     var wheelSpeeds = kinematics.toWheelSpeeds(m_chassisSpeeds);
@@ -166,5 +192,9 @@ public class Drivetrain extends SubsystemBase {
       shifter.set(DoubleSolenoid.Value.kReverse);
       inHighGear = 0;
     }
+  }
+
+  public DifferentialDriveKinematics getKinematics() {
+    return kinematics;
   }
 }
