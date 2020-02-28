@@ -59,10 +59,12 @@ public class RobotContainer {
       .whenPressed(oscillateTurret);
     new JoystickButton(controller, Button.kB.value)
       .whenPressed(lockOnTurret);
+      /*
     new JoystickButton(controller, Button.kBumperLeft.value)
-      .whenHeld(new RunCommand(turret::set45, turret));
+      .whenHeld(new RunCommand(turret::setWantedAngle(45) turret));
     new JoystickButton(controller, Button.kBumperRight.value)
-      .whenHeld(new RunCommand(turret::setNeg45, turret));
+      .whenHeld(new RunCommand(turret::setWantedAngle(-45), turret));
+      */
   }
 
 
