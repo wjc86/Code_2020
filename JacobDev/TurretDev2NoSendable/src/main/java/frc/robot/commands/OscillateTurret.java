@@ -4,6 +4,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OscillateTurret extends CommandBase {
 
@@ -23,7 +24,7 @@ public class OscillateTurret extends CommandBase {
 
   @Override
   public void execute() {
-    /*
+    
     if(isTurningRight) {
         System.out.println("RIGHT");
         //Go to the minPos
@@ -41,10 +42,9 @@ public class OscillateTurret extends CommandBase {
             isTurningRight = true;
         }
     }
-    */
-    turret.setTurretPosition(turret.getMidPos());
-    System.out.println("Angle: " + turret.getTurretAngle());
-    System.out.println("Ticks: " + turret.getTurretPosition());
+    
+    //turret.setTurretPosition(90);
+    SmartDashboard.putNumber("Angle", turret.getTurretAngle());
   }
 
   @Override

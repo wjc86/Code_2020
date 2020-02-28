@@ -19,8 +19,9 @@ public class HomeTurret extends CommandBase {
 
   @Override
   public void execute() {
-    oscillateTurret.execute();
-    isFinished();
+    if(turret.getTurretAngle() < 90) {
+      //turret.setTurretPosition();
+    }
   }
 
   @Override
@@ -30,7 +31,7 @@ public class HomeTurret extends CommandBase {
   @Override
   public boolean isFinished() {
     if(turret.isOnHallEffect()) {
-        System.out.println("ON SENSOR");
+        turret.setTurretAngle(0);
         return true;
     }
     return false;
