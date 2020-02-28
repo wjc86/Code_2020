@@ -7,19 +7,27 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimberWinch;
 
 public class ManualClimb extends CommandBase {
+  ClimberWinch m_ClimberWinch = ClimberWinch.getInstance();
+  DoubleSupplier winchPercentDoubleSupplier;
   /**
    * Creates a new ManualClimb.
    */
-  public ManualClimb() {
+  public ManualClimb(DoubleSupplier winchPercentDoubleSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.winchPercentDoubleSupplier = winchPercentDoubleSupplier;
+    addRequirements(m_ClimberWinch);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_ClimberWinch.setManualClimb(winchPercentDoubleSupplier.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

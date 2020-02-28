@@ -7,11 +7,18 @@
 
 package frc.robot;
 
+import com.revrobotics.ControlType;
+
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.Climb;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ManualClimb;
+import frc.robot.commands.ResetClimb;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,6 +31,11 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  private final Joystick stick = new Joystick(0);
+  private final JoystickButton resetButton = new JoystickButton(stick, Constants.resetButtonPort);
+  private final JoystickButton climbButton = new JoystickButton(stick, Constants.climbButtonPort);
+  private final JoystickButton manualButton = new JoystickButton(stick, Constants.manualButtonPort);
 
 
 
@@ -42,6 +54,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    resetButton.whenPressed(new ResetClimb());
+    climbButton.whenPressed(new Climb());
+    manualButton.whenHeld(new ManualClimb(() -> stick.getY()));
   }
 
 

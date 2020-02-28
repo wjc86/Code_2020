@@ -86,10 +86,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    turretCommand = robotContainer.getTurretCommand();
-    if(turretCommand != null) {
-      //turretCommand.schedule();
-    }
+
   }
 
   /**
@@ -113,6 +110,7 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboardInit() {
+    /*
     SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp()); 
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
@@ -121,6 +119,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Angle P", 0);
     SmartDashboard.putNumber("Angle I", 0);
     SmartDashboard.putNumber("Angle D", 0);
+    */
 
     //Turret
     SmartDashboard.putNumber("kP", 0.0);
@@ -129,6 +128,7 @@ public class Robot extends TimedRobot {
   }
 
   public void putDashboard() {
+    /*
     SmartDashboard.putNumber("Timestamp", m_VisionClient.getTimestamp());
     SmartDashboard.putBoolean("isBallTargetAvail", m_VisionClient.isBallTargetAvail());
     SmartDashboard.putNumber("Ball Distance", m_VisionClient.getBallDistance());
@@ -139,5 +139,6 @@ public class Robot extends TimedRobot {
       commandText = command.getName();
     }
     SmartDashboard.putString("___Selected Command", commandText);
+    */
   }
 }

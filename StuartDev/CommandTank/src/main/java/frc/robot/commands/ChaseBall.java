@@ -8,13 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.VisionClient;
+import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 
-public class DeployIntake extends CommandBase {
-  private Intake m_Intake = Intake.getInstance();
-  public DeployIntake() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Intake);
+
+public class ChaseBall extends CommandBase {
+  private VisionClient m_VisionClient = VisionClient.getInstance();
+  private DriveToSetpointPID m_DriveToSetpointPID;
+  private Drivetrain m_Drivetrain = Drivetrain.getInstance();
+
+  public ChaseBall() {
+    System.out.println("3");
+    m_DriveToSetpointPID = new DriveToSetpointPID(() -> m_VisionClient.getBallDistance(), () -> 0.0, .5, () -> (m_VisionClient.getBallAngle()*-1.0), () -> 0.0, 3.0);
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +31,14 @@ public class DeployIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake.PistonDeploy();
+    // m_DriveToSetpointPID.execute();
+    if(m_VisionClient.isBallTargetAvail()){
+      m_DriveToSetpointPID.execute();
+    } else if (m_VisionClient.getBallAngle() < 0) {
+      m_Drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 2.0*Math.PI));
+    } else {      
+      m_Drivetrain.drive(new ChassisSpeeds(0.0, 0.0, -2.0*Math.PI));
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +49,6 @@ public class DeployIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_DriveToSetpointPID.isFinished();
   }
 }

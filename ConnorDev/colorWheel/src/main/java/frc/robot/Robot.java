@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     joystick = new Joystick(1);
     mColorSensor = new ColorSensor();
     mColorSensor.configureColorSensor();
+    SmartDashboard.putString("Wanted Color", "UNKNOWN");
   }
 
   /**
@@ -77,6 +78,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Position Wanted Color", "UNKNOWN");
   }
 
+  
   /**
    * This function is called periodically during operator control.
    */
@@ -88,6 +90,7 @@ public class Robot extends TimedRobot {
       mColorSensor.rotateNumber();
       
     }
+    mColorSensor.colorSearch();
   }
 
   /**
