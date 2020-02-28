@@ -24,6 +24,7 @@ public class DrivetrainConstants {
 
     // Speed limits
     public static final double MAX_LINEAR_SPEED = 4;
+    public static final double MAX_LINEAR_ACCEL = 1;
     public static final double MAX_ROT_SPEED = 2.0 * Math.PI;
 
     // PID values for DriveToSetpointPID
