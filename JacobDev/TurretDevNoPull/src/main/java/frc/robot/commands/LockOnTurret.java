@@ -10,13 +10,12 @@ public class LockOnTurret extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Turret turret = Turret.getInstance();
-  private OscillateTurret oscillateTurret;
+  private OscillateTurret oscillateTurret = new OscillateTurret();
 
   private boolean seesTarget;
 
   public LockOnTurret() {
     seesTarget = false;
-    oscillateTurret = new OscillateTurret();
   }
 
   @Override

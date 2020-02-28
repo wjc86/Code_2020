@@ -2,6 +2,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Turret;
+import frc.robot.commands.OscillateTurret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class HomeTurret extends CommandBase {
@@ -11,7 +12,11 @@ public class HomeTurret extends CommandBase {
   private final Turret turret = Turret.getInstance();
   private OscillateTurret oscillateTurret = new OscillateTurret();
 
-  public HomeTurret() { }
+  private boolean isHomed;
+
+  public HomeTurret() {
+    isHomed = false;
+  }
 
   @Override
   public void initialize() {
@@ -20,7 +25,6 @@ public class HomeTurret extends CommandBase {
   @Override
   public void execute() {
     oscillateTurret.execute();
-    isFinished();
   }
 
   @Override
@@ -30,7 +34,6 @@ public class HomeTurret extends CommandBase {
   @Override
   public boolean isFinished() {
     if(turret.isOnHallEffect()) {
-        System.out.println("ON SENSOR");
         return true;
     }
     return false;
