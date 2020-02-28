@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   private final Intake m_Intake = Intake.getInstance();
   private final Joystick Joy = new Joystick(1);
-  private final JoystickButton DeployIntakeButton = new JoystickButton(Joy, 1);
-  private final JoystickButton RetractIntakeButton = new JoystickButton(Joy, 2);
-  private final JoystickButton RunIntakeButton = new JoystickButton(Joy, 3);
+
+  private final JoystickButton extendIntakeButton = new JoystickButton(Joy, 1);
+  private final JoystickButton moveIntakeButton = new JoystickButton(Joy, 2);
   
   public RobotContainer() {
     configureButtonBindings();
@@ -18,9 +18,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    RunIntakeButton.whenPressed(new RunIntake());
-    RunIntakeButton.whenReleased(new StopIntake());
-    DeployIntakeButton.whenPressed(new DeployIntake());
-    RetractIntakeButton.whenPressed(new RetractIntake());
-  } 
+    extendIntakeButton.whenPressed(new extendIntake());
+    moveIntakeButton.whenPressed(new moveIntake());
+  }
 }
