@@ -10,15 +10,17 @@ public class RobotContainer {
   private final Joystick Joy = new Joystick(1);
 
   private final JoystickButton extendIntakeButton = new JoystickButton(Joy, 1);
-  private final JoystickButton moveIntakeButton = new JoystickButton(Joy, 2);
-  
+  private final JoystickButton reverseIntakeButton = new JoystickButton(Joy, 2);
+  private final JoystickButton retractIntakeButton = new JoystickButton(Joy, 3);
+
   public RobotContainer() {
     configureButtonBindings();
-    m_Intake.setDefaultCommand(new SensorIntake()); 
+    m_Intake.setDefaultCommand(new SensorIntake());
   }
 
   private void configureButtonBindings() {
     extendIntakeButton.whenPressed(new extendIntake());
-    moveIntakeButton.whenPressed(new moveIntake());
+    reverseIntakeButton.whenPressed(new reverseIntake());
+    retractIntakeButton.whenPressed(new retractIntake());
   }
 }

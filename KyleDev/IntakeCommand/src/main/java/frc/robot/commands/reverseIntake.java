@@ -4,22 +4,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-public class moveIntake extends CommandBase {
+public class reverseIntake extends CommandBase {
   private Intake m_Intake = Intake.getInstance();
+  boolean done = false;
   
-  public moveIntake() {addRequirements(m_Intake);}
+  public reverseIntake() {addRequirements(m_Intake);}
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    done = false;
+  }
 
   @Override
   public void execute() {
-    if(m_Intake.isDeployed == true) {
-      if(m_Intake.speed == 0) {m_Intake.speed = Constants.intakeMaxPCT;}
-      else if(m_Intake.speed == Constants.intakeMaxPCT) {m_Intake.speed = 0;}
-    }
-
-    m_Intake.StartIntake(m_Intake.speed);
+    m_Intake.StartIntake(Constants.intakeMaxPCT * -1);
+    done = true;
   }
 
   @Override
