@@ -19,12 +19,13 @@ public class retractIntake extends CommandBase {
 
   @Override
   public void execute() {
-    if (deployed){
-    m_Intake.PistonRetract();
-    m_Intake.StartIntake(0);
-    deployed = false;
+    if (m_Intake.isDeployed == true){
+      m_Intake.pistonRetract();
+      m_Intake.startIntake(0);
+      m_Intake.speed = 0;
+      deployed = false;
     }
-    done = true
+    done = true;
   }
   // Called once the command ends or is interrupted.
   @Override

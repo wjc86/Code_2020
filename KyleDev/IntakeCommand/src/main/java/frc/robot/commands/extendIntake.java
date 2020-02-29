@@ -7,11 +7,9 @@ import frc.robot.subsystems.Intake;
 public class extendIntake extends CommandBase {
   private Intake m_Intake = Intake.getInstance();
   boolean deployed = false;
-  boolean done=false;
+  boolean done = false;
   
-  public extendIntake() {
-    addRequirements(m_Intake);
-  }
+  public extendIntake() {addRequirements(m_Intake);}
 
   @Override
   public void initialize() {
@@ -21,20 +19,18 @@ public class extendIntake extends CommandBase {
 
   @Override
   public void execute() {
-    if (!deployed){
-    m_Intake.PistonDeploy();
-    m_Intake.StartIntake(Constants.intakeMaxPCT);
-    deployed = true;
+    if (m_Intake.isDeployed == false){
+      m_Intake.pistonDeploy();
+      m_Intake.startIntake(Constants.intakeMaxPCT);
+      m_Intake.speed = Constants.intakeMaxPCT;
+      deployed = true;
     }
     done=true;
   }
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(done){

@@ -25,19 +25,21 @@ public class Intake extends SubsystemBase {
 
   public Intake() {}
   
-  public void Linebreak() {
+  public void lineBreak() {
     SmartDashboard.putBoolean("Line Touching", intakeSensor.get());
     SmartDashboard.putBoolean("Is Deployed", isDeployed);
   }
 
-  public void StartIntake(double speedPCT) {intakeMotor.set(ControlMode.PercentOutput, speedPCT);}
+  public void startIntake(double speedPCT) {
+    intakeMotor.set(ControlMode.PercentOutput, speedPCT);
+  }
 
-  public void PistonDeploy() {
+  public void pistonDeploy() {
     intakePiston1.set(Value.kForward);
     intakePiston2.set(Value.kForward);
   }
 
-  public void PistonRetract() {
+  public void pistonRetract() {
     intakePiston1.set(Value.kReverse);
     intakePiston2.set(Value.kReverse);
   }

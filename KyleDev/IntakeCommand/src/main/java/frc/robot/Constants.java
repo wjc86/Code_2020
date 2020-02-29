@@ -7,5 +7,5 @@ public final class Constants {
     public static int intakePiston1Reverse = 2;
     public static int intakePiston2Forward = 3;
     public static int intakePiston2Reverse = 4;
-    public static double intakeMaxPCT = 0.9;
+    public static double intakeMaxPCT = 0.4;
 }

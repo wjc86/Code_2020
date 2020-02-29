@@ -1,29 +1,44 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Shooter extends SubsystemBase {
-  private instance s
-  /**
-   * Creates a new Shooter.
-   */
-  public Shooter() {
+  private static Shooter instance = new Shooter();
+  public TalonFX Flywheel = new TalonFX(Constants.FlywheelCANID);
+  public TalonSRX shooterSpeedUpMotor = new TalonSRX(Constants.ShooterTalonCANID);
+  private DigitalInput shooterLine = new DigitalInput(Constants.ShooterLinebreakID);
 
+  public Shooter() {
+    Flywheel.config_kP(0, shooterKP);
+    Flywheel.config_kI(0, shooterKI);
+    Flywheel.config_kD(0, shooterKD);
   }
-  
-  public void getInstance() {
+
+  public static Shooter getInstance() {
     return instance;
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void runShooter(int x) {
+    if(x == 1) { 
+      Flywheel.set(ControlMode.PercentOutput, Constants.shooterFlywheelPCT);
+      shooterSpeedUpMotor.set(ControlMode.PercentOutput, Constants.shooterSpeedUpPCT);
+    } else {
+      Flywheel.set(ControlMode.PercentOutput, 0);
+      shooterSpeedUpMotor.set(ControlMode.PercentOutput, 0);
+    }
   }
+
+  public void shooterLineBreak() {
+    SmartDashboard.putBoolean("Shooter Line", shooterLine.get());
+  }
+
+  @Override
+  public void periodic() {}
 }

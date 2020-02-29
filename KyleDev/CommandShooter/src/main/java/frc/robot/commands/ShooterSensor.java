@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class reverseIntake extends CommandBase {
-  private Intake m_Intake = Intake.getInstance();
-  boolean done = false;
-  
-  public reverseIntake() {addRequirements(m_Intake);}
+public class ShooterSensor extends CommandBase {
+  private Shooter m_Shooter = Shooter.getInstance();
+  private boolean done = false;
+
+  public ShooterSensor() {
+    addRequirements(m_Shooter);
+  }
 
   @Override
   public void initialize() {
@@ -17,12 +18,13 @@ public class reverseIntake extends CommandBase {
 
   @Override
   public void execute() {
-    m_Intake.startIntake(m_Intake.speed * -1);
+    m_Shooter.shooterLineBreak();
     done = true;
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
