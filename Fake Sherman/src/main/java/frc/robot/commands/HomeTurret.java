@@ -21,19 +21,20 @@ public class HomeTurret extends CommandBase {
 
   @Override
   public void execute() {
-    //oscillateTurret.execute();
+    oscillateTurret.execute();
   }
 
   @Override
   public void end(boolean interrupted) {
-    if(isFinished()) {
-      turret.setTurretAngle((int)turret.getMidPos());
-    }
+    turret.setTurretPosition(turret.getMidPos());
   }
 
   @Override
   public boolean isFinished() {
-    if(turret.isOnHallEffect()) { return true; }
+    if(turret.isOnHallEffect()) {
+        turret.setTurretAngle((int)turret.getMidPos());
+        return true;
+    }
     return false;
   }
 }
