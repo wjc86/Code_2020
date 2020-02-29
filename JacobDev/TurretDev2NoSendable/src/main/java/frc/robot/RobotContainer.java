@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.Turret;
-import frc.robot.commands.HomeTurret;
 import frc.robot.commands.LockOnTurret;
 import frc.robot.commands.OscillateTurret;
+import frc.robot.commands.TurretToZero;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -36,8 +36,8 @@ public class RobotContainer {
   private XboxController controller = new XboxController(2);
 
   private Command oscillateTurret = new OscillateTurret();
-  private Command homeTurret = new HomeTurret();
   private Command lockOnTurret = new LockOnTurret();
+  private TurretToZero turretToZero = new TurretToZero();
 
   private Turret turret = Turret.getInstance();
 
@@ -53,12 +53,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {  
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(homeTurret);
     new JoystickButton(controller, Button.kX.value)
-      .whenPressed(oscillateTurret);
+      .whenHeld(oscillateTurret);
     new JoystickButton(controller, Button.kB.value)
       .whenPressed(lockOnTurret);
+    new JoystickButton(controller, Button.kY.value)
+      .whenPressed(turretToZero);
       /*
     new JoystickButton(controller, Button.kBumperLeft.value)
       .whenHeld(new RunCommand(turret::setWantedAngle(45) turret));

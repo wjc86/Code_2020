@@ -1,7 +1,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,7 +12,6 @@ public class OscillateTurret extends CommandBase {
   private final Turret turret = Turret.getInstance();
 
   private boolean isTurningRight;
-  private boolean finished = false;
 
   public OscillateTurret() {
     addRequirements(turret);
@@ -27,33 +25,31 @@ public class OscillateTurret extends CommandBase {
   @Override
   public void execute() {
     if(isTurningRight) {
-        //Go to the maxPos
-        turret.setTurretPosition(turret.getMaxPos());
-        //Turret is less than the maxPos so turn around
-        if(turret.getTurretAngle() > (turret.getMaxPos() - 5.0)) {
-            isTurningRight = false;
-        }  
-    } else {    
+        System.out.println("RIGHT");
         //Go to the minPos
         turret.setTurretPosition(turret.getMinPos());
-        //Turret is greater than the minPos so turn around
-        if(turret.getTurretAngle() < (turret.getMinPos() + 5.0)) {
+        //Turret is less than the minPos so turn around
+        if(Math.abs(turret.getTurretAngle() - turret.getMinPos()) < 5) {
+            isTurningRight = false;
+        }  
+    } else {
+        System.out.println("LEFT");       
+        //Go to the minPos
+        turret.setTurretPosition(turret.getMaxPos());
+        //Turret is greater than the maxPos so turn around
+        if(Math.abs(turret.getTurretAngle() - turret.getMaxPos()) < 5) {
             isTurningRight = true;
         }
     }
+    SmartDashboard.putNumber("Angle", turret.getTurretAngle());
   }
 
   @Override
   public void end(boolean interrupted) {
-    // turret.setTurretPosition(turret.getTurretPosition());
   }
 
   @Override
   public boolean isFinished() {
-    return finished;
-  }
-    
-  public void setFinished(boolean finished) {
-    this.finished = finished;
+    return false;
   }
 }

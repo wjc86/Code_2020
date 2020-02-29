@@ -19,7 +19,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 
 public class ColorSensor{
-    private CANSparkMax colorWheel = new CANSparkMax(10, MotorType.kBrushless);
+    private CANSparkMax colorWheel = new CANSparkMax(4, MotorType.kBrushless);
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
     
@@ -139,7 +139,8 @@ public class ColorSensor{
 
 
     //     SmartDashboard.putString("Wanted Color", "UNKNOWN");
-    //     while(mWantedColor == ColorSensor.color.UNKNOWN){
+    //     while(mWantedColor == 
+    // ColorSensor.color.UNKNOWN){
     //         mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
     //     }
     //     mDetectedColor = ColorSensor.color.UNKNOWN;
@@ -148,7 +149,7 @@ public class ColorSensor{
     //         colorWheel.set(MOTOR_SPEED);
     //     }
     //     colorWheel.set(0);
-    } 
+    };
 
     public void colorSearch(){
         mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();

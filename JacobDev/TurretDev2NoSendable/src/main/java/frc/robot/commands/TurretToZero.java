@@ -4,14 +4,14 @@ package frc.robot.commands;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HomeTurret extends CommandBase {
+public class TurretToZero extends CommandBase {
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Turret turret = Turret.getInstance();
   private OscillateTurret oscillateTurret = new OscillateTurret();
 
-  public HomeTurret() { 
+  public TurretToZero() { 
     addRequirements(turret);
   }
 
@@ -21,19 +21,19 @@ public class HomeTurret extends CommandBase {
 
   @Override
   public void execute() {
-    //oscillateTurret.execute();
+    turret.setTurretPosition(turret.getMidPos());
   }
 
   @Override
   public void end(boolean interrupted) {
-    if(isFinished()) {
-      turret.setTurretAngle((int)turret.getMidPos());
-    }
+    turret.setTurretAngle((int)turret.getMidPos());
   }
 
   @Override
   public boolean isFinished() {
-    if(turret.isOnHallEffect()) { return true; }
+    if(Math.abs(turret.getTurretAngle() - turret.getMidPos()) < 1) {
+        return true;
+    }
     return false;
   }
 }
