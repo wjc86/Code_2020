@@ -1,57 +1,104 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+/* Normal Imports */
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
-/**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+/* Command Imports */
+
+import frc.robot.commands.Climb;
+import frc.robot.commands.ManualClimb;
+import frc.robot.commands.ResetClimb;
+import frc.robot.commands.ShooterSpinDown;
+import frc.robot.commands.ShooterSpinUp;
+import frc.robot.commands.extendIntake;
+import frc.robot.commands.retractIntake;
+import frc.robot.commands.reverseIntake;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ChaseBall;
+import frc.robot.commands.HomeTurret;
+import frc.robot.commands.LockOnTurret;
+import frc.robot.commands.OscillateTurret;
+import frc.robot.commands.ConveyorIntake;
+import frc.robot.commands.ConveyorShoot;
+
+  /* Subsystem Imports */
+
+import frc.robot.subsystems.Drivetrain;
+// import frc.robot.subsystems.Turret;
+// import frc.robot.subsystems.ConveyorSubsystem;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shooter;
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+    /* Get Instances */
 
+  private Drivetrain m_Drivetrain = Drivetrain.getInstance();
+  private Controller m_Controller = Controller.getInstance();
+  // private Turret turret = Turret.getInstance();
+  // private ConveyorSubsystem m_ConveyorSubsystem = ConveyorSubsystem.getInstance();
+  // private final Intake m_Intake = Intake.getInstance();
+  // private final Shooter m_Shooter = Shooter.getInstance();
 
+    /* Create Joysticks */
 
-  /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
-   */
+  private final Joystick leftStick = new Joystick(0);
+  private final Joystick rightStick = new Joystick(1);
+  private final Joystick XboxController = new Joystick(2);
+
+    /* Creates the commands */
+
+  private Command oscillateTurret = new OscillateTurret();
+  private Command homeTurret = new HomeTurret();
+  private Command lockOnTurret = new LockOnTurret();
+
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
+
+    m_Drivetrain.setDefaultCommand(new ArcadeDrive(
+      () -> m_Controller.getSpeed(), () -> m_Controller.getRot()));
   }
 
-  /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
-  }
 
+    /* Drivetrain Commands */
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    System.out.println("1");
+    m_Controller.getBallChaseButton().whenHeld(new ChaseBall()); //Example of what to do
+
+    /* Intake Commands */
+
+    extendIntakeButton.whenPressed(new extendIntake());
+    reverseIntakeButton.whenPressed(new reverseIntake());
+    retractIntakeButton.whenPressed(new retractIntake());
+
+    /* Conveyor Commands */
+
+    shootButton.whenPressed(new ConveyorShoot());
+    ciButton.whenPressed(new ConveyorIntake());
+
+    /* Turret Commands */
+
+    new JoystickButton(XboxController, Button.kA.value)
+      .whenPressed(homeTurret);
+    new JoystickButton(XboxController, Button.kX.value)
+      .whenPressed(oscillateTurret);
+    new JoystickButton(XboxController, Button.kB.value)
+      .whenPressed(lockOnTurret);
+
+    /* Shooter Commands */
+
+    speedButton.whenHeld(new ShooterSpinUp());
+    slowButton.whenHeld(new ShooterSpinDown());
+
+    /* Climber Commands */
+    
+    resetButton.whenPressed(new ResetClimb());
+    climbButton.whenPressed(new Climb());
+    manualButton.whenHeld(new ManualClimb(() -> leftStick.getY()));
   }
 }

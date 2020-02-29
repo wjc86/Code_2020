@@ -90,31 +90,10 @@ public class ConveyorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Bottom", isBottomLineClosed());
     SmartDashboard.putBoolean("Shooter Line", isShooterLineClosed());
     SmartDashboard.putBoolean("Intake Line", isIntakeLineClosed());
- //   SmartDashboard.putNumber("Pos", getPosition());
   }
-
-
- /* public double getPosition() {
-    return conveyorMotor.getEncoder().getPosition();
-  }
-
-  public void advPosition(double pos) {
-    conveyorMotor.getEncoder().setPositionConversionFactor(1.0);
-    conveyorPID.setP(0.01);
-    conveyorPID.setI(0);
-    conveyorPID.setD(0);
-    // conveyorPID.setReference(pos/7.0037 + getPosition(), ControlType.kPosition);
-    conveyorPID.setReference(1.0, ControlType.kPosition);
-    System.out.println("Reference set" + pos/7.0037 + getPosition());
-  }
-
-  public void setPosition(double pos){
-    conveyorPID.setReference(pos, ControlType.kPosition);
-  }*/
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     putToDashboard();
   }
 }

@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -24,8 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.Controller;
-import frc.robot.VisionClient;
+// import frc.robot.Controller;
+// import frc.robot.VisionClient;
 
 public class Drivetrain extends SubsystemBase {
   /**
@@ -34,15 +33,15 @@ public class Drivetrain extends SubsystemBase {
 
   private static Drivetrain instance = new Drivetrain();
 
-  private Controller m_Contoller = Controller.getInstance();
-  private VisionClient m_VisionClient = VisionClient.getInstance();
+  // private Controller m_Contoller = Controller.getInstance();
+  // private VisionClient m_VisionClient = VisionClient.getInstance();
 
   // private final DoubleSolenoid m_shifter = new DoubleSolenoid(Constants.shifterIDOne, Constants.shifterIDTwo);
 
   private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(Constants.leftMasterID);
-  private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.leftFollowerID);
+  // private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.leftFollowerID);
   private final WPI_TalonFX m_rightMaster = new WPI_TalonFX(Constants.rightMasterID);
-  private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(Constants.rightFollowerID);
+  // private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(Constants.rightFollowerID);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 

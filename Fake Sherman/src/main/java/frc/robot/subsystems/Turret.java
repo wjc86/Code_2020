@@ -3,12 +3,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +24,7 @@ public class Turret extends SubsystemBase {
     private double maxPos = 90;
 
     //Measurements
-    private final double degrees2Rotations = (double)1 / 360;
+    // private final double degrees2Rotations = (double)1 / 360;
 
     private PIDController pid = new PIDController(0.03, 0.0001, 0.001);
 

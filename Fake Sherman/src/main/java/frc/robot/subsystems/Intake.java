@@ -5,15 +5,12 @@ import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 
 public class Intake extends SubsystemBase {
   private VictorSPX intakeMotor = new VictorSPX(Constants.intakeMotorCANID);
-  private DigitalInput intakeSensor = new DigitalInput(Constants.intakeLineBreakID);
   private DoubleSolenoid intakePiston1 = new DoubleSolenoid(Constants.intakePiston1Forward, Constants.intakePiston1Reverse);
   private DoubleSolenoid intakePiston2 = new DoubleSolenoid(Constants.intakePiston2Forward, Constants.intakePiston2Reverse);
   public boolean isDeployed = false;
@@ -24,11 +21,6 @@ public class Intake extends SubsystemBase {
   public static Intake getInstance() {return instance;}
 
   public Intake() {}
-  
-  public void lineBreak() {
-    SmartDashboard.putBoolean("Line Touching", intakeSensor.get());
-    SmartDashboard.putBoolean("Is Deployed", isDeployed);
-  }
 
   public void startIntake(double speedPCT) {
     intakeMotor.set(ControlMode.PercentOutput, speedPCT);

@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class ConveyorIntake extends CommandBase {
   private ConveyorSubsystem m_ConveyorSubsystem = ConveyorSubsystem.getInstance();
 
-  private double intake_speed = 0.25;
+  // private double intake_speed = 0.25;
 
   private boolean inletBallDetected = false;
   private boolean fullyLoaded = false;
