@@ -18,6 +18,7 @@ package frc.robot;
 public final class Constants {
     //TURRET CONSTANTS
     public static final double TURRET_PERCENT_OUTPUT = 1.0; //As a decimal
+    public static final double TURRET_MAX_OUTPUT = 0.1;
     public static final double TURRET_TO_MOTOR_GEAR_RATIO = (double)120/16;
     public static final double MOTOR_TO_TURRET_GEAR_RATIO = (double)16/120;
 

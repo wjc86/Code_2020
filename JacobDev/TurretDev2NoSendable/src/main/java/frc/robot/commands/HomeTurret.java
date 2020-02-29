@@ -11,7 +11,9 @@ public class HomeTurret extends CommandBase {
   private final Turret turret = Turret.getInstance();
   private OscillateTurret oscillateTurret = new OscillateTurret();
 
-  public HomeTurret() { }
+  public HomeTurret() { 
+    addRequirements(turret);
+  }
 
   @Override
   public void initialize() {
@@ -19,19 +21,18 @@ public class HomeTurret extends CommandBase {
 
   @Override
   public void execute() {
-    if(turret.getTurretAngle() < 90) {
-      //turret.setTurretPosition();
-    }
+    oscillateTurret.execute();
   }
 
   @Override
   public void end(boolean interrupted) {
+    turret.setTurretPosition(turret.getMidPos());
   }
 
   @Override
   public boolean isFinished() {
     if(turret.isOnHallEffect()) {
-        turret.setTurretAngle(0);
+        turret.setTurretAngle((int)turret.getMidPos());
         return true;
     }
     return false;

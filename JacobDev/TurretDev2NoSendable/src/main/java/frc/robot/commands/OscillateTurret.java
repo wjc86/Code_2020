@@ -15,6 +15,7 @@ public class OscillateTurret extends CommandBase {
   private boolean isTurningRight;
 
   public OscillateTurret() {
+    addRequirements(turret);
     isTurningRight = true;
   }
 
@@ -24,13 +25,12 @@ public class OscillateTurret extends CommandBase {
 
   @Override
   public void execute() {
-    
     if(isTurningRight) {
         System.out.println("RIGHT");
         //Go to the minPos
         turret.setTurretPosition(turret.getMinPos());
         //Turret is less than the minPos so turn around
-        if(turret.getTurretAngle() < turret.getMinPos()) {
+        if(Math.abs(turret.getTurretAngle() - turret.getMinPos()) < 5) {
             isTurningRight = false;
         }  
     } else {
@@ -38,12 +38,10 @@ public class OscillateTurret extends CommandBase {
         //Go to the minPos
         turret.setTurretPosition(turret.getMaxPos());
         //Turret is greater than the maxPos so turn around
-        if(turret.getTurretAngle() > turret.getMaxPos()) {
+        if(Math.abs(turret.getTurretAngle() - turret.getMaxPos()) < 5) {
             isTurningRight = true;
         }
     }
-    
-    //turret.setTurretPosition(90);
     SmartDashboard.putNumber("Angle", turret.getTurretAngle());
   }
 

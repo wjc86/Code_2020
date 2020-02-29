@@ -15,6 +15,7 @@ public class LockOnTurret extends CommandBase {
   private boolean seesTarget;
 
   public LockOnTurret() {
+    addRequirements(turret);
     seesTarget = false;
     oscillateTurret = new OscillateTurret();
   }
