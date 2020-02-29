@@ -37,6 +37,7 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         isOnHallEffect();
+        getTurretAngle();
     }
 
 
@@ -53,7 +54,6 @@ public class Turret extends SubsystemBase {
         double output = -1 * pid.calculate(currentDegrees, wantedDegrees) * Constants.TURRET_PERCENT_OUTPUT;
         if(output > Constants.TURRET_MAX_OUTPUT) { output = Constants.TURRET_MAX_OUTPUT; }
         else if (output < -Constants.TURRET_MAX_OUTPUT) { output = -Constants.TURRET_MAX_OUTPUT; }
-        System.out.println(output);
         rotateMotor.set(ControlMode.PercentOutput, output);
     }
 
@@ -67,7 +67,9 @@ public class Turret extends SubsystemBase {
 
     //Returns the angle offset where 0 degrees is where the turret and robot are facing the same direction
     public double getTurretAngle() {
-        return -1.0 * getTurretPosition() * Constants.MOTOR_TO_TURRET_GEAR_RATIO * Constants.REVOLUTIONS_PER_ENCODER_TICK * 360.0;
+        double angle = -1.0 * getTurretPosition() * Constants.MOTOR_TO_TURRET_GEAR_RATIO * Constants.REVOLUTIONS_PER_ENCODER_TICK * 360.0;
+        SmartDashboard.putNumber("Angle", angle);
+        return angle;
     }
 
     public double getMinPos() { return minPos; }
