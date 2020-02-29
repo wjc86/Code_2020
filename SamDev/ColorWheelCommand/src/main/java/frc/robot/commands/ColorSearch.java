@@ -30,7 +30,7 @@ public class ColorSearch extends CommandBase {
     mMotor = motor;
     mJoystick = joystick;
 
-    addRequirements(colorSensor, (Subsystem) motor, (Subsystem) joystick);
+    addRequirements(colorSensor);
   }
 
   // Called when the command is initially scheduled.

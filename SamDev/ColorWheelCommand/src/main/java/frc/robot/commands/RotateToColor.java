@@ -17,6 +17,7 @@ import frc.robot.subsystems.ColorSensor;
 public class RotateToColor extends CommandBase {
   private ColorSensor mColorSensor;
   private CANSparkMax mMotor;
+  public boolean done =false;
 
   /**
    * Creates a new RotateToColor.
@@ -30,19 +31,24 @@ public class RotateToColor extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    done =false;
+    mColorSensor.wantedColor = ColorSensor.color.UNKNOWN;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     SmartDashboard.putString("Wanted Color", "UNKNOWN");
-    while(mColorSensor.wantedColor == ColorSensor.color.UNKNOWN){
+    if(mColorSensor.wantedColor == ColorSensor.color.UNKNOWN){
         mColorSensor.wantedColor = ColorSensor.toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
     }
     mColorSensor.detectedColor = ColorSensor.color.UNKNOWN;
-    while(mColorSensor.wantedColor != mColorSensor.detectedColor){
+    if(mColorSensor.wantedColor != mColorSensor.detectedColor){
       mColorSensor.detectedColor = mColorSensor.detectColor();
       mMotor.set(Constants.DEFAULT_MOTOR_SPEED);
+    }
+    else{
+      done = true;
     }
     mMotor.set(0);
   }
@@ -55,6 +61,9 @@ public class RotateToColor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    if (done){
+      return true;
+    }
+    return false;
   }
 }
