@@ -17,13 +17,17 @@ public class VisionClient {
     double[] defaultArray = { 0.0, 0.0, 0.0, 5.0, 5.0 };
     NetworkTableInstance tableInstance;
     NetworkTable ballTable;
+    NetworkTable g2Table;
     NetworkTableEntry ballTableEntry;
+    NetworkTableEntry g2TableEntry;
     NetworkTableEntry returnData;
 
     public VisionClient() {
         tableInstance = NetworkTableInstance.getDefault();
         ballTable = tableInstance.getTable("ballVision");
+        g2Table = tableInstance.getTable("g2Vision");
         ballTableEntry = ballTable.getEntry("target_data");
+        g2TableEntry = g2Table.getEntry("target_data");
         returnData = ballTable.getEntry("return_data");
     }
 
@@ -54,6 +58,18 @@ public class VisionClient {
     public double getBallAngle() {
         return ballTableEntry.getDoubleArray(defaultArray)[4];
     }
+
+    // public boolean seesG2() {
+    //     if (g2TableEntry.getDoubleArray(defaultArray)[1] == 1) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+    // public double getAngle2G2() {
+        
+    // }
 
     public void pushToTable(double timestamp) {
         returnData.setNumber(timestamp);

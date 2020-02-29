@@ -23,14 +23,19 @@ public class Turret extends SubsystemBase {
     private TalonSRX rotateMotor = new TalonSRX(11); //Might be (port) 12    
 
     //Measured in Degrees
-    private double minPos = -90;
-    private double midPos = 0;
-    private double maxPos = 90;
+    private double minPos = -88.0;
+    private double midPos = 4.0;
+    private double maxPos = 94.0;
 
     //Measurements
-    private final double degrees2Rotations = (double)1 / 360;
+    private final double degrees2Rotations = (double)1 / 360; 
 
-    private PIDController pid = new PIDController(0.03, 0.0001, 0.001);
+    private PIDController pid = new PIDController(0.0175, 0.0001, 0.001);
+
+    private double currentAngle = 0.0;
+    private double lastAngle = 0.0;
+    private boolean currentHall = false;
+    private boolean lastHall = false;
 
     public Turret() {}
 
@@ -38,6 +43,7 @@ public class Turret extends SubsystemBase {
     public void periodic() {
         isOnHallEffect();
         getTurretAngle();
+        calibratePosition();
     }
 
 
@@ -50,10 +56,41 @@ public class Turret extends SubsystemBase {
     }
 
     public void setTurretPosition(double wantedDegrees) {
+        if(wantedDegrees > maxPos) {
+            wantedDegrees = maxPos;
+        } else if(wantedDegrees < minPos) {
+            wantedDegrees = minPos;
+        }
         double currentDegrees = getTurretAngle();
-        double output = -1 * pid.calculate(currentDegrees, wantedDegrees) * Constants.TURRET_PERCENT_OUTPUT;
-        if(output > Constants.TURRET_MAX_OUTPUT) { output = Constants.TURRET_MAX_OUTPUT; }
-        else if (output < -Constants.TURRET_MAX_OUTPUT) { output = -Constants.TURRET_MAX_OUTPUT; }
+        double output = -1 * pid.calculate(currentDegrees, wantedDegrees);
+        double error = wantedDegrees - getTurretAngle();
+        // if (Math.abs(error) > 90) {
+          if (output > 0.1) {
+            output = 0.1;
+          } else if (output < -0.1) {
+            output = -0.1;
+          }
+        // } else if (Math.abs(error) < 90 && Math.abs(error) > 60) {
+        //   if (output > .15) {
+        //     output = .15;
+        //   } else if (output < -.15) {
+        //     output = -.15;
+        //   }
+        // } else if (Math.abs(error) < 60 && Math.abs(error) > 30) {
+        //   if (output > .1) {
+        //     output = .1;
+        //   } else if (output < -.1) {
+        //     output = -.1;
+        //   }
+        // } else if (Math.abs(error) < 30) {
+        //   if (output > .05) {
+        //     output = .05;
+        //   } else if (output < -.05) {
+        //     output = -.05;
+        //   }
+        SmartDashboard.putNumber("PID Out", output);
+        SmartDashboard.putNumber("Actual Angle", currentDegrees);
+        SmartDashboard.putNumber("Wanted Angle", wantedDegrees);
         rotateMotor.set(ControlMode.PercentOutput, output);
     }
 
@@ -80,5 +117,18 @@ public class Turret extends SubsystemBase {
     public boolean isOnHallEffect() { 
         SmartDashboard.putBoolean("Hall Effect", !hallEffect.get());
         return !hallEffect.get();
+    }
+
+    public void calibratePosition() {
+        currentAngle = getTurretAngle();
+        currentHall = isOnHallEffect();
+
+        if(((currentAngle - lastAngle) > 0 && (lastHall == false && currentHall == true)) || ((currentAngle - lastAngle) < 0 && (lastHall == true && currentHall == false))) { 
+            rotateMotor.setSelectedSensorPosition(0);
+            System.out.println("true");
+        }
+
+        lastAngle = currentAngle;
+        lastHall = currentHall;
     }
 }

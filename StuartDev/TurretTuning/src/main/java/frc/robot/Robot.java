@@ -152,20 +152,20 @@ public class Robot extends TimedRobot {
     } else if (leftStick.getRawButton(5)) {
       wantedAngle = 90;
     }
-    wantedAngle += rightStick.getY();
+    //wantedAngle += rightStick.getY();
     output = pid.calculate(getTurretAngle(), wantedAngle);
     double error = wantedAngle - getTurretAngle();
     if (Math.abs(error) > 90) {
-      if (output > .3) {
-        output = .3;
-      } else if (output < -.3) {
-        output = -.3;
-      }
-    } else if (Math.abs(error) < 90 && Math.abs(error) > 60) {
       if (output > .2) {
         output = .2;
       } else if (output < -.2) {
         output = -.2;
+      }
+    } else if (Math.abs(error) < 90 && Math.abs(error) > 60) {
+      if (output > .15) {
+        output = .15;
+      } else if (output < -.15) {
+        output = -.15;
       }
     } else if (Math.abs(error) < 60 && Math.abs(error) > 30) {
       if (output > .1) {
@@ -192,11 +192,9 @@ public class Robot extends TimedRobot {
   }
 
   public void updatePID() {
-    // pid.setP(SmartDashboard.getNumber("p", 0));
-    // pid.setI(SmartDashboard.getNumber("i", 0));
-    // pid.setD(SmartDashboard.getNumber("d", 0));
-    // pid.set0
-    // pid.set
+    pid.setP(SmartDashboard.getNumber("p", 0));
+    pid.setI(SmartDashboard.getNumber("i", 0));
+    pid.setD(SmartDashboard.getNumber("d", 0));
   }
 
   public double getTurretAngle() {
