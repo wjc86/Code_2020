@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -42,14 +44,20 @@ public class Robot extends TimedRobot {
     //Measurements
     private final double degrees2Rotations = (double)1 / 360;
 
-    private PIDController pid = new PIDController(0.0, 0.0, 0.0);
+    private PIDController pid = new PIDController(0.03, 0.0001, 0.001);
 
-    private Joystick stick = new Joystick(0);
+    private Joystick leftStick = new Joystick(0);
+    private Joystick rightStick = new Joystick(1);
 
     public static final double TURRET_PERCENT_OUTPUT = 0.1; //As a decimal
     public static final double MOTOR_TO_TURRET_GEAR_RATIO = 16.0/120.0;
     public static final double ENCODER_TICKS_PER_REVOLUTION = 4096.0;
     public static final double REVOLUTIONS_PER_ENCODER_TICK = 1.0 / 4096.0;
+
+    public double offset = 0;
+
+    double wantedAngle = 0;
+
 
 
   /**
@@ -77,6 +85,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Actual Angle", getTurretAngle());
+    SmartDashboard.putBoolean("Hall Effect", hallEffect.get());
+    if (!hallEffect.get() && rightStick.getRawButton(1)) {
+      calibratePosition();
+    }
   }
 
   /**
@@ -113,6 +125,15 @@ public class Robot extends TimedRobot {
     }
   }
 
+  @Override
+  public void teleopInit() {
+    // TODO Auto-generated method stub
+    super.teleopInit();
+    SmartDashboard.putNumber("p", 0);
+    SmartDashboard.putNumber("i", 0);
+    SmartDashboard.putNumber("d", 0);
+  }
+
   /**
    * This function is called periodically during operator control.
    */
@@ -120,13 +141,44 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     updatePID();
     double output = 0;
-    double wantedAngle = 0;
-    if (stick.getRawButton(1)){
-      wantedAngle = 45;
-      output = pid.calculate(getTurretAngle(), wantedAngle);
-    } else if (stick.getRawButton(2)) {
+    if (leftStick.getRawButton(1)){
+      wantedAngle = -90;
+    } else if (leftStick.getRawButton(2)) {
       wantedAngle = -45;
-      output = pid.calculate(getTurretAngle(), wantedAngle);
+    } else if (leftStick.getRawButton(3)) {
+      wantedAngle = 0;
+    } else if (leftStick.getRawButton(4)) {
+      wantedAngle = 45;
+    } else if (leftStick.getRawButton(5)) {
+      wantedAngle = 90;
+    }
+    wantedAngle += rightStick.getY();
+    output = pid.calculate(getTurretAngle(), wantedAngle);
+    double error = wantedAngle - getTurretAngle();
+    if (Math.abs(error) > 90) {
+      if (output > .3) {
+        output = .3;
+      } else if (output < -.3) {
+        output = -.3;
+      }
+    } else if (Math.abs(error) < 90 && Math.abs(error) > 60) {
+      if (output > .2) {
+        output = .2;
+      } else if (output < -.2) {
+        output = -.2;
+      }
+    } else if (Math.abs(error) < 60 && Math.abs(error) > 30) {
+      if (output > .1) {
+        output = .1;
+      } else if (output < -.1) {
+        output = -.1;
+      }
+    } else if (Math.abs(error) < 30) {
+      if (output > .05) {
+        output = .05;
+      } else if (output < -.05) {
+        output = -.05;
+      }
     }
     rotateMotor.set(ControlMode.PercentOutput, -output);
     SmartDashboard.putNumber("Wanted Angle", wantedAngle);
@@ -140,17 +192,25 @@ public class Robot extends TimedRobot {
   }
 
   public void updatePID() {
-    pid.setP(SmartDashboard.getNumber("p", 0));
-    pid.setI(SmartDashboard.getNumber("i", 0));
-    pid.setD(SmartDashboard.getNumber("d", 0));
+    // pid.setP(SmartDashboard.getNumber("p", 0));
+    // pid.setI(SmartDashboard.getNumber("i", 0));
+    // pid.setD(SmartDashboard.getNumber("d", 0));
+    // pid.set0
+    // pid.set
   }
 
   public double getTurretAngle() {
-    double degrees = getTurretPosition() * MOTOR_TO_TURRET_GEAR_RATIO * REVOLUTIONS_PER_ENCODER_TICK * 360.0 * -1.0;
-    return degrees - midPos;
+    double degrees = (getTurretPosition() * MOTOR_TO_TURRET_GEAR_RATIO * REVOLUTIONS_PER_ENCODER_TICK * 360.0 * -1.0) - offset;
+    return degrees;// - midPos;
   }
 
   public double getTurretPosition() {
     return rotateMotor.getSelectedSensorPosition(0);
+  }
+
+  public void calibratePosition() {
+    // offset = getTurretAngle();
+    rotateMotor.setSelectedSensorPosition(0);
+    // wantedAngle = 0;
   }
 }
