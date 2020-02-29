@@ -33,7 +33,7 @@ public class ColorSensor extends SubsystemBase {
     private static final boolean isLightOn = true;
 
     private static ColorSensor.color mCurrentColor = ColorSensor.color.UNKNOWN;
-    private ColorSensor.color lastColor = ColorSensor.color.UNKNOWN;
+    public ColorSensor.color lastColor = ColorSensor.color.UNKNOWN;
     private int colorCounter = 0;
     private static final int COLOR_LIMIT = 5;
     private ColorSensor.color lastValidColor = ColorSensor.color.UNKNOWN;
@@ -43,7 +43,6 @@ public class ColorSensor extends SubsystemBase {
 
     private ArrayList<ColorSensor.color> colors = new ArrayList<>();
 
-    private final double MOTOR_SPEED = 0.15;
     private int colorReadBefore = 0;
     private int colorReadAfter = 0;
 

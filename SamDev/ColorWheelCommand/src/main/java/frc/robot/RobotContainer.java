@@ -34,6 +34,7 @@ public class RobotContainer {
 
   private final RotateNumberOfTimes rotateNumber = new RotateNumberOfTimes(mSensor, colorMotor, joy1);
   private final RotateToColor rotateColor = new RotateToColor(mSensor, colorMotor);
+  private final ColorSearch colorSearch = new ColorSearch(mSensor, colorMotor, joy1);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,9 +43,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    CommandScheduler.getInstance().onCommandExecute(rotateColor -> SmartDashboard.putBoolean("rotateColor", true));
+    /*CommandScheduler.getInstance().onCommandExecute(rotateColor -> SmartDashboard.putBoolean("rotateColor", true));
     CommandScheduler.getInstance().onCommandFinish(rotateColor -> SmartDashboard.putString("Detected", mSensor.detectedColor.toString()));
-    CommandScheduler.getInstance().onCommandExecute(rotateNumber -> SmartDashboard.putBoolean("rotateNumber", true));
+    CommandScheduler.getInstance().onCommandExecute(rotateNumber -> SmartDashboard.putBoolean("rotateNumber", true));*/
+    CommandScheduler.getInstance().onCommandExecute(colorSearch -> SmartDashboard.putBoolean("hasExecuted", true));
   }
 
   /**
@@ -54,7 +56,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(joy1, 3).whenPressed(rotateColor);
-    new JoystickButton(joy1, 4).whenPressed(rotateNumber);
+    /*new JoystickButton(joy1, 3).whenPressed(rotateColor);
+    new JoystickButton(joy1, 4).whenPressed(rotateNumber);*/
+    //new JoystickButton(joy1, 1).whenHeld(colorSearch);
+    new JoystickButton(joy1, 1).whenPressed(colorSearch);
+    new JoystickButton(joy1, 7).cancelWhenActive(colorSearch);
   }
 }

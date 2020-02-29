@@ -23,7 +23,7 @@ public class ColorSensor{
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
     
-    private int colorSearchState = 0;
+    private state colorSearchState = state.NEUTRAL;
 
     private static final int YELLOW_CALIBRATION_LIGHT_OFF = 60;
     private static final int RED_CALIBRATION_LIGHT_OFF = 20;
@@ -51,10 +51,13 @@ public class ColorSensor{
     private final double MOTOR_SPEED = 0.15;
     private int colorReadBefore = 0;
     private int colorReadAfter = 0;
+
+    private int mCounter = 0;
    // this bit of code right below might wreck something until we find a good spot to put it, we dont know where we should.
     public void configureColorSensor(){
         mColorSensor.configureColorSensor(ColorSensorResolution.kColorSensorRes16bit, ColorSensorMeasurementRate.kColorRate25ms, GainFactor.kGain3x);
     }
+
     public ColorSensor.color detectColor(){
         Color detectedColor = mColorSensor.getColor();
         
@@ -132,7 +135,7 @@ public class ColorSensor{
     }
 
      public void rotateToColor(){
-        colorSearchState = 1;
+        colorSearchState = ColorSensor.state.SPIN_TO_COLOR;
 
 
     //     SmartDashboard.putString("Wanted Color", "UNKNOWN");
@@ -151,22 +154,35 @@ public class ColorSensor{
         mWantedColor = toColor(SmartDashboard.getString("Wanted Color", "UNKNOWN")).getActualColor();
         mDetectedColor = detectColor();
         switch(colorSearchState){
-         case 0 : 
-         break;
-         case 1 : 
-            // colorWheel.set(MOTOR_SPEED);
-            if(mDetectedColor == mWantedColor){
-                colorSearchState = 0;
-                // colorWheel.set(0);
-                SmartDashboard.putString("FOUND COLOR", mDetectedColor.toString());
-            }
-         break;
+            case NEUTRAL: 
+                break;
+            case SPIN_TO_COLOR:
+                colorWheel.set(MOTOR_SPEED);
+                if(mDetectedColor == mWantedColor){
+                    colorSearchState = state.NEUTRAL;
+                    colorWheel.set(0);
+                    SmartDashboard.putString("FOUND COLOR", mDetectedColor.toString());
+                }
+                break;
+            case SPIN_NUMBER_OF_TIMES:
+                colorWheel.set(MOTOR_SPEED);
+                if(mDetectedColor == mWantedColor && mCounter >= 7 && lastColor != mDetectedColor){
+                    colorSearchState = state.NEUTRAL;
+                    colorWheel.set(0);
+                    SmartDashboard.putString("FOUND COLOR", mDetectedColor.toString());
+                    mCounter = 0;
+                } else if(mDetectedColor == mWantedColor && lastColor != mDetectedColor){
+                    mCounter++;
+                }
+                break;
         }
     }
 
 
     public void rotateNumber(){
-        ArrayList<ColorSensor.color> kColors = new ArrayList<>();
+        colorSearchState = state.SPIN_NUMBER_OF_TIMES;
+
+        /*ArrayList<ColorSensor.color> kColors = new ArrayList<>();
         kColors.add(ColorSensor.color.RED);
         kColors.add(ColorSensor.color.GREEN);
         kColors.add(ColorSensor.color.CYAN);
@@ -174,7 +190,7 @@ public class ColorSensor{
 
         /*Timer timer = new Timer();
         timer.start();
-        while(timer.get() <= 0.1){}*/
+        while(timer.get() <= 0.1){}
 
         mWantedColor = detectColor();
         while(mWantedColor == ColorSensor.color.UNKNOWN){
@@ -196,9 +212,9 @@ public class ColorSensor{
                     counter++;
                 }
             }
-          /*  if(currentColor == ColorSensor.color.RED && lastColor != ColorSensor.color.RED){
+            if(currentColor == ColorSensor.color.RED && lastColor != ColorSensor.color.RED){
                 counter++;
-            }*/
+            }
             lastColor = currentColor;
             SmartDashboard.putNumber("Counter", counter);
             SmartDashboard.putString("ArrayList Values", iterate(colors));
@@ -206,7 +222,7 @@ public class ColorSensor{
                 break;
             }
         }
-        colorWheel.set(0);
+        colorWheel.set(0);*/
     }
 
     public void manualOverride(){
@@ -355,5 +371,11 @@ public class ColorSensor{
                 return ColorSensor.color.UNKNOWN;
             }
         }
+    }
+
+    public enum state {
+        NEUTRAL,
+        SPIN_NUMBER_OF_TIMES,
+        SPIN_TO_COLOR
     }
 }
