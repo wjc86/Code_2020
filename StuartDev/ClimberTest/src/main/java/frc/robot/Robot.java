@@ -14,9 +14,10 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    motor = new CANSparkMax(0, MotorType.kBrushless);
+    motor = new CANSparkMax(2, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
-    motor.setSmartCurrentLimit(60);
+    motor.setSmartCurrentLimit(120);
+    motor.setSmartCurrentLimit(120, 120);
     motor.burnFlash();
     stick = new Joystick(0);
   }
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     motor.set(-stick.getThrottle());
     SmartDashboard.putNumber("Output", -stick.getThrottle());
+    SmartDashboard.putNumber("Amps", motor.getOutputCurrent());
+    SmartDashboard.putNumber("bus voltage", motor.getBusVoltage());
   }
 
   @Override
