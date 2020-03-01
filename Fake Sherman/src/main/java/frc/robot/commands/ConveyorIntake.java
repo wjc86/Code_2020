@@ -14,7 +14,6 @@ public class ConveyorIntake extends CommandBase {
   // private double intake_speed = 0.25;
 
   private boolean inletBallDetected = false;
-  private boolean fullyLoaded = false;
   private boolean done = false;
   public Timestamp calltime;
 
@@ -23,9 +22,9 @@ public class ConveyorIntake extends CommandBase {
    */
   public ConveyorIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
-    Date date = new Date();
-    long time = date.getTime();
-    calltime = new Timestamp(time);
+    // Date date = new Date();
+    // long time = date.getTime();
+    // calltime = new Timestamp(time);
     addRequirements(m_ConveyorSubsystem);
   }
 
@@ -33,7 +32,6 @@ public class ConveyorIntake extends CommandBase {
   @Override
   public void initialize() {
     inletBallDetected = false;
-    fullyLoaded = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,46 +43,23 @@ public class ConveyorIntake extends CommandBase {
     System.out.print(calltime + " | ");
     System.out.print("Top: " + topLine + " | ");
     System.out.println("Bottom: " + bottomLine + " | ");
-    if (!m_ConveyorSubsystem.isTopLineClosed()) {
-      fullyLoaded = true;
-      done = true;
-      m_ConveyorSubsystem.conveyorMotor.set(ControlMode.Velocity, 0);
-    }
-    if (!fullyLoaded) {
+    if (!m_ConveyorSubsystem.getIsFull()){
       if (!inletBallDetected) {
         if (!m_ConveyorSubsystem.isBottomLineClosed()) {
           inletBallDetected = true;
-          m_ConveyorSubsystem.conveyorMotor.set(ControlMode.MotionProfile, 10);
+          m_ConveyorSubsystem.setMotionProfile(10);
         }
       }
       if (inletBallDetected) {
         if (m_ConveyorSubsystem.isBottomLineClosed()) {
           inletBallDetected = false;
           done = true;
-          m_ConveyorSubsystem.conveyorMotor.set(ControlMode.Velocity, 0);
+          m_ConveyorSubsystem.setPercentControl(0);
         }
       }
+    } else {
+      m_ConveyorSubsystem.setPercentControl(0);
     }
-
-    // if(!lastSensorState && m_ConveyorSubsystem.bottomLine()){
-    // holdPosition = m_ConveyorSubsystem.getPosititon();
-    // }
-    // SmartDashboard.putNumber("Hold Position", holdPosition);
-    // if (m_ConveyorSubsystem.topLine()){
-    // if (m_ConveyorSubsystem.bottomLine()){
-    // m_ConveyorSubsystem.setPosititon(holdPosition);
-    // SmartDashboard.putBoolean("Top and Bottom", true);
-    // }
-    // else {
-    // SmartDashboard.putBoolean("Top and Bottom", false);
-    // m_ConveyorSubsystem.move(-0.1);
-    // }
-    // }
-    // else {
-    // m_ConveyorSubsystem.move(0);
-    // }
-    // lastSensorState = m_ConveyorSubsystem.bottomLine();
-    // m_ConveyorSubsystem.setPosition()
   }
 
   // Called once the command ends or is interrupted.
@@ -95,9 +70,6 @@ public class ConveyorIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (done) {
-      return true;
-    }
     return false;
   }
 }

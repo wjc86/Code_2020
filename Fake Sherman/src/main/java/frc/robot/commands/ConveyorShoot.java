@@ -26,23 +26,18 @@ public class ConveyorShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooting = false;
+    m_ConveyorSubsystem.setPercentControl(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!shooting) {
-      m_ConveyorSubsystem.conveyorMotor.set(ControlMode.Velocity, 1);
-      shooting = true;
-      
-    }
-    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_ConveyorSubsystem.setPercentControl(0);
   }
 
   // Returns true when the command should end.

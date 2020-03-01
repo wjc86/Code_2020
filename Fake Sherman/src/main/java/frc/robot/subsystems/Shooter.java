@@ -9,13 +9,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Shooter extends SubsystemBase {
   private static Shooter instance = new Shooter();
-  public TalonFX Flywheel = new TalonFX(Constants.FlywheelCANID);
-  public TalonSRX shooterSpeedUpMotor = new TalonSRX(Constants.ShooterTalonCANID);
+  public TalonFX flywheel = new TalonFX(Constants.FlywheelCANID);
+  public TalonSRX booster = new TalonSRX(Constants.ShooterTalonCANID);
 
   public Shooter() {
-    Flywheel.config_kP(0, Constants.flywheelP);
-    Flywheel.config_kI(0, Constants.flywheelI);
-    Flywheel.config_kD(0, Constants.flywheelD);
+    flywheel.config_kP(0, Constants.flywheelP);
+    flywheel.config_kI(0, Constants.flywheelI);
+    flywheel.config_kD(0, Constants.flywheelD);
   }
 
   public static Shooter getInstance() {
@@ -24,12 +24,24 @@ public class Shooter extends SubsystemBase {
 
   public void runShooter(int x) {
     if(x == 1) { 
-      Flywheel.set(ControlMode.PercentOutput, Constants.shooterFlywheelPCT);
-      shooterSpeedUpMotor.set(ControlMode.PercentOutput, Constants.shooterSpeedUpPCT);
+      flywheel.set(ControlMode.PercentOutput, Constants.shooterFlywheelPCT);
+      booster.set(ControlMode.PercentOutput, Constants.shooterSpeedUpPCT);
     } else {
-      Flywheel.set(ControlMode.PercentOutput, 0);
-      shooterSpeedUpMotor.set(ControlMode.PercentOutput, 0);
+      flywheel.set(ControlMode.PercentOutput, 0);
+      booster.set(ControlMode.PercentOutput, 0);
     }
+  }
+
+  public void shooterVelocityControl(double velocity) {
+    flywheel.set(ControlMode.Velocity, velocity);
+  }
+
+  public void shooterPercentControl(double percent) {
+    flywheel.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void boosterPercentControl(double percent) {
+    flywheel.set(ControlMode.PercentOutput, percent);
   }
 
   @Override
