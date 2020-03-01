@@ -4,6 +4,10 @@ package frc.robot.commands;
 import frc.robot.VisionClient;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class LockOnTurret extends CommandBase {
@@ -16,11 +20,16 @@ public class LockOnTurret extends CommandBase {
 
   private boolean seesTarget;
   private double visionAngle;
+  private double setPoint;
+  private DoubleSupplier stick;
+  private BooleanSupplier button;
 
-  public LockOnTurret() {
+  public LockOnTurret(DoubleSupplier stick, BooleanSupplier button) {
     addRequirements(turret);
     seesTarget = false;
     oscillateTurret = new OscillateTurret();
+    this.stick = stick;
+    this.button = button;
   }
 
   @Override
@@ -29,21 +38,25 @@ public class LockOnTurret extends CommandBase {
 
   @Override
   public void execute() {
-    // seesTarget = m_VisionClient.seesG2();
-    // visionAngle = m_VisionClient.getAngle2G2();
+    seesTarget = m_VisionClient.seesG2();
+    visionAngle = m_VisionClient.getAngle2G2();
     if(!seesTarget) {
-      oscillateTurret.execute();
-      seesTarget = SmartDashboard.getBoolean("seesAG2", false);
+      // oscillateTurret.execute();
+      setPoint = turret.getTurretAngle();
+      SmartDashboard.putBoolean("Working", false);
     }
     else {
-      oscillateTurret.setFinished(true);
-      double visionAngle = SmartDashboard.getNumber("angle", 0);
-      turret.setTurretPosition(visionAngle + turret.getTurretAngle());
+      SmartDashboard.putBoolean("Working", true);
+      setPoint = visionAngle + turret.getTurretAngle();
+      SmartDashboard.putNumber("angle", visionAngle);
+      SmartDashboard.putNumber("setpoint", setPoint);
+      turret.setTurretPosition(setPoint);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
+    turret.setTurretPercentOut(0);
   }
 
   @Override

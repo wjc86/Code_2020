@@ -26,7 +26,7 @@ public class TurretToZero extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    turret.setTurretAngle((int)turret.getMidPos());
+    turret.setTurretPercentOut(0);
   }
 
   @Override

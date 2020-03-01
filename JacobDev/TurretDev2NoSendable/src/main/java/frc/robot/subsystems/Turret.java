@@ -32,6 +32,7 @@ public class Turret extends SubsystemBase {
 
     private PIDController pid = new PIDController(0.0175, 0.0001, 0.001);
 
+    private double wantedAngle = 0.0;
     private double currentAngle = 0.0;
     private double lastAngle = 0.0;
     private boolean currentHall = false;
@@ -55,42 +56,24 @@ public class Turret extends SubsystemBase {
         return rotateMotor.getSelectedSensorPosition(0);
     }
 
-    public void setTurretPosition(double wantedDegrees) {
-        if(wantedDegrees > maxPos) {
-            wantedDegrees = maxPos;
-        } else if(wantedDegrees < minPos) {
-            wantedDegrees = minPos;
+    public void setTurretPosition(double wantedAngle) {
+        this.wantedAngle = wantedAngle;
+        if(wantedAngle > maxPos) {
+            wantedAngle = maxPos;
+        } else if(wantedAngle < minPos) {
+            wantedAngle = minPos;
         }
-        double currentDegrees = getTurretAngle();
-        double output = -1 * pid.calculate(currentDegrees, wantedDegrees);
-        double error = wantedDegrees - getTurretAngle();
+        currentAngle = getTurretAngle();
+        double output = -1 * pid.calculate(currentAngle, wantedAngle);
+        double error = wantedAngle - currentAngle;
         // if (Math.abs(error) > 90) {
           if (output > 0.1) {
             output = 0.1;
           } else if (output < -0.1) {
             output = -0.1;
           }
-        // } else if (Math.abs(error) < 90 && Math.abs(error) > 60) {
-        //   if (output > .15) {
-        //     output = .15;
-        //   } else if (output < -.15) {
-        //     output = -.15;
-        //   }
-        // } else if (Math.abs(error) < 60 && Math.abs(error) > 30) {
-        //   if (output > .1) {
-        //     output = .1;
-        //   } else if (output < -.1) {
-        //     output = -.1;
-        //   }
-        // } else if (Math.abs(error) < 30) {
-        //   if (output > .05) {
-        //     output = .05;
-        //   } else if (output < -.05) {
-        //     output = -.05;
-        //   }
         SmartDashboard.putNumber("PID Out", output);
-        SmartDashboard.putNumber("Actual Angle", currentDegrees);
-        SmartDashboard.putNumber("Wanted Angle", wantedDegrees);
+        SmartDashboard.putNumber("Wanted Angle", wantedAngle);
         rotateMotor.set(ControlMode.PercentOutput, output);
     }
 
@@ -105,7 +88,7 @@ public class Turret extends SubsystemBase {
     //Returns the angle offset where 0 degrees is where the turret and robot are facing the same direction
     public double getTurretAngle() {
         double angle = -1.0 * getTurretPosition() * Constants.MOTOR_TO_TURRET_GEAR_RATIO * Constants.REVOLUTIONS_PER_ENCODER_TICK * 360.0;
-        SmartDashboard.putNumber("Angle", angle);
+        SmartDashboard.putNumber("Actual Angle", currentAngle);
         return angle;
     }
 
