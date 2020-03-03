@@ -1,24 +1,37 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-  /**
-   * Creates a new Shooter.
-   */
-  public Shooter() {
+  private static Shooter instance = new Shooter();
 
+  public TalonFX flywheel = new TalonFX(ShooterConstants.FLYWHEEL_ID);
+  public TalonSRX booster = new TalonSRX(ShooterConstants.BOOSTER_ID);
+
+  public Shooter() {
+    flywheel.config_kP(0, ShooterConstants.FLYWHEEL_P);
+    flywheel.config_kI(0, ShooterConstants.FLYWHEEL_I);
+    flywheel.config_kD(0, ShooterConstants.FLYWHEEL_D);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public static Shooter getInstance() {
+    return instance;
+  }
+
+  public void setFlywheelVelocityControl(double velocity) {
+    flywheel.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setFlywheelPercentControl(double percent) {
+    flywheel.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void setBoosterPercentControl(double percent) {
+    flywheel.set(ControlMode.PercentOutput, percent);
   }
 }
