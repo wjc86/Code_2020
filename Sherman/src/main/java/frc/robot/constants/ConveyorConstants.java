@@ -11,8 +11,10 @@ package frc.robot.constants;
  * Add your docs here.
  */
 public class ConveyorConstants {
+
     public static int MASTER_ID = 3;
     public static int FOLLOWER_ID = 33;
+
 
     public static int SHOOTER_SENSOR_PORT = 0;
     public static int TOP_SENSOR_PORT = 3;
