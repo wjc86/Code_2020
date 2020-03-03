@@ -24,6 +24,11 @@ public class Intake extends SubsystemBase {
   public static Intake getInstance() {return instance;}
 
   public Intake() {}
+  
+  public void lineBreak() {
+    SmartDashboard.putBoolean("Line Touching", intakeSensor.get());
+    SmartDashboard.putBoolean("Is Deployed", isDeployed);
+  }
 
   public void startIntake(double speedPCT) {
     intakeMotor.set(ControlMode.PercentOutput, speedPCT);

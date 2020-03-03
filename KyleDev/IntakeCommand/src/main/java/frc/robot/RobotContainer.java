@@ -15,6 +15,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureButtonBindings();
+    m_Intake.setDefaultCommand(new SensorIntake());
   }
 
   private void configureButtonBindings() {
