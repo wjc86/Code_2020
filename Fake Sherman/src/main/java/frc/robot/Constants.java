@@ -62,6 +62,12 @@ public final class Constants {
     public static final double REVOLUTIONS_PER_ENCODER_TICK = 1.0 / 4096.0;
 
     /* Conveyor Constants */
+    public static double kP = 0.0;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+    public static int maxConveyorVelocity = 0;
+    public static int maxConveyorAccel = 0;
+
 
     /* Intake Constants */
 

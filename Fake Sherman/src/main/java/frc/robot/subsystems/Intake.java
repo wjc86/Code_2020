@@ -14,7 +14,6 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid intakePiston1 = new DoubleSolenoid(Constants.intakePiston1Forward, Constants.intakePiston1Reverse);
   private DoubleSolenoid intakePiston2 = new DoubleSolenoid(Constants.intakePiston2Forward, Constants.intakePiston2Reverse);
   public boolean isDeployed = false;
-  public double speed = 0;
 
   public static Intake instance = new Intake();
 

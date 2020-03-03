@@ -1,24 +1,133 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.ConveyorConstants;
 
 public class Conveyor extends SubsystemBase {
-  /**
-   * Creates a new Conveyor.
-   */
-  public Conveyor() {
+  private static Conveyor instance = new Conveyor();
 
+  private TalonSRX master = new TalonSRX(ConveyorConstants.MASTER_ID);
+  private TalonSRX follower = new TalonSRX(ConveyorConstants.FOLLOWER_ID);
+
+  private DigitalInput shooterSensor = new DigitalInput(ConveyorConstants.SHOOTER_SENSOR_PORT);
+  private DigitalInput topSensor = new DigitalInput(ConveyorConstants.TOP_SENSOR_PORT);
+  private DigitalInput bottomSensor = new DigitalInput(ConveyorConstants.BOTTOM_SENSOR_PORT);
+  private DigitalInput intakeSensor = new DigitalInput(ConveyorConstants.INTAKE_SENSOR_PORT);
+
+  private int ballCount = 0;
+  private boolean shooterLineWasTripped = false;
+  private boolean intakeLineWasTripped = false;
+  private boolean isFull = false;
+
+  public Conveyor() {
+    master.config_kP(0, ConveyorConstants.MOTION_MAGIC_P);
+    master.config_kP(0, ConveyorConstants.MOTION_MAGIC_I);
+    master.config_kP(0, ConveyorConstants.MOTION_MAGIC_D);
+    master.configMotionCruiseVelocity(ConveyorConstants.MOTION_MAGIC_VELOCITY);
+    master.configMotionAcceleration(ConveyorConstants.MOTION_MAGIC_ACCELERATION);
+    follower.follow(master);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    putToDashboard();
+    ballCounting();
+    updateIsFull();
+  }
+
+  public static Conveyor getInstance(){
+    return instance;
+  }
+
+  public void setPercentControl(double percent) {
+    master.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void setMotionMagic(double pos) {
+    master.set(ControlMode.MotionMagic, pos);
+  }
+
+  public void ballCounting() {
+    if(checkForEntry()){
+      ballCount++;
+    }
+    if(checkForExit()){
+      if(ballCount > 0){
+        ballCount--;
+      }
+    }
+  }
+
+  public boolean checkForExit() {
+    if(shooterLineWasTripped) {
+      if(isShooterLineClosed()) {
+        shooterLineWasTripped = false;
+        return true;
+      } 
+      else if (!isShooterLineClosed()) {
+        shooterLineWasTripped = true;
+      }
+
+    }
+    return false;
+  }
+
+  public boolean checkForEntry() {
+    if(intakeLineWasTripped) {
+      if(isIntakeLineClosed()) {
+        intakeLineWasTripped = false;
+        return true;
+      } 
+      else if (!isIntakeLineClosed()) {
+        intakeLineWasTripped = true;
+      }
+
+    }
+    return false;
+  }
+
+  public boolean isTopLineClosed() {
+    return topSensor.get();
+  }
+
+  public boolean isBottomLineClosed() {
+    return bottomSensor.get();
+  }
+
+  public boolean isShooterLineClosed() {
+    return shooterSensor.get();
+  }
+
+  public boolean isIntakeLineClosed() {
+    return intakeSensor.get(); 
+  }
+
+  public int getBallCount() {
+    return ballCount;
+  }
+
+  public boolean getIsFull() {
+    return isFull;
+  }
+
+  public void setIsFull(boolean isFull) {
+    this.isFull = isFull;
+  }
+
+  public void updateIsFull() {
+    isFull = !isTopLineClosed();
+  }
+
+  public void putToDashboard() {
+    SmartDashboard.putBoolean("Top", isTopLineClosed());
+    SmartDashboard.putBoolean("Bottom", isBottomLineClosed());
+    SmartDashboard.putBoolean("Shooter Line", isShooterLineClosed());
+    SmartDashboard.putBoolean("Intake Line", isIntakeLineClosed());
+    SmartDashboard.putNumber("Ball Count", ballCount);
   }
 }

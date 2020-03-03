@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,14 +17,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     motor = new CANSparkMax(2, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
-    motor.setSmartCurrentLimit(120);
-    motor.setSmartCurrentLimit(120, 120);
+    motor.setSmartCurrentLimit(100);
+    motor.setIdleMode(IdleMode.kBrake);
     motor.burnFlash();
     stick = new Joystick(0);
   }
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Amps", motor.getOutputCurrent());
+    SmartDashboard.putNumber("bus voltage", motor.getBusVoltage());
   }
 
   @Override
@@ -36,8 +39,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    motor.set(-stick.getThrottle());
-    SmartDashboard.putNumber("Output", -stick.getThrottle());
+    motor.set(-stick.getY());
+    SmartDashboard.putNumber("Output", -stick.getY());
     SmartDashboard.putNumber("Amps", motor.getOutputCurrent());
     SmartDashboard.putNumber("bus voltage", motor.getBusVoltage());
   }

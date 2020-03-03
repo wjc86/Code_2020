@@ -5,20 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class Intake extends SubsystemBase {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class Shoot extends SequentialCommandGroup {
   /**
-   * Creates a new Intake.
+   * Creates a new Shoot.
    */
-  public Intake() {
-
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public Shoot() {
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());
+    super();
   }
 }
