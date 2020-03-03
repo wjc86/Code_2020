@@ -48,7 +48,7 @@ public class ColorSensor{
 
     private ArrayList<ColorSensor.color> colors = new ArrayList<>();
 
-    private final double MOTOR_SPEED = 0.15;
+    private final double MOTOR_SPEED = 0.08; // 0.15
     private int colorReadBefore = 0;
     private int colorReadAfter = 0;
 
