@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -13,12 +11,11 @@ public class Shooter extends SubsystemBase {
   private static Shooter instance = new Shooter();
   public TalonFX Flywheel = new TalonFX(Constants.FlywheelCANID);
   public TalonSRX shooterSpeedUpMotor = new TalonSRX(Constants.ShooterTalonCANID);
-  private DigitalInput shooterLine = new DigitalInput(Constants.ShooterLinebreakID);
 
   public Shooter() {
-    Flywheel.config_kP(0, shooterKP);
-    Flywheel.config_kI(0, shooterKI);
-    Flywheel.config_kD(0, shooterKD);
+    Flywheel.config_kP(0, Constants.flywheelP);
+    Flywheel.config_kI(0, Constants.flywheelI);
+    Flywheel.config_kD(0, Constants.flywheelD);
   }
 
   public static Shooter getInstance() {
@@ -33,10 +30,6 @@ public class Shooter extends SubsystemBase {
       Flywheel.set(ControlMode.PercentOutput, 0);
       shooterSpeedUpMotor.set(ControlMode.PercentOutput, 0);
     }
-  }
-
-  public void shooterLineBreak() {
-    SmartDashboard.putBoolean("Shooter Line", shooterLine.get());
   }
 
   @Override

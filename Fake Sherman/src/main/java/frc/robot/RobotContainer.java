@@ -4,6 +4,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -100,5 +103,29 @@ public class RobotContainer {
     resetButton.whenPressed(new ResetClimb());
     climbButton.whenPressed(new Climb());
     manualButton.whenHeld(new ManualClimb(() -> leftStick.getY()));
+
+    m_Controller.getShootButton().whenPressed(
+      new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new LockOnTurret(),
+          new ArcadeDrive(() -> 0, () -> 0),
+          new SequentialCommandGroup(
+            new ShooterSpinUp(), //end: if at velocity
+            new CheckInRange(), //end: if true
+            new ConveyorShoot() //end: stop conveyor
+          )
+        ), new ParallelCommandGroup(
+          new ShooterSpinDown(), //end: shooter is stopped
+          new HomeTurret() //end: 
+        )
+      )
+    );
+
+    m_Controller.getBallChaseButton().whenHeld(
+      new SequentialCommandGroup(
+        new extendIntake(),
+        new ChaseBall()
+      )
+    );
   }
 }

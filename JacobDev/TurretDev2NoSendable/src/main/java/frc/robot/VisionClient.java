@@ -27,7 +27,7 @@ public class VisionClient {
         ballTable = tableInstance.getTable("ballVision");
         g2Table = tableInstance.getTable("g2Vision");
         ballTableEntry = ballTable.getEntry("target_data");
-        g2TableEntry = g2Table.getEntry("target_data");
+        g2TableEntry = g2Table.getEntry("vision_data");
         returnData = ballTable.getEntry("return_data");
     }
 
@@ -59,17 +59,17 @@ public class VisionClient {
         return ballTableEntry.getDoubleArray(defaultArray)[4];
     }
 
-    // public boolean seesG2() {
-    //     if (g2TableEntry.getDoubleArray(defaultArray)[1] == 1) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+    public boolean seesG2() {
+        if (g2TableEntry.getDoubleArray(defaultArray)[1] == 1.0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    // public double getAngle2G2() {
-        
-    // }
+    public double getAngle2G2() {
+        return g2TableEntry.getDoubleArray(defaultArray)[4];
+    }
 
     public void pushToTable(double timestamp) {
         returnData.setNumber(timestamp);

@@ -45,7 +45,7 @@ public class OscillateTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    // turret.setTurretPosition(turret.getTurretPosition());
+    turret.setTurretPercentOut(0);
   }
 
   @Override

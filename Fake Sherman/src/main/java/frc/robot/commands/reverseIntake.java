@@ -5,30 +5,24 @@ import frc.robot.subsystems.Intake;
 
 public class reverseIntake extends CommandBase {
   private Intake m_Intake = Intake.getInstance();
-  boolean done = false;
   
   public reverseIntake() {addRequirements(m_Intake);}
 
   @Override
-  public void initialize() {
-    done = false;
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
-    m_Intake.startIntake(m_Intake.speed * -1);
-    done = true;
+    m_Intake.startIntake(-1);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Intake.startIntake(0);
+  }
 
   @Override
   public boolean isFinished() {
-    if(done) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }

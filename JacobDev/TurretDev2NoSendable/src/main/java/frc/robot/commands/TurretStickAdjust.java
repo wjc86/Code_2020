@@ -7,37 +7,35 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ConveyorSubsystem;
+import frc.robot.subsystems.Turret;
 
-
-
-public class ConveyorShoot extends CommandBase {
-  private ConveyorSubsystem m_ConveyorSubsystem = ConveyorSubsystem.getInstance();
-  boolean shooting;
-
-  public ConveyorShoot() {
-    addRequirements(m_ConveyorSubsystem);
-    
+public class TurretStickAdjust extends CommandBase {
+  private DoubleSupplier stickValue;
+  private Turret turret = Turret.getInstance();
+  /**
+   * Creates a new TurretStickAdjust.
+   */
+  public TurretStickAdjust(DoubleSupplier stickValue) {
+    this.stickValue = stickValue;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ConveyorSubsystem.setPercentControl(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    turret.setTurretPosition(turret.getTurretAngle() + stickValue.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ConveyorSubsystem.setPercentControl(0);
   }
 
   // Returns true when the command should end.
