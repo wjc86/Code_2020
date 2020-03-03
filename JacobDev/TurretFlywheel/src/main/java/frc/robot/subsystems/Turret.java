@@ -12,15 +12,14 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
 
     private static Turret instance = new Turret();
 
-    //Sensors
-    private DigitalInput hallEffect = new DigitalInput(0);
-    private TalonSRX rotateMotor = new TalonSRX(11); //Might be (port) 12    
+    private WPI_TalonFX flywheelMotor = new WPI_TalonFX(11);
 
     //Measured in Degrees
     private double minPos = -88.0; //-88
@@ -28,7 +27,8 @@ public class Turret extends SubsystemBase {
     private double maxPos = 94.0; //92
 
     //Measurements
-    private final double degrees2Rotations = (double)1 / 360; 
+    private final double degrees2Rotations = 1.0 / 360.0; 
+    private final double percentToVoltage = 3.0 / 25.0;
 
     private PIDController pid = new PIDController(0.0175, 0.0001, 0.001);
 
@@ -42,9 +42,10 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() {
-        isOnHallEffect();
-        getTurretAngle();
-        calibratePosition();
+        //isOnHallEffect();
+        //getTurretAngle();
+        //calibratePosition();
+        putOutput();
     }
 
 
@@ -52,6 +53,19 @@ public class Turret extends SubsystemBase {
         return instance;
     }
 
+    public void setFlywheelOutput(double percent) {
+        flywheelMotor.setVoltage(percent * percentToVoltage);
+    }
+
+    public void changeOutput(double input) {
+        flywheelMotor.setVoltage(flywheelMotor.get() + input);
+    }
+
+    public void putOutput() {
+        SmartDashboard.putNumber("Flywheel Output", flywheelMotor.get());
+    }
+
+    /*
     public double getTurretPosition() {
         return rotateMotor.getSelectedSensorPosition(0);
     }
@@ -114,4 +128,5 @@ public class Turret extends SubsystemBase {
         lastAngle = currentAngle;
         lastHall = currentHall;
     }
+    */
 }

@@ -18,6 +18,7 @@ import frc.robot.commands.LockOnTurret;
 import frc.robot.commands.OscillateTurret;
 import frc.robot.commands.TurretStickAdjust;
 import frc.robot.commands.TurretToZero;
+import frc.robot.commands.Shoot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -38,6 +39,7 @@ public class RobotContainer {
 
   private Command oscillateTurret = new OscillateTurret();
   private Command lockOnTurret = new LockOnTurret(() -> controller.getRawAxis(0), () -> controller.getYButton());
+  private Command shoot = new Shoot();
   private TurretToZero turretToZero = new TurretToZero();
 
   private Turret turret = Turret.getInstance();
@@ -58,10 +60,12 @@ public class RobotContainer {
       .whenHeld(oscillateTurret);
     new JoystickButton(controller, Button.kB.value)
       .whenPressed(lockOnTurret);
-    // new JoystickButton(controller, Button.kY.value)
-    //   .whenPressed(turretToZero);
+    new JoystickButton(controller, Button.kY.value)
+      .whenPressed(turretToZero);
     new JoystickButton(controller, Button.kA.value)
       .whenHeld(new TurretStickAdjust(() -> controller.getY()));
+    new JoystickButton(controller, Button.kBumperRight.value)
+      .whenHeld(shoot);
       /*
     new JoystickButton(controller, Button.kBumperLeft.value)
       .whenHeld(new RunCommand(turret::setWantedAngle(45) turret));
