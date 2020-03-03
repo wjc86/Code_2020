@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
       DrivetrainConstants.TRACK_WIDTH);
   private final DifferentialDriveOdometry odometry;
 
-  private int inHighGear = 1;
+  private int inHighGear = 1; //should this be a boolean (It definitely should, but is it annoying to refactor?)
 
   public Drivetrain() {
     gyro.reset();

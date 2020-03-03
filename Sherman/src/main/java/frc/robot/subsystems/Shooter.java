@@ -31,7 +31,12 @@ public class Shooter extends SubsystemBase {
     flywheel.set(ControlMode.PercentOutput, percent);
   }
 
+  // Should there be a booster velocity control with associated constants?
+  // public void setBoosterVelocityControl(double velocity) {
+  //   booster.set(ControlMode.Velocity, velocity);
+  // }
+  
   public void setBoosterPercentControl(double percent) {
-    flywheel.set(ControlMode.PercentOutput, percent);
+    booster.set(ControlMode.PercentOutput, percent);
   }
 }
