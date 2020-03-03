@@ -24,7 +24,7 @@ public class Shoot extends CommandBase {
 
   private WPI_TalonFX flywheelMotor = new WPI_TalonFX(11);
 
-  private double limit = 10;
+  private double output = 10;
 
   public Shoot() {
     addRequirements(turret);
@@ -33,24 +33,24 @@ public class Shoot extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    flywheelMotor.setFlywheelOutput(0);
+    turret.setFlywheelOutput(0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    SmartDashboard.putNumber("limit", limit);
-    System.out.println("limit: " + limit);
+    SmartDashboard.putNumber("output", output);
+    System.out.println("output: " + output);
     if(Math.abs(stick.getY()) > 0.1) {
-      limit -= stick.getY() / 4;
+      output -= stick.getY() / 4;
       turret.changeOutput(stick.getY() / 4);
     }
-    if(limit < 0) {
-      limit = 0;
-    } else if (limit > 1) {
-      limit = 1;
+    if(output < 0) {
+      output = 0;
+    } else if (output > 100) {
+      output = 100;
     }
-    turret.setFlywheelOutput(limit);
+    turret.setFlywheelOutput(output);
   }
 
   // Make this return true when this Command no longer needs to run execute()
