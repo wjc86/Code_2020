@@ -41,8 +41,8 @@ public class LockOnTurret extends CommandBase {
     seesTarget = m_VisionClient.seesG2();
     visionAngle = m_VisionClient.getAngle2G2();
     if(!seesTarget) {
-      // oscillateTurret.execute();
-      setPoint = turret.getTurretAngle();
+      oscillateTurret.execute();
+      //setPoint = turret.getTurretAngle();
       SmartDashboard.putBoolean("Working", false);
     }
     else {

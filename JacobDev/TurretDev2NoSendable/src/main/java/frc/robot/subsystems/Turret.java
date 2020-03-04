@@ -23,9 +23,9 @@ public class Turret extends SubsystemBase {
     private TalonSRX rotateMotor = new TalonSRX(11); //Might be (port) 12    
 
     //Measured in Degrees
-    private double minPos = -88.0;
-    private double midPos = 4.0;
-    private double maxPos = 94.0;
+    private double minPos = -88.0; //-88
+    private double midPos = 4.0; //Degrees have been reduced to avoid hardstops
+    private double maxPos = 94.0; //92
 
     //Measurements
     private final double degrees2Rotations = (double)1 / 360; 

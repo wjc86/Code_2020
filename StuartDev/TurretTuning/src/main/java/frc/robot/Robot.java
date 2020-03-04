@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
     private TalonSRX rotateMotor = new TalonSRX(11);    
     
     //Measured in Degrees
-    private double minPos = -88.0;
-    private double midPos = 4.0;
-    private double maxPos = 94.0;
+    private double minPos = -84.0; //-88
+    private double midPos = 4.0; //Min and Max have been reduced to not hit hard stops
+    private double maxPos = 90.0; //94
 
     //Measurements
     private final double degrees2Rotations = (double)1 / 360;
