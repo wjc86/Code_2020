@@ -17,12 +17,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Compressor;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
@@ -57,9 +56,7 @@ public class Robot extends TimedRobot {
   private CANSparkMax winch2 = new CANSparkMax(1, MotorType.kBrushless);
   private DigitalInput topConveyorLinebreak = new DigitalInput(1);
   private DigitalInput bottomConveyorLinebreak = new DigitalInput(2);
-  private Timer tinyTim = new Timer();
-  
-
+  private DigitalInput hallEffect = new DigitalInput(3);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -134,6 +131,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    SmartDashboard.putBoolean("Top Linebreak", topConveyorLinebreak.get());
+    SmartDashboard.putBoolean("Bottom Linebreak", bottomConveyorLinebreak.get());
+    SmartDashboard.putBoolean("Hal Effect Sensor", hallEffect.get());
+    SmartDashboard.putNumber("Encoder Value for Turret", turret.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Encoder Value for Conveyor", conveyorMaster.getSelectedSensorPosition());
     if (Joy.getRawButton(1)) {
       leftMotorMaster.set(ControlMode.PercentOutput, 0);
       rightMotorMaster.set(ControlMode.PercentOutput, 0);
@@ -142,7 +144,13 @@ public class Robot extends TimedRobot {
       compressor.stop();
       leftIntakePiston.set(Value.kReverse);
       rightIntakePiston.set(Value.kReverse);
-
+      intake.set(0);
+      conveyorMaster.set(ControlMode.PercentOutput, 0);
+      turret.set(ControlMode.PercentOutput, 0);
+      flywheel.set(ControlMode.PercentOutput, 0);
+      speedShooter.set(ControlMode.PercentOutput, 0);
+      winch1.set(0);
+      winch2.set(0);
     }
     
     if (Joy.getRawButton(2)) {
@@ -160,6 +168,25 @@ public class Robot extends TimedRobot {
     if (Joy.getRawButton(5)){
       leftIntakePiston.set(Value.kForward);
       rightIntakePiston.set(Value.kForward);
+    }
+    if (Joy.getRawButton(6)) {
+      intake.set(0.2);
+    }
+    if(Joy.getRawButton(7)) {
+      conveyorMaster.set(ControlMode.PercentOutput, 0.2);
+    }
+    if(Joy.getRawButton(8)) {
+      turret.set(ControlMode.PercentOutput, 0.2);
+    }
+    if(Joy.getRawButton(9)) {
+      flywheel.set(ControlMode.PercentOutput, 0.2);
+    }
+    if(Joy.getRawButton(10)) {
+      speedShooter.set(ControlMode.PercentOutput, 0.2);
+    }
+    if(Joy.getRawButton(11)) {
+      winch1.set(0.2);
+      winch2.set(0.2);
     }
   } 
 }

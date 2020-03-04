@@ -26,11 +26,11 @@ public class Conveyor extends SubsystemBase {
 
   public Conveyor() {
     master.config_kP(0, ConveyorConstants.MOTION_MAGIC_P);
-    master.config_kP(0, ConveyorConstants.MOTION_MAGIC_I);
-    master.config_kP(0, ConveyorConstants.MOTION_MAGIC_D);
+    master.config_kI(0, ConveyorConstants.MOTION_MAGIC_I);
+    master.config_kD(0, ConveyorConstants.MOTION_MAGIC_D);
     master.configMotionCruiseVelocity(ConveyorConstants.MOTION_MAGIC_VELOCITY);
     master.configMotionAcceleration(ConveyorConstants.MOTION_MAGIC_ACCELERATION);
-    follower.follow(master);
+    follower.follow(master);//Does the follow set the PID to match/ just match output so it doesnt matter
   }
 
   @Override
