@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,6 +20,8 @@ public class Shoot extends SequentialCommandGroup {
   public Shoot() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super();
-  }
+    super(
+      SequentialCommandGroup(new LockOn, //Initial Lock and Ranging
+      new ParallelDeadlineGroup(new LockOn, new SequentialCommandGroup(new ShootShooter,new ShootConveyor,new DisableShooter)));//since ShootShooter needs to be interrupted, will it ever exit to Shoot Conveyor? may need to have exit condition based on spin up
+    }
 }
