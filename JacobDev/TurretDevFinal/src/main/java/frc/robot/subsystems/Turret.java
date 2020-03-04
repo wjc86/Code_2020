@@ -8,7 +8,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +20,11 @@ public class Turret extends SubsystemBase {
 
     //Sensors
     private DigitalInput hallEffect = new DigitalInput(0);
-    private TalonSRX rotateMotor = new TalonSRX(33); //Might be (port) 12    
+
+    //Motors (with CAN IDs)
+    private TalonSRX rotateMotor = new TalonSRX(33); 
+    private WPI_TalonFX flywheelMotor = new WPI_TalonFX(22);
+    private TalonSRX boosterMotor = new TalonSRX(11);
 
     //Measured in Degrees
     private double minPos = -88.0; //-88
@@ -38,18 +42,43 @@ public class Turret extends SubsystemBase {
     private boolean currentHall = false;
     private boolean lastHall = false;
 
-    public Turret() {}
+    private double currentAngle2 = 1.0;
+    private double lastAngle2 = 0.0;
+
+    public Turret() {
+      setBoosterOutput(0.0);
+      setFlywheelOutput(0.0);
+      setTurretAngle((int)midPos);
+    }
 
     @Override
     public void periodic() {
+        getFlywheelOutput();
         isOnHallEffect();
         getTurretAngle();
-        calibratePosition();
     }
-
 
     public static Turret getInstance() {
         return instance;
+    }
+
+    public double getCurrentAngle() { return currentAngle2; }
+    public void setCurrentAngle(double angle) { currentAngle2 = angle; }
+    public double getLastAngle() { return lastAngle2; }
+    public void setLastAngle(double angle) { lastAngle2 = angle; }
+
+    public double getFlywheelOutput() {
+      double output = flywheelMotor.getMotorOutputPercent();
+      SmartDashboard.putNumber("flyWheel (%)Output", output);
+      return output;
+    }
+
+    public void setFlywheelOutput(double percentOutput) {
+      flywheelMotor.set(ControlMode.PercentOutput, percentOutput);
+    }
+
+    public void setBoosterOutput(double percentOutput) {
+      boosterMotor.set(ControlMode.PercentOutput, percentOutput);
     }
 
     public double getTurretPosition() {
@@ -67,18 +96,18 @@ public class Turret extends SubsystemBase {
         double output = -1 * pid.calculate(currentAngle, wantedAngle);
         double error = wantedAngle - currentAngle;
         // if (Math.abs(error) > 90) {
-          if (output > 0.1) {
-            output = 0.1;
-          } else if (output < -0.1) {
-            output = -0.1;
+          if (output > Constants.TURRET_MAX_ROTATION_OUTPUT) {
+            output = Constants.TURRET_MAX_ROTATION_OUTPUT;
+          } else if (output < -Constants.TURRET_MAX_ROTATION_OUTPUT) {
+            output = -Constants.TURRET_MAX_ROTATION_OUTPUT;
           }
-        SmartDashboard.putNumber("PID Out", output);
-        SmartDashboard.putNumber("Wanted Angle", wantedAngle);
+
         rotateMotor.set(ControlMode.PercentOutput, output);
     }
 
     public void setTurretPercentOut(double percent) {
         rotateMotor.set(ControlMode.PercentOutput, percent);
+        calibratePosition();
     }
 
     public void setTurretAngle(int angle) {
@@ -103,15 +132,15 @@ public class Turret extends SubsystemBase {
     }
 
     public void calibratePosition() {
-        currentAngle = getTurretAngle();
-        currentHall = isOnHallEffect();
+      currentAngle = getTurretAngle();
+      currentHall = isOnHallEffect();
 
-        if(((currentAngle - lastAngle) > 0 && (lastHall == false && currentHall == true)) || ((currentAngle - lastAngle) < 0 && (lastHall == true && currentHall == false))) { 
-            rotateMotor.setSelectedSensorPosition(0);
-            System.out.println("true");
-        }
-
-        lastAngle = currentAngle;
-        lastHall = currentHall;
+      if(((currentAngle - lastAngle) > 0 && (lastHall == false && currentHall == true)) || 
+      ((currentAngle - lastAngle) < 0 && (lastHall == true && currentHall == false))) { 
+          rotateMotor.setSelectedSensorPosition(0);
+          System.out.println("true");
+      }
+      lastAngle = currentAngle;
+      lastHall = currentHall;
     }
 }
