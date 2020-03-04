@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
       DrivetrainConstants.TRACK_WIDTH);
   private final DifferentialDriveOdometry odometry;
 
-  private int inHighGear = 1; //should this be a boolean (It definitely should, but is it annoying to refactor?)
+  private boolean inHighGear = true; //should this be a boolean (It definitely should, but is it annoying to refactor?)
 
   public Drivetrain() {
     gyro.reset();
@@ -84,7 +84,7 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput;
     double rightOutput;
     
-    if (inHighGear == 1) {
+    if (inHighGear) {
       leftOutput = leftPIDControllerHigh.calculate(
           leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
           + leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
@@ -110,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput;
     double rightOutput;
     
-    if (inHighGear == 1) {
+    if (inHighGear) {
       leftOutput = leftPIDControllerHigh.calculate(
           leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, leftMetersPerSecond)
           + leftFeedforwardHigh.calculate(leftMetersPerSecond);
@@ -176,21 +176,21 @@ public class Drivetrain extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
-  public int getInHighGear() {
+  public boolean getInHighGear() {
     return inHighGear;
   }
 
-  public void setInHighGear(int inHighGear) {
+  public void setInHighGear(boolean inHighGear) {
     this.inHighGear = inHighGear;
   }
 
   public void shift() {
     if (shifter.get() == DoubleSolenoid.Value.kReverse) {
       shifter.set(DoubleSolenoid.Value.kForward);
-      inHighGear = 1;
+      inHighGear = true;
     } else{} {
       shifter.set(DoubleSolenoid.Value.kReverse);
-      inHighGear = 0;
+      inHighGear = false;
     }
   }
 

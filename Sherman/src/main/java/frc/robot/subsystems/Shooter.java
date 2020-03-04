@@ -39,4 +39,8 @@ public class Shooter extends SubsystemBase {
   public void setBoosterPercentControl(double percent) {
     booster.set(ControlMode.PercentOutput, percent);
   }
+
+  public double getFlywheelSpeed(){
+    return flywheel.getSelectedSensorVelocity(0);
+  }
 }

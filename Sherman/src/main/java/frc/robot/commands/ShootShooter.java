@@ -29,7 +29,7 @@ public class ShootShooter extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(m_Shooter.get_flywheel_speed()>=ShooterConstants.FLYWHEEL_VELOCITY){
+    if(m_Shooter.getFlywheelSpeed()>=ShooterConstants.FLYWHEEL_VELOCITY){
       return true;//Spinning down the motor needs to be a separate command so it can come after the conveyor shoot
     }
     return false;

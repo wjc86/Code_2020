@@ -2,10 +2,10 @@ package frc.robot.constants;
 
 public class DrivetrainConstants {
     // IDs for Drivetrain motors and solenoids
-    public static final int LEFT_MASTER_ID = 1;
-    public static final int LEFT_FOLLOWER_ID = 11;
-    public static final int RIGHT_MASTER_ID = 2;
-    public static final int RIGHT_FOLLOWER_ID = 22;
+    public static final int LEFT_MASTER_ID =  2;
+    public static final int LEFT_FOLLOWER_ID = 22 ;
+    public static final int RIGHT_MASTER_ID =  1;
+    public static final int RIGHT_FOLLOWER_ID = 11;
     public static final int SHIFTER_ID_1 = 0;
     public static final int SHIFTER_ID_2 = 1;
 
