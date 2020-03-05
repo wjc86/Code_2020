@@ -17,7 +17,7 @@ public class DeployClimber extends CommandBase {
 
   @Override
   public void execute() {
-    m_Climber.set(1);
+    // m_Climber.set(1);
   }
 
   @Override
@@ -26,10 +26,10 @@ public class DeployClimber extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if (m_Climber.getPosition() > ClimberConstants.DEPLOY_HEIGHT) { 
-      return true;
-    } else {
+    // if (m_Climber.getPosition() > ClimberConstants.DEPLOY_HEIGHT) { 
+    //   return true;
+    // } else {
       return false;
-    }
+    // }
   }
 }

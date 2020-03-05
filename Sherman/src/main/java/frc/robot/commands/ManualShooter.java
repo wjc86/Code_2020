@@ -7,23 +7,21 @@
 
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Harvester;
+import frc.robot.subsystems.Shooter;
 
-public class ManualHarvest extends CommandBase {
-  private Harvester m_Harvester = Harvester.getInstance();
+public class ManualShooter extends CommandBase {
+  private Shooter m_Shooter = Shooter.getInstance();
 
-  DoubleSupplier motorSupply;
-  BooleanSupplier actuateSupply;
-  Boolean deployed = false;
+  DoubleSupplier flywheelSupply;
+  DoubleSupplier boosterSupply;
 
-  public ManualHarvest(DoubleSupplier motorSupply, BooleanSupplier actuateSupply) {
-    this.motorSupply = motorSupply;
-    this.actuateSupply = actuateSupply;
-    addRequirements(m_Harvester);
+  public ManualShooter(DoubleSupplier flywheelSupply, DoubleSupplier boosterSupply) {
+    this.flywheelSupply = flywheelSupply;
+    this.boosterSupply = boosterSupply;
+    addRequirements(m_Shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -34,26 +32,13 @@ public class ManualHarvest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // System.out.println("BOO?: " + motorSupply.getAsDouble());
-    m_Harvester.setPercentControl(motorSupply.getAsDouble());
-    System.out.println(actuateSupply.getAsBoolean());
-    boolean actuate = actuateSupply.getAsBoolean();
-    if(actuate/* && deployed*/) {
-      System.out.println("YAYAYAY");
-      m_Harvester.retract();
-      deployed = false;
-    }
-    if(actuate && !deployed) {
-      System.out.println("BOOBOO");
-      m_Harvester.deploy();
-      deployed = true;
-    }
+    m_Shooter.setFlywheelPercentControl(flywheelSupply.getAsDouble());
+    m_Shooter.setBoosterPercentControl(boosterSupply.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Harvester.setPercentControl(0);
   }
 
   // Returns true when the command should end.

@@ -14,10 +14,10 @@ public class Conveyor extends SubsystemBase {
   private TalonSRX master = new TalonSRX(ConveyorConstants.MASTER_ID);
   private TalonSRX follower = new TalonSRX(ConveyorConstants.FOLLOWER_ID);
 
-  private DigitalInput shooterSensor = new DigitalInput(ConveyorConstants.SHOOTER_SENSOR_PORT);
+  // private DigitalInput shooterSensor = new DigitalInput(ConveyorConstants.SHOOTER_SENSOR_PORT);
   private DigitalInput topSensor = new DigitalInput(ConveyorConstants.TOP_SENSOR_PORT);
   private DigitalInput bottomSensor = new DigitalInput(ConveyorConstants.BOTTOM_SENSOR_PORT);
-  private DigitalInput intakeSensor = new DigitalInput(ConveyorConstants.INTAKE_SENSOR_PORT);
+  // private DigitalInput intakeSensor = new DigitalInput(ConveyorConstants.INTAKE_SENSOR_PORT);
 
   private int ballCount = 0;
   private boolean shooterLineWasTripped = false;
@@ -46,10 +46,12 @@ public class Conveyor extends SubsystemBase {
 
   public void setPercentControl(double percent) {
     master.set(ControlMode.PercentOutput, percent);
+    follower.follow(master);
   }
 
   public void setMotionMagic(double pos) {
     master.set(ControlMode.MotionMagic, pos);
+    follower.follow(master);
   }
 
   public void ballCounting() {
@@ -65,11 +67,11 @@ public class Conveyor extends SubsystemBase {
 
   public boolean checkForExit() {
     if(shooterLineWasTripped) {
-      if(isShooterLineClosed()) {
+      if(isTopLineClosed()) {
         shooterLineWasTripped = false;
         return true;
       } 
-      else if (!isShooterLineClosed()) {
+      else if (!isTopLineClosed()) {
         shooterLineWasTripped = true;
       }
 
@@ -79,11 +81,11 @@ public class Conveyor extends SubsystemBase {
 
   public boolean checkForEntry() {
     if(intakeLineWasTripped) {
-      if(isIntakeLineClosed()) {
+      if(isBottomLineClosed()) {
         intakeLineWasTripped = false;
         return true;
       } 
-      else if (!isIntakeLineClosed()) {
+      else if (!isBottomLineClosed()) {
         intakeLineWasTripped = true;
       }
 
@@ -99,13 +101,13 @@ public class Conveyor extends SubsystemBase {
     return bottomSensor.get();
   }
 
-  public boolean isShooterLineClosed() {
-    return shooterSensor.get();
-  }
+  // public boolean isShooterLineClosed() {
+  //   return shooterSensor.get();
+  // }
 
-  public boolean isIntakeLineClosed() {
-    return intakeSensor.get(); 
-  }
+  // public boolean isIntakeLineClosed() {
+  //   return intakeSensor.get(); 
+  // }
 
   public int getBallCount() {
     return ballCount;
@@ -126,8 +128,8 @@ public class Conveyor extends SubsystemBase {
   public void putToDashboard() {
     SmartDashboard.putBoolean("Top", isTopLineClosed());
     SmartDashboard.putBoolean("Bottom", isBottomLineClosed());
-    SmartDashboard.putBoolean("Shooter Line", isShooterLineClosed());
-    SmartDashboard.putBoolean("Intake Line", isIntakeLineClosed());
+    // SmartDashboard.putBoolean("Shooter Line", isShooterLineClosed());
+    // SmartDashboard.putBoolean("Intake Line", isIntakeLineClosed());
     SmartDashboard.putNumber("Ball Count", ballCount);
   }
 }

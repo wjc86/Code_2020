@@ -7,13 +7,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import java.util.function.DoubleSupplier;
 
-public class Plant extends CommandBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Conveyor;
+
+public class ManualConveyor extends CommandBase {
+  private Conveyor m_Conveyor = Conveyor.getInstance();
+  DoubleSupplier supplier;
   /**
-   * Creates a new Plant.
+   * Creates a new ManualConveyor.
    */
-  public Plant() {
+  public ManualConveyor(DoubleSupplier supplier) {
+    this.supplier = supplier;
+    addRequirements(m_Conveyor);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,11 +32,14 @@ public class Plant extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_Conveyor.setPercentControl(supplier.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_Conveyor.setPercentControl(0);
+
   }
 
   // Returns true when the command should end.

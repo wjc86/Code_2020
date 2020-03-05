@@ -7,8 +7,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,10 +20,19 @@ public class Shoot extends SequentialCommandGroup {
    * Creates a new Shoot.
    */
   public Shoot() {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
     super(
-      SequentialCommandGroup(new LockOn, //Initial Lock and Ranging
-      new ParallelDeadlineGroup(new LockOn, new SequentialCommandGroup(new ShootShooter,new ShootConveyor,new DisableShooter)));//since ShootShooter needs to be interrupted, will it ever exit to Shoot Conveyor? may need to have exit condition based on spin up
-    }
+    //   new ParallelRaceGroup(
+    //     new LockOn(),
+    //     new ArcadeDrive(() -> 0, () -> 0),
+    //     new SequentialCommandGroup(
+    //       new ShootShooter(), // end: if at velocity
+    //       new CheckInRange(), //end: if true
+    //       new ShootConveyor() //end: stop conveyor
+    //     )
+    //   ), new ParallelCommandGroup(
+    //     new ShooterSpinDown(), //end: shooter is stopped
+    //     new HomeTurret() //end: 
+    // )
+    );
+  }
 }
