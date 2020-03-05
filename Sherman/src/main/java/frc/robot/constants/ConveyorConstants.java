@@ -26,4 +26,6 @@ public class ConveyorConstants {
     public static double MOTION_MAGIC_D = 0.0;
     public static int MOTION_MAGIC_VELOCITY = 0;
     public static int MOTION_MAGIC_ACCELERATION = 0;
+
+    public static double SHOOT_TIME = 1.5;
 }

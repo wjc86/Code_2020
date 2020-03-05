@@ -25,6 +25,7 @@ public class Controller {
     private final POVButton sowButton = new POVButton(operator, 180);
     private final JoystickButton manualShooterButton = new JoystickButton(operator, Button.kBack.value);
     private final JoystickButton manualTurretButton = new JoystickButton(operator, Button.kStart.value);
+    private final JoystickButton shootButton = new JoystickButton(operator, Button.kY.value);
 
     // getInstance function for controller
     public static Controller getInstance() {
