@@ -48,7 +48,7 @@ public class RobotContainer {
     m_Controller.getClimbButton().whenHeld(new Climb(() -> m_Controller.getClimbPercent()));
     m_Controller.getSowButton().whenHeld(new Sow());
     m_Controller.getManualShooterButton().whenHeld(new ManualShooter(() -> m_Controller.getManualShooterFlywheel(), () -> m_Controller.getManualShooterBooster()));
-    m_Controller.getManualTurretButton().whenHeld(new ManualTurret(() -> m_Controller.getManualTurretIncrease()));
+    // m_Controller.getManualTurretButton().whenHeld(new ManualTurret(() -> m_Controller.getManualTurretIncrease()));
   }
 
   public Command getAutonomousCommand() throws IOException {

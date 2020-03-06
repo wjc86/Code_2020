@@ -9,19 +9,19 @@ public class Shoot extends SequentialCommandGroup {
 
   public Shoot() {
     super(
-      new ParallelRaceGroup(
-        new LockOn(),
-        new SequentialCommandGroup(
-          new Until(G2),
-          new SpinUpShooter(),
-          new Until(buttonpress),
-          new ShootConveyor()
-        )
-      ),
-      new ParallelCommandGroup(
-        new Turret2Zero(),
-        new EndShoot()
-      )
+    //   new ParallelRaceGroup(
+    //     // new LockOn(),
+    //     // new SequentialCommandGroup(
+    //     //   new Until(G2),
+    //     //   new SpinUpShooter(),
+    //     //   new Until(buttonpress),
+    //     //   new ShootConveyor()
+    //     )
+    //   ),
+    //   new ParallelCommandGroup(
+    //     new Turret2Zero(),
+    //     new EndShoot()
+    //   )
     );
   }
 }
