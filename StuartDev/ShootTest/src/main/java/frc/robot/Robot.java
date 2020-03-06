@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    SmartDashboard.putNumber("Conveyor Percent", 0);
   }
 
   @Override
