@@ -8,8 +8,10 @@ public class DrivetrainConstants {
     public static final int RIGHT_MASTER_ID =  1;
     public static final int RIGHT_FOLLOWER_ID = 11;
 
-    public static final int SHIFTER_ID_1 = 0;
-    public static final int SHIFTER_ID_2 = 1;
+    public static final int RIGHT_SHIFTER_ID_1 = 1;
+    public static final int RIGHT_SHIFTER_ID_2 = 6;
+    public static final int LEFT_SHIFTER_ID_1 = 7;
+    public static final int LEFT_SHIFTER_ID_2 = 0;
 
     // Tuning values for Drivetrain
     public static final double[][] LEFT_PID = {{0,0,0}, {0,0,0}};

@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -30,8 +31,9 @@ import frc.robot.constants.DrivetrainConstants;
 public class Drivetrain extends SubsystemBase {
   private static Drivetrain instance = new Drivetrain();
 
-  private final DoubleSolenoid shifter = new DoubleSolenoid(DrivetrainConstants.SHIFTER_ID_1,
-      DrivetrainConstants.SHIFTER_ID_2);
+  private final DoubleSolenoid rightShifter = new DoubleSolenoid(10, DrivetrainConstants.RIGHT_SHIFTER_ID_1,
+      DrivetrainConstants.RIGHT_SHIFTER_ID_2);
+  private final DoubleSolenoid leftShifter = new DoubleSolenoid(10, DrivetrainConstants.LEFT_SHIFTER_ID_1, DrivetrainConstants.LEFT_SHIFTER_ID_2);
 
   private final WPI_TalonFX leftMaster = new WPI_TalonFX(DrivetrainConstants.LEFT_MASTER_ID);
   private final WPI_TalonFX leftFollower = new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_ID);
@@ -68,6 +70,10 @@ public class Drivetrain extends SubsystemBase {
     gyro.reset();
     odometry = new DifferentialDriveOdometry(getAngle());
     rightMaster.setInverted(true);
+    rightShifter.set(Value.kReverse);
+    leftShifter.set(Value.kReverse);
+    rightFollower.follow(rightFollower);
+    leftFollower.follow(leftMaster);
   }
 
   @Override
@@ -80,30 +86,37 @@ public class Drivetrain extends SubsystemBase {
     return instance;
   }
 
-  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-    double leftOutput;
-    double rightOutput;
-    
-    if (inHighGear) {
-      leftOutput = leftPIDControllerHigh.calculate(
-          leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
-          + leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
-      rightOutput = rightPIDControllerHigh.calculate(
-          rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
-          + rightFeedforwardHigh.calculate(speeds.rightMetersPerSecond);
-    } else {
-      leftOutput = leftPIDControllerLow.calculate(
-          leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
-          + leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
-      rightOutput = rightPIDControllerLow.calculate(
-          rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
-          + rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
-    }
+  // public void arcadeDrive(double speed, double rot) {
+  
+  // }
 
-    leftMaster.setVoltage(leftOutput);
-    rightMaster.setVoltage(rightOutput);
-    leftFollower.follow(leftMaster);
-    rightFollower.follow(rightMaster);
+  public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+    System.out.println("Right Speed: " + speeds.rightMetersPerSecond + " | Left Speed: " + speeds.leftMetersPerSecond);
+    double leftOutput = speeds.leftMetersPerSecond;
+    double rightOutput = speeds.rightMetersPerSecond;
+    
+    // if (inHighGear) {
+    //   leftOutput = leftPIDControllerHigh.calculate(
+    //       leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
+    //       + leftFeedforwardHigh.calculate(speeds.leftMetersPerSecond);
+    //   rightOutput = rightPIDControllerHigh.calculate(
+    //       rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
+    //       + rightFeedforwardHigh.calculate(speeds.rightMetersPerSecond);
+    // } else {
+    //   leftOutput = leftPIDControllerLow.calculate(
+    //       leftMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.leftMetersPerSecond)
+    //       + leftFeedforwardLow.calculate(speeds.leftMetersPerSecond);
+    //   rightOutput = rightPIDControllerLow.calculate(
+    //       rightMaster.getSelectedSensorVelocity() * DrivetrainConstants.VELOCITY_RATIO, speeds.rightMetersPerSecond)
+    //       + rightFeedforwardLow.calculate(speeds.rightMetersPerSecond);
+    // }
+
+    // leftMaster.setVoltage(leftOutput);
+    // rightMaster.setVoltage(rightOutput);
+    // leftFollower.follow(leftMaster);
+    // rightFollower.follow(rightMaster);
+    leftMaster.set(leftOutput);
+    rightMaster.set(rightOutput);
   }
 
   public void setSpeedsDouble(double leftMetersPerSecond, double rightMetersPerSecond) {
@@ -134,6 +147,7 @@ public class Drivetrain extends SubsystemBase {
 
   @SuppressWarnings("ParameterName")
   public void drive(ChassisSpeeds m_chassisSpeeds) {
+    System.out.println("Linear Speed: " + m_chassisSpeeds.vxMetersPerSecond +" | Rot Speed: " + m_chassisSpeeds.omegaRadiansPerSecond);
     var wheelSpeeds = kinematics.toWheelSpeeds(m_chassisSpeeds);
     setSpeeds(wheelSpeeds);
   }
@@ -185,11 +199,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void shift() {
-    if (shifter.get() == DoubleSolenoid.Value.kReverse) {
-      shifter.set(DoubleSolenoid.Value.kForward);
+    if (rightShifter.get() == DoubleSolenoid.Value.kReverse) {
+      rightShifter.set(DoubleSolenoid.Value.kForward);
+      leftShifter.set(DoubleSolenoid.Value.kForward);
       inHighGear = true;
-    } else{} {
-      shifter.set(DoubleSolenoid.Value.kReverse);
+    } else {
+      rightShifter.set(DoubleSolenoid.Value.kReverse);
+      leftShifter.set(DoubleSolenoid.Value.kReverse);
       inHighGear = false;
     }
   }

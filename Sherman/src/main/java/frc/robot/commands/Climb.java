@@ -1,13 +1,17 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.subsystems.Climber;
 
 public class Climb extends CommandBase {
   private Climber m_Climber = Climber.getInstance();
+  private DoubleSupplier supplier;
 
-  public Climb() {
+  public Climb(DoubleSupplier supplier) {
+    this.supplier = supplier;
     addRequirements(m_Climber);
   }
 
@@ -17,20 +21,16 @@ public class Climb extends CommandBase {
 
   @Override
   public void execute() {
-    m_Climber.set(-1);
+    m_Climber.setPercentControl(supplier.getAsDouble());
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_Climber.lock();
+    m_Climber.setPercentControl(0);
   }
 
   @Override
   public boolean isFinished() {
-    if(m_Climber.getPosition() > ClimberConstants.CLIMB_HEIGHT) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }

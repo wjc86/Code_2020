@@ -21,10 +21,6 @@ public class ConveyorIntake extends CommandBase {
    * Creates a new ConveyorIntake.
    */
   public ConveyorIntake() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Date date = new Date();
-    // long time = date.getTime();
-    // calltime = new Timestamp(time);
     addRequirements(m_ConveyorSubsystem);
   }
 
