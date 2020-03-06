@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private VictorSP booster = new VictorSP(0);
   private TalonSRX master = new TalonSRX(3);
   private TalonSRX follower = new TalonSRX(33);
-  private Joystick stick = new Joystick(0);
+  private Joystick stick = new Joystick(2);
 
   @Override
   public void robotInit() {
@@ -54,10 +54,10 @@ public class Robot extends TimedRobot {
       flywheel.set(ControlMode.PercentOutput, 0);
       booster.set(0);
     }
-    if (stick.getRawButton(2)) {
-      master.set(ControlMode.PercentOutput, stick.getY());
-    } else {
-      master.set(ControlMode.PercentOutput, 0);
+    if (stick.getPOV() == 0 || stick.getPOV() == 45 || stick.getPOV() == 315) {
+      master.set(ControlMode.PercentOutput, .25);
+    } else if (stick.getPOV() == 180 || stick.getPOV() == 135 || stick.getPOV() == 225) {
+      master.set(ControlMode.PercentOutput, -.25);
     }
     SmartDashboard.putNumber("Conveyor Percent", stick.getY());
     follower.follow(master);
