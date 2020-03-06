@@ -42,9 +42,6 @@ public class Turret extends SubsystemBase {
     private boolean currentHall = false;
     private boolean lastHall = false;
 
-    private double currentAngle2 = 1.0;
-    private double lastAngle2 = 0.0;
-
     public Turret() {
       setBoosterOutput(0.0);
       setFlywheelOutput(0.0);
@@ -61,11 +58,6 @@ public class Turret extends SubsystemBase {
     public static Turret getInstance() {
         return instance;
     }
-
-    public double getCurrentAngle() { return currentAngle2; }
-    public void setCurrentAngle(double angle) { currentAngle2 = angle; }
-    public double getLastAngle() { return lastAngle2; }
-    public void setLastAngle(double angle) { lastAngle2 = angle; }
 
     public double getFlywheelOutput() {
       double output = flywheelMotor.getMotorOutputPercent();
