@@ -1,7 +1,0 @@
-There is currently not a project name. Check back later for updates.
-
-Update 1:
-There are now state machine diagrams that model all of the subsystems.
-These diagrams are currently available in .drawio, .png, and .xml file formats, as well as in a Powerpoint.
-
-Suggested project names by members: "Project X++", "Project XR", "Project XR++"
